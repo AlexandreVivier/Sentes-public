@@ -19,7 +19,7 @@
     <div class="show-button-container">
 
         <div class="w-33">
-            <button type="button" class="light-button" onclick="window.history.back()">
+            <button type="button" class="light-button special-elite-regular" onclick="window.history.back()">
                 Non
             </button>
         </div>
@@ -28,7 +28,7 @@
         <form action="{{ route('admin.events.destroy', $event->id) }}" method="post" class="w-33">
             @csrf
             @method('DELETE')
-            <button type="submit" class="green-button w-33">
+            <button type="submit" class="green-button special-elite-regular w-33">
                 Oui
             </button>
         </form>
@@ -37,7 +37,7 @@
         <form action="{{ route('admin.users.destroy', $user->id) }}" method="post"  class="w-33">
             @csrf
             @method('DELETE')
-            <button type="submit" class="green-button w-33">
+            <button type="submit" class="green-button special-elite-regular w-33">
                 Oui
             </button>
         </form>
@@ -46,7 +46,7 @@
         <form action="{{ route('admin.locations.destroy', $location->id) }}" method="post"  class="w-33">
             @csrf
             @method('DELETE')
-            <button type="submit" class="green-button w-33">
+            <button type="submit" class="green-button special-elite-regular w-33">
                 Oui
             </button>
         </form>

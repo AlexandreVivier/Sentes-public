@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         // **************** USERS ****************
 
         User::factory()->create([
-            'login' => 'Admin',
+            'login' => 'Alexandre',
             'first_name' => 'Alex',
             'last_name' => 'Smith',
             'password' => 'Alexandre14!',
@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'login' => 'Orga',
+            'login' => 'Thomas',
             'first_name' => 'Thomas',
             'last_name' => 'Smith',
             'password' => 'Thomas18!',
@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'login' => 'User',
+            'login' => 'Turianne',
             'first_name' => 'Jean',
             'last_name' => 'Smith',
             'password' => 'CommonUser42!',
@@ -51,7 +51,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'login' => 'hacker',
+            'login' => 'Sylvain',
             'first_name' => 'Hacker',
             'last_name' => 'Smith',
             'password' => 'GeniusHacker42!',
@@ -118,6 +118,12 @@ class DatabaseSeeder extends Seeder
 
         Attendee::factory()->create([
             'event_id' => 1,
+            'user_id' => 1,
+            'is_organizer' => true,
+        ]);
+
+        Attendee::factory()->create([
+            'event_id' => 1,
             'user_id' => 2,
             'is_organizer' => true,
         ]);
@@ -157,6 +163,13 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Attendees and organizers for this event :
+        Attendee::factory()->create([
+            'event_id' => 3,
+            'user_id' => 1,
+            'is_organizer' => true,
+            'has_payed' => true,
+        ]);
+
 
         Attendee::factory()->create([
             'event_id' => 3,

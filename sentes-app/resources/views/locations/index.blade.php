@@ -2,7 +2,7 @@
 
     <section>
         @include('components.dropdown', ['locations' => $locations])
-        <h1 class="index-title">Les GN à {{ $location->title }} :</h1>
+        <h1 class="index-title special-elite-regular">Les GN à {{ $location->title }} :</h1>
 
         <div class="index-grid">
 

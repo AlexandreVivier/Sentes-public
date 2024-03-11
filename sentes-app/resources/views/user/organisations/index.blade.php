@@ -1,7 +1,7 @@
 <x-layoutLight>
 
     <section>
-        <h1 class="index-title">Les GN que j'ai organisés :</h1>
+        <h1 class="index-title special-elite-regular">Les GN que j'ai organisés :</h1>
         <div class="index-grid">
             @empty($events)
             @auth

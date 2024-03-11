@@ -46,7 +46,7 @@
 				</div>
 
 				<div class="form-input">
-					<button type="submit" class="green-button">
+					<button type="submit" class="green-button special-elite-regular">
                         Enregistrer
                     </button>
 				</div>

@@ -41,13 +41,13 @@
 				</div>
 
 				<div class="form-input">
-					<button type="submit" class="green-button">
+					<button type="submit" class="green-button special-elite-regular">
                         Te connecter
                     </button>
 				</div>
 
-				<div class="form-input form-link">
-					<a href="{{ route('password.request') }}" class="text-green">Mot de passe oublié ?</a>
+				<div class="form-input">
+					<a href="{{ route('password.request') }}" class="text-green link">Mot de passe oublié ?</a>
 				</div>
 
 			</form>

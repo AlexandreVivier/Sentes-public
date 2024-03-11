@@ -167,13 +167,13 @@
             <div class="show-button-container">
 
             <div class="form-input">
-                <a href="{{ route('admin.events.show', $event->id) }}" class="light-button w-100">
+                <a href="{{ route('admin.events.show', $event->id) }}" class="light-button special-elite-regular w-100">
                     Annuler
                 </a>
             </div>
 
             <div class="form-input">
-                <button type="submit" class="green-button w-100">
+                <button type="submit" class="green-button special-elite-regular w-100">
                     Enregistrer
                 </button>
             </div>

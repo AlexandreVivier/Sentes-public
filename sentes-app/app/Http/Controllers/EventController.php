@@ -17,8 +17,6 @@ class EventController extends Controller
         $events = Event::latest()
             ->with(['location', 'organizers.user', 'attendees.user'])
             ->filter(request(['search']))
-            ->where('is_cancelled', false)
-            ->where('start_date', '>', now())
             ->orderBy('start_date')
             ->paginate(4);
 
@@ -205,7 +203,6 @@ class EventController extends Controller
                 ->whereHas('organizers', function ($query) use ($userId) {
                     $query->where('user_id', $userId);
                 })
-                ->where('start_date', '>', now())
                 ->orderBy('start_date')
                 ->get();
         });

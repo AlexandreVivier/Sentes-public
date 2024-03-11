@@ -3,9 +3,10 @@
         let link = document.getElementById('delete');
         let dialog = document.getElementById('cancelEvent');
 
+        if(link !== null){
         link.addEventListener('click', function(event) {
             event.preventDefault();
             dialog.showModal();
-        });
+        });}
     });
 </script>

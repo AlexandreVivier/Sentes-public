@@ -10,10 +10,10 @@
     </div>
 
             <div class="form-input form-multi-button">
-                <a href="{{ route('admin.events.index') }}" class="light-button">
+                <a href="{{ route('admin.events.index') }}" class="light-button special-elite-regular">
                     Retour à la liste
                 </a>
-                <button type="submit" class="green-button">
+                <button type="submit" class="green-button special-elite-regular">
                     Créer le GN
                 </button>
             </div>

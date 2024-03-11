@@ -13,10 +13,10 @@
                         @include('components.forms.eventCreate1')
 
 						<div class="form-input form-multi-button">
-							<a href="{{ route('home') }}" class="light-button">
+							<a href="{{ route('home') }}" class="light-button special-elite-regular">
                                 Retour
                             </a>
-							<button type="submit" class="green-button">
+							<button type="submit" class="green-button special-elite-regular">
                                 Suivant
                             </button>
 						</div>

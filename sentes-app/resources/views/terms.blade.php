@@ -1,7 +1,7 @@
 <x-layoutLight>
 	<section>
 		<x-basicFrameHeader>
-            <h2 class="italic">
+            <h2>
                 Conditions Générales d'Utilisation :
             </h2>
         </x-basicFrameHeader>
@@ -117,7 +117,7 @@
                 <p>CGU réalisées sur http://legalplace.fr/</p>
             </article>
 <footer>
-    <a href="{{ route('home') }}" class="light-button">Retour à l'accueil</a>
+    <a href="{{ route('home') }}" class="light-button special-elite-regular">Retour à l'accueil</a>
 </footer>
 </x-basicFrameContent>
 </x-layoutLight>

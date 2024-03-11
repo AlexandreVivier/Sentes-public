@@ -1,4 +1,4 @@
-<h2 class="text-roboto">
+<h2 class="special-elite-regular">
     Informations obligatoires :
 </h2>
 <div class="form-wrapper">

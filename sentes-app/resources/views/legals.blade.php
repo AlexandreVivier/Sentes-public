@@ -1,13 +1,13 @@
 <x-layoutLight>
 	<section>
 		<x-basicFrameHeader>
-            <h2 class="italic">
+            <h2>
                 Mentions légales
             </h2>
         </x-basicFrameHeader>
         <x-basicFrameContent>
             <article class="w-75">
-                <h3 class="index-title">Identification du site :</h3>
+                <h3 class="index-title special-elite-regular">Identification du site :</h3>
                 <p class="text-green text-medium italic text-interline">
                     En vertu de l'article 6 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, il est précisé aux utilisateurs du site les-sentes.org l'identité des différents intervenants dans le cadre de sa réalisation et de son suivi :
                 </p>
@@ -17,13 +17,13 @@
                 </p>
             </article>
             <article class="w-75">
-                <h3 class="index-title">Hébergement :</h3>
+                <h3 class="index-title special-elite-regular">Hébergement :</h3>
                 <p class="text-green text-medium italic text-interline">
                     Le site les-sentes.org est hébergé par la société OVH, dont le siège social est situé au 2 rue Kellermann, 59100 Roubaix.
                 </p>
                 </article>
                 <article class="w-75">
-                    <h3 class="index-title">Confidentialité des contenus :</h3>
+                    <h3 class="index-title special-elite-regular">Confidentialité des contenus :</h3>
                 <p class="text-green text-medium italic text-interline">
                     Les informations personnelles recueillies lors de l’inscription sur le site sont enregistrées exclusivement dans la base de données du site.
                 </p>
@@ -47,7 +47,7 @@
                 </p>
                 </article>
                 <article class="w-75">
-                    <h3 class="index-title">Propriété intellectuelle :</h3>
+                    <h3 class="index-title special-elite-regular">Propriété intellectuelle :</h3>
                     <p class="text-green text-medium italic text-interline">
                         Les contenus des GN créés par les joueuses sont sous licence Creative Commons BY-NC-SA. Vous pouvez les réutiliser à des fins non commerciales, en citant la source.
                     </p>
@@ -63,7 +63,7 @@
                 </p>
                 </article>
                 <footer>
-                    <a href="{{ route('home') }}" class="light-button">Retour à l'accueil</a>
+                    <a href="{{ route('home') }}" class="light-button special-elite-regular">Retour à l'accueil</a>
                 </footer>
             </x-basicFrameContent>
     </x-layoutLight>

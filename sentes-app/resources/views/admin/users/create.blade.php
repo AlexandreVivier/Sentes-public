@@ -24,8 +24,8 @@
                     <p class="text-green italic"> La personne ainsi enregistrée sera considérée comme ayant accepté les conditions générales d'utilisation du site.</p>
                 </div>
                 <div class="form-input form-multi-button">
-                    <a href="{{ route('admin.users.index') }}" class="light-button">Retour à la liste</a>
-                    <button type="submit" class="green-button">Enregistrer la personne</button>
+                    <a href="{{ route('admin.users.index') }}" class="light-button special-elite-regular">Retour à la liste</a>
+                    <button type="submit" class="green-button special-elite-regular">Enregistrer la personne</button>
                 </div>
 
             </form>

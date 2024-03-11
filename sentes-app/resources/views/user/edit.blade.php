@@ -23,12 +23,12 @@
                 </div>
                 <div class="user-button-container">
                     <div class="w-100">
-                        <button type="submit" class="green-button w-100">
+                        <button type="submit" class="green-button special-elite-regular w-100">
                             Enregistrer
                         </button>
                     </div>
                     <div class="w-100">
-                        <a href="{{ route('profile.myProfile') }}" class="light-button w-100">
+                        <a href="{{ route('profile.myProfile') }}" class="light-button special-elite-regular w-100">
                             Retour
                         </a>
                     </div>
@@ -38,7 +38,7 @@
                 <form action="{{ route('user.delete', $user->id) }}" method="post" class="w-100">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="transparent-button w-100" id="delete">
+                    <button type="submit" class="transparent-button special-elite-regular w-100" id="delete">
                         <span class="text-normal">Supprimer mon compte</span>
                     </button>
                 </form>

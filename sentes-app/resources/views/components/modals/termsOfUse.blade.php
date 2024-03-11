@@ -121,10 +121,10 @@
 <footer>
     <div class="flex-row w-100 justify-center">
         <form method="dialog" class="flex-row w-50">
-            <button class="green-button" value="accept">
+            <button class="green-button special-elite-regular" value="accept">
                 Accepter
             </button>
-            <button class="light-button" value="cancel">
+            <button class="light-button special-elite-regular" value="cancel">
                 refuser
             </button>
         </form>

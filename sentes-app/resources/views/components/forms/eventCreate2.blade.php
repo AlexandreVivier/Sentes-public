@@ -1,4 +1,4 @@
-<h2 class="text-roboto">
+<h2 class="special-elite-regular">
     Informations suplémentaires :
 </h2>
 

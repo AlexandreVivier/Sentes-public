@@ -15,10 +15,10 @@
                 @include('components.forms.eventCreate2')
 
                 <div class="form-input form-multi-button">
-                    <a href="{{ route('home') }}" class="light-button">
+                    <a href="{{ route('home') }}" class="light-button special-elite-regular">
                         Ignorer
                     </a>
-                    <button type="submit" class="green-button">
+                    <button type="submit" class="green-button special-elite-regular">
                         Enregistrer
                     </button>
                 </div>

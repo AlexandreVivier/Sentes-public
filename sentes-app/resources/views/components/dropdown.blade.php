@@ -2,13 +2,13 @@
     <form action="#" method="get" class="w-25">
         <input type="text"
         name="search"
-        class="bg-light search-input"
+        class="bg-light search-input special-elite-regular"
         placeholder="Rechercher un GN..."
         value="{{ request('search') }}"
         >
     </form>
     <div x-data="{ show: false }" class="w-25" @click.away="show = false">
-        <button class="light-button dropdown-toggle" @click="show = !show">
+        <button class="light-button special-elite-regular dropdown-toggle" @click="show = !show">
             {{ isset($location) ? ucwords($location->title) : 'Par lieu' }}
             <span class="chevron"><i class="fa-solid fa-chevron-down"></i></span>
         </button>

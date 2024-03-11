@@ -18,7 +18,7 @@
     <div class="user-button-container">
 
         <div class="w-50">
-            <button type="button" class="light-button" onclick="window.history.back()">
+            <button type="button" class="light-button special-elite-regular" onclick="window.history.back()">
                 Non, je me suis trompé.
             </button>
         </div>
@@ -26,7 +26,7 @@
         <form action="{{ route('event.cancel', $event->id) }}" method="post"  class="w-50">
             @csrf
             @method('PATCH')
-            <button type="submit" class="green-button w-33">
+            <button type="submit" class="green-button special-elite-regular w-33">
                 Oui, je confirme.
             </button>
         </form>

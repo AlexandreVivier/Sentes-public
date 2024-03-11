@@ -1,4 +1,3 @@
-
 .dashboard-frame
 {
 	width: 100%;
@@ -61,7 +60,7 @@ thead,  tfoot
 {
 	background-color: #353C34;
 	color: #fff;
-	font-family: 'roboto', sans-serif;
+	font-family: 'secret_typewriter', sans-serif;
 }
 
 th,  td

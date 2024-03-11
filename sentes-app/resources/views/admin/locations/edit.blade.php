@@ -76,11 +76,11 @@
 
             </div>
             <div class="form-submit">
-                <button type="submit" class="green-button">Enregistrer</button>
+                <button type="submit" class="green-button special-elite-regular">Enregistrer</button>
             </div>
 
             <div class="form-submit">
-                <a href="{{ route('admin.locations.show', $location->id) }}" class="light-button">Annuler</a>
+                <a href="{{ route('admin.locations.show', $location->id) }}" class="light-button special-elite-regular">Annuler</a>
             </div>
     </form>
 </article>

@@ -6,7 +6,7 @@
 <form method="POST" action="{{ route('admin.locations.store') }}" class="form-large">
     @csrf
 
-    <h2 class="text-roboto">
+    <h2 class="special-elite-regular">
         Ajouter un lieu à la liste :
     </h2>
 
@@ -103,10 +103,10 @@
     </div>
 
     <div class="form-input form-multi-button">
-        <a href="{{ route('admin.locations.index') }}" class="light-button">
+        <a href="{{ route('admin.locations.index') }}" class="light-button special-elite-regular">
             Retour à la liste
         </a>
-        <button type="submit" class="green-button">
+        <button type="submit" class="green-button special-elite-regular">
             Créer le lieu
         </button>
     </div>
