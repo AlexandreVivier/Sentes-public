@@ -21,7 +21,6 @@ class Event extends Model
         'description',
         'start_date',
         'end_date',
-        'author_id',
         'location_id',
         'price',
         'image_path',
@@ -34,7 +33,6 @@ class Event extends Model
 
     protected $with = [
         'location',
-        'author',
     ];
 
 
@@ -43,19 +41,60 @@ class Event extends Model
         return $this->belongsTo(Location::class);
     }
 
-    public function author()
-    {
-        return $this->belongsTo(User::class, 'author_id');
-    }
-
     public function attendees()
     {
-        return $this->hasMany(Attendee::class);
+        return $this->hasMany(Attendee::class, 'event_id');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'attendees', 'event_id', 'user_id');
+    }
+
+    public function getAttendeesCount()
+    {
+        return $this->attendees()->count();
     }
 
     public function organizers()
     {
-        return $this->hasMany(Attendee::class)->where('is_organizer', true);
+        return $this->attendees()->where('is_organizer', true);
+    }
+
+    public function getOrganizersCount()
+    {
+        return $this->organizers()->count();
+    }
+
+    public function getOrganizersLogin()
+    {
+        return $this->organizers->map(function ($organizer) {
+            return $organizer->user->login;
+        })->implode(', ');
+    }
+
+    public function getOrganizerLogin($organizer)
+    {
+        return $organizer->user->login;
+    }
+
+    public function checkIfAuthIsOrganizer()
+    {
+        return $this->organizers()->where('user_id', auth()->id())->exists();
+    }
+
+    public function getNonOrganizersAttendeesLogin()
+    {
+        return $this->attendees()->where('is_organizer', false)->get()->map(function ($attendee) {
+            return $attendee->user->login;
+        })->implode(', ');
+    }
+
+    public function getNonOrganizersLoginAndIdInArray()
+    {
+        return $this->attendees()->where('is_organizer', false)->get()->map(function ($attendee) {
+            return ['login' => $attendee->user->login, 'id' => $attendee->user->id];
+        });
     }
 
     public function formatDate($date)

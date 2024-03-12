@@ -1,5 +1,5 @@
 <header class="bg-header border-green flex-row justify-center">
-    <h1 class="text-frame-title">
+    <h1 class="text-frame-title special-elite-regular">
         Conditions d'utilisation
     </h1>
 </header>

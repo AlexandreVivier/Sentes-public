@@ -1,6 +1,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let link = document.getElementById('delete');
+        let link = document.getElementById('cancel');
         let dialog = document.getElementById('cancelEvent');
 
         if(link !== null){

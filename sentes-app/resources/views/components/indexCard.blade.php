@@ -5,14 +5,9 @@
                 {{ $event->title }}
             </h2>
             <div class="index-author-list">
-                @if($event->is_cancelled)
-                    <p class="italic"> GN Annulé !</p>
-                @elseif($event->start_date < now())
-                    <p> GN terminé !</p>
-                @endif
                 <p class="special-elite-regular">Par :
                     @if($event->organizers->isNotEmpty())
-                        {{ $event->organizers->pluck('user.login')->implode(', ') }}
+                        {{ $event->getOrganizersLogin() }}
                     @else
                         <span> ???</span>
                     @endif
@@ -20,11 +15,16 @@
             </div>
         </div>
         <div class="card-content {{ $event->is_cancelled ? 'bg-content-cancelled' : ($event->start_date < now() ? 'bg-content-past' : 'bg-light') }} border-light text-green ">
+            @if($event->is_cancelled)
+                <p class="special-elite-regular"> GN Annulé !</p>
+            @elseif($event->start_date < now())
+                <p class="special-elite-regular"> GN terminé !</p>
+            @endif
             <p class="semi-bold special-elite-regular">A {{ optional($event->location)->title ?? 'Définir' }} -
                 <span class="uppercase">{{ optional($event->location)->city_name }}</span>
             </p>
             <p class="semi-bold">Du {{ $event->formatDate($event->start_date) }} au {{ $event->formatDate($event->end_date ?? $event->start_date) }}</p>
-            <p class="text-normal text-green">Inscrit·es : {{ $event->attendees->count() }} / {{ $event->max_attendees }}</p>
+            <p class="text-normal text-green">Inscrit·es : {{ $event->getAttendeesCount() }} / {{ $event->max_attendees }}</p>
             <div class="w-100 flex-row justify-center">
                 <p class="italic text-center w-75 text-light-green special-elite-regular">"{{ $event->description }}"</p>
             </div>

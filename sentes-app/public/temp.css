@@ -617,34 +617,8 @@ a.footer-text:hover
 	transition: all 0.4s ease-in-out;
 }
 
-.black-button
-{
-	background: linear-gradient(180deg, rgb(33, 33, 31) 0%, rgb(0, 0, 0) 100%);
-	cursor: pointer;
-	box-shadow: 0px 1px 3px #353C34;
-	display: flex;
-	justify-content: center;
-	width: 100%;
-	padding: 0.5rem;
-	text-transform: uppercase;
-	text-decoration: none;
-	font-size: 1.2rem;
-	-webkit-text-stroke: 0.01em #ffffff;
-	text-shadow: 0px 0px 2px black;
-	font-weight: 500;
-	color: #f0efe992;
-	border: 3px solid #EFF0E9;
-}
-
-.black-button:hover
-{
-	background: linear-gradient(90deg, rgba(45, 40, 29, 0.8) 0%, rgb(45, 43, 40) 25%, rgb(45, 43, 40) 75%, rgba(45, 38, 29, 0.8) 100%);
-	color : #ffffff;
-	-webkit-text-stroke: 0.01em #B77A16;
-	text-shadow: 1px 1px 2px #deaf97, 0 0 1em rgba(64, 255, 0, 0.171), 0 0 0.2em rgba(9, 255, 0, 0.235);
-	border-image: linear-gradient(to right, #868686, #b0aaaa, #fffbf5, #b0aaaa, #868686) 1;
-	box-shadow: 0px 1px 5px #353C34;
-	transition: all 0.4s ease-in-out;
+.small-button {
+    max-width: 110px;
 }
 
 .transparent-button
@@ -1076,14 +1050,15 @@ border: 2px solid #353C34}
 	z-index: 100;
 	display: flex;
 	justify-content: space-between;
-	margin: 0 1rem;
+	margin: 0 1rem 0 0.2rem;
 }
 
 .nav > .nav-header > .nav-title > a
 {
     font-size: larger;
 	text-decoration: none;
-	color: #EFF0E9;
+	color: #d3d4cc;
+    -webkit-text-stroke: 1px #fff;
 	text-shadow: 1px 1px 2px rgb(24, 24, 24);
 }
 
@@ -1104,14 +1079,14 @@ border: 2px solid #353C34}
 	display: flex;
 	align-items: center;
 	text-transform: uppercase;
-	color: #EFF0E9;
+	color: #d3d4cc;
 	text-shadow: 1px 1px 2px rgb(24, 24, 24);
 }
 
 .nav > .nav-header > .nav-title
 {
 	font-size: 1.2rem;
-	color: #EFF0E9;
+	color: #d3d4cc;
 	text-shadow: 1px 1px 2px rgb(24, 24, 24);
 }
 
@@ -1139,6 +1114,7 @@ border: 2px solid #353C34}
 	width: 25px;
 	height: 10px;
 	border-top: 2px solid #EFF0E9;
+    border-image: linear-gradient(to right, #a9afa6, #d3d4cc, #EFF0E9, #d3d4cc, #a9afa6) 1;
 	text-shadow: 1px 1px 2px rgb(24, 24, 24);
 }
 
@@ -1261,6 +1237,11 @@ border: 2px solid #353C34}
 	{
 		font-size: 1.2rem;
 	}
+
+    .nav > .nav-btn
+    {
+        top: 0.5rem;
+    }
 }
 
 /* ------------------------------- MD SCREENS ------------------------------- */
@@ -1510,7 +1491,13 @@ border: 2px solid #353C34}
 	{
 		transition: all 0.2s ease-in;
         color: #FFF;
+        text-shadow: 2px 2px 0px black;
 	}
+
+    .nav > .nav-header > .nav-title > a:hover
+    {
+        -webkit-text-stroke: 1px #353c34;
+    }
 
 }
 

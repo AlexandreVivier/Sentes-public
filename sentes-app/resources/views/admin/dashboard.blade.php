@@ -62,11 +62,9 @@
                             @else
                             <td class="td-mobile-none italic">Lieu supprimé !</td>
                             @endif
-                            @if($event->organizers()->get() !== null)
+                            @if($event->organizers->isNotEmpty())
                                 <td>
-                                    @foreach($event->organizers()->get() as $organizer)
-                                        {{ $organizer->user->login }}
-                                    @endforeach
+                                        {{ $event->getOrganizersLogin() }}
                                 </td>
                             @else
                                 <td class="td-mobile-none italic">Orga supprimé !</td>

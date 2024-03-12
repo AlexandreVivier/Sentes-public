@@ -68,7 +68,7 @@ class LocationController extends Controller
 
     public function getEventsByLocation(Location $location)
     {
-        $events = Event::with(['location', 'organizers.user', 'attendees.user'])
+        $events = Event::with(['organizers.user', 'attendees.user'])
             ->where('location_id', $location->id)
             ->paginate(4);
 

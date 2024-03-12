@@ -110,7 +110,6 @@ class DatabaseSeeder extends Seeder
             'start_date' => '2024-02-24',
             'end_date' => '2024-02-25',
             'location_id' => 2,
-            'author_id' => 2,
             'max_attendees' => 35,
             'image_path' => 'events/images/vinland.png',
 
@@ -135,7 +134,6 @@ class DatabaseSeeder extends Seeder
             'start_date' => '2025-02-24',
             'end_date' => '2025-02-25',
             'location_id' => 3,
-            'author_id' => 3,
             'price' => 10,
             'max_attendees' => 50,
             'is_cancelled' => true,
@@ -156,7 +154,6 @@ class DatabaseSeeder extends Seeder
             'description' => ' la tyrannie, la mort, la réconciliation',
             'start_date' => date('Y-m-d', strtotime('+1 day')),
             'location_id' => 3,
-            'author_id' => 3,
             'price' => 10,
             'max_attendees' => 25,
             'image_path' => 'events/images/hiver-nucleaire.png',
@@ -199,6 +196,46 @@ class DatabaseSeeder extends Seeder
             'has_payed' => false,
         ]);
 
+        // Full event
+
+        Event::factory()->create([
+            'title' => 'La ZAD des tréfonds',
+            'description' => 'Drames forestiers dans une réalité sorcière',
+            'start_date' => date('Y-m-d', strtotime('+1 day')),
+            'location_id' => 4,
+            'price' => 10,
+            'max_attendees' => 4,
+            'image_path' => 'events/images/les-sentes.png',
+        ]);
+
+        Attendee::factory()->create([
+            'event_id' => 4,
+            'user_id' => 4,
+            'is_organizer' => true,
+            'has_payed' => true,
+        ]);
+
+        Attendee::factory()->create([
+            'event_id' => 4,
+            'user_id' => 5,
+            'is_organizer' => true,
+            'has_payed' => true,
+        ]);
+
+        Attendee::factory()->create([
+            'event_id' => 4,
+            'user_id' => 6,
+            'is_organizer' => false,
+            'has_payed' => true,
+        ]);
+
+        Attendee::factory()->create([
+            'event_id' => 4,
+            'user_id' => 7,
+            'is_organizer' => false,
+            'has_payed' => false,
+        ]);
+
         // Other events
 
         Event::factory()->create([
@@ -207,13 +244,12 @@ class DatabaseSeeder extends Seeder
             'start_date' => '2024-10-24',
             'end_date' => '2024-10-25',
             'location_id' => 1,
-            'author_id' => 1,
             'max_attendees' => 50,
             'image_path' => 'events/images/valerrance.png',
         ]);
 
         Attendee::factory()->create([
-            'event_id' => 4,
+            'event_id' => 5,
             'user_id' => 1,
             'is_organizer' => true,
             'has_payed' => true,
@@ -226,7 +262,6 @@ class DatabaseSeeder extends Seeder
             'description' => 'Drames forestiers dans une réalité sorcière',
             'start_date' => date('Y-m-d', strtotime('+1 day')),
             'location_id' => 5,
-            'author_id' => 5,
             'price' => 10,
             'max_attendees' => 25,
         ]);

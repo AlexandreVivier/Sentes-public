@@ -85,6 +85,15 @@ class RegisterController extends Controller
         if (auth()->user()->id !== $user->id) {
             abort(403, 'Tu n\'as pas le droit de voir cette page');
         }
+
+        cache()->forget('users');
+        cache()->forget("user-{$user->id}", $user->id);
+        cache()->forget("my-events-{$user->id}", $user->id);
+        cache()->forget('events');
+        $attendees = Attendee::where('user_id', $user->id)->get();
+        foreach ($attendees as $attendee) {
+            $attendee->delete();
+        }
         $user->delete();
 
         session()->flash('success', 'Ton compte a bien été supprimé !');

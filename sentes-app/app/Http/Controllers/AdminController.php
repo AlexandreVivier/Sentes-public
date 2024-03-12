@@ -21,12 +21,10 @@ class AdminController extends Controller
 
     public function userIndex()
     {
-        $users = User::orderBy('id')->get();
+        $users = User::all();
         $titles = ['Avatar', 'Pseudo', 'Prénom', 'Nom', 'Email', 'Inscription'];
 
-        $users = cache()->rememberForever('users', function () {
-            return User::with('attendees')->orderBy('id')->get();
-        });
+        $users =  User::with('attendees')->orderBy('id')->get();
 
         return view('admin.index', compact('users', 'titles'));
     }
@@ -52,17 +50,14 @@ class AdminController extends Controller
             'city' => ['nullable', 'max:50'],
         ]);
 
-        if (request('avatar_path')) {
+        if (request()->hasFile('avatar_path')) {
             $attributes['avatar_path'] = request('avatar_path')->store('public/users/avatars');
             $attributes['avatar_path'] = str_replace('public/', '', $attributes['avatar_path']);
         }
 
-
         cache()->forget('users');
         $user = User::create($attributes);
-        cache()->rememberForever('users', function () {
-            return User::orderBy('id')->get();
-        });
+
         session()->flash('success', 'Le compte a bien été créé !');
 
         return redirect(route('admin.users.show', $user));
@@ -89,8 +84,6 @@ class AdminController extends Controller
         if (request()->hasFile('avatar_path')) {
             $attributes['avatar_path'] = request('avatar_path')->store('public/users/avatars');
             $attributes['avatar_path'] = str_replace('public/', '', $attributes['avatar_path']);
-        } else {
-            $attributes['avatar_path'] = '/images/static/blank-profile.png';
         }
 
         cache()->forget('users');
@@ -103,7 +96,14 @@ class AdminController extends Controller
 
     public function userDestroy(User $user)
     {
+        $attendees = $user->attendees()->get();
+        foreach ($attendees as $attendee) {
+            $attendee->delete();
+        }
         cache()->forget('users');
+        cache()->forget("user-{$user->id}", $user->id);
+        cache()->forget("my-events-{$user->id}", $user->id);
+        cache()->forget('events');
         $user->delete();
         session()->flash('success', 'Le compte a bien été supprimé !');
 
@@ -123,7 +123,7 @@ class AdminController extends Controller
     public function locationIndex()
     {
         $locations = cache()->rememberForever('locations', function () {
-            return Location::orderBy('id')->get();
+            return Location::all();
         });
         $titles = ['Nom', 'Numéro', 'Rue', 'Ville', 'Code Postal', 'Créé le'];
 
@@ -183,6 +183,7 @@ class AdminController extends Controller
     public function locationDestroy(Location $location)
     {
         cache()->forget('locations');
+        // Events ?
         $location->delete();
         session()->flash('success', 'Le lieu a bien été supprimé !');
 
@@ -195,10 +196,9 @@ class AdminController extends Controller
     }
 
     // ****************** EVENTS ****************** //
-
     public function eventIndex()
     {
-        $events = Event::with('location', 'attendees', 'organizers')->orderBy('id')->get();
+        $events = Event::with(['organizers.user'])->get();
         $titles = ['Titre', 'Entête', 'Date de début', 'Lieu', 'Orga(s)'];
 
         return view('admin.index', compact('events', 'titles'));
@@ -216,7 +216,6 @@ class AdminController extends Controller
             'description' => ['required', 'max:99'],
             'start_date' => ['required', 'date', 'after:now'],
             'location_id' => ['required', Rule::exists('locations', 'id')],
-            'author_id' => ['required', Rule::exists('users', 'id')],
             'price' => ['nullable', 'numeric', 'min:1'],
             'max_attendees' => ['nullable', 'numeric', 'min:1'],
             'image_path' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png'],
@@ -227,12 +226,12 @@ class AdminController extends Controller
         ]);
 
 
-        if (request('image_path')) {
+        if (request()->hasFie('image_path')) {
             $attributes['image_path'] = request('image_path')->store('public/events/images');
             $attributes['image_path'] = str_replace('public/', '', $attributes['image_path']);
         }
 
-        if (request('file_path')) {
+        if (request()->hasFile('file_path')) {
             $attributes['file_path'] = request('file_path')->store('public/events/files');
             $attributes['file_path'] = str_replace('public/', '', $attributes['file_path']);
         }
@@ -241,7 +240,7 @@ class AdminController extends Controller
         $event = Event::create($attributes);
         Attendee::create([
             'event_id' => $event->id,
-            'user_id' => $attributes['author_id'],
+            'user_id' => auth()->user()->id,
             'is_organizer' => true,
         ]);
 
@@ -262,7 +261,6 @@ class AdminController extends Controller
             'description' => ['required', 'max:99'],
             'start_date' => ['required', 'date'],
             'location_id' => ['required', Rule::exists('locations', 'id')],
-            'author_id' => ['required', Rule::exists('users', 'id')],
             'price' => ['nullable', 'numeric', 'min:1'],
             'max_attendees' => ['nullable', 'numeric', 'min:1'],
             'image_path' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png'],
@@ -278,12 +276,12 @@ class AdminController extends Controller
             $event->uncancel();
         }
 
-        if (request('image_path')) {
+        if (request()->hasFile('image_path')) {
             $attributes['image_path'] = request('image_path')->store('public/events/images');
             $attributes['image_path'] = str_replace('public/', '', $attributes['image_path']);
         }
 
-        if (request('file_path')) {
+        if (request()->hasFile('file_path')) {
             $attributes['file_path'] = request('file_path')->store('public/events/files');
             $attributes['file_path'] = str_replace('public/', '', $attributes['file_path']);
         }
@@ -311,7 +309,7 @@ class AdminController extends Controller
     public function eventShow(Event $event)
     {
         $event = cache()->rememberForever("event-{$event->id}", function () use ($event) {
-            return Event::with('location', 'attendees', 'organizers')->find($event->id);
+            return Event::with('attendees', 'organizers')->find($event->id);
         });
         return view('admin.show', compact('event'));
     }

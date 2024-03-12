@@ -14,8 +14,9 @@ class EventController extends Controller
 {
     public function index()
     {
-        $events = Event::latest()
-            ->with(['location', 'organizers.user', 'attendees.user'])
+        $events = Event::with(['organizers.user', 'attendees.user'])
+            ->where('start_date', '>', now())
+            ->where('is_cancelled', false)
             ->filter(request(['search']))
             ->orderBy('start_date')
             ->paginate(4);
@@ -44,14 +45,12 @@ class EventController extends Controller
             'location_id' => ['required', Rule::exists('locations', 'id')],
         ]);
 
-        $attributes['author_id'] = $authorId;
-
         cache()->forget('events');
-        cache()->forget('event-admin');
+
         $event = Event::create($attributes);
-        $orga = Attendee::create([
+        Attendee::create([
             'event_id' => $event->id,
-            'user_id' => $authorId,
+            'user_id' => auth()->user()->id,
             'is_organizer' => true,
         ]);
 
@@ -81,7 +80,6 @@ class EventController extends Controller
             'description' => ['max:99'],
             'start_date' => ['date', 'after:now'],
             'location_id' => [Rule::exists('locations', 'id')],
-            'author_id' => [Rule::exists('users', 'id')],
             'price' => ['nullable', 'numeric', 'min:1'],
             'max_attendees' => ['nullable', 'numeric', 'min:1'],
             'image_path' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png'],
@@ -92,14 +90,14 @@ class EventController extends Controller
 
         ]);
 
-        if (request('image_path')) {
+        if (request()->hasFile('image_path')) {
             $attributes['image_path'] = request('image_path')->store('public/events/images');
             $attributes['image_path'] = str_replace('public/', '', $attributes['image_path']);
         } else {
             $attributes['image_path'] = 'events/images/blank-event.png';
         }
 
-        if (request('file_path')) {
+        if (request()->hasFile('file_path')) {
             $attributes['file_path'] = request('file_path')->store('public/events/files');
             $attributes['file_path'] = str_replace('public/', '', $attributes['file_path']);
         }
@@ -108,7 +106,6 @@ class EventController extends Controller
 
         cache()->forget('events');
         cache()->forget("event-{$event->id}", $event->id);
-        cache()->forget('event-admin');
         cache()->forget("my-events-{$userId}", auth()->user()->id);
         $event->update($attributes);
 
@@ -137,7 +134,6 @@ class EventController extends Controller
 
         cache()->forget('events');
         cache()->forget("event-{$event->id}", $event->id);
-        cache()->forget('event-admin');
         $event->delete();
 
         return redirect(route('events.index'));
@@ -155,7 +151,6 @@ class EventController extends Controller
 
         cache()->forget('events');
         cache()->forget("event-{$event->id}", $event->id);
-        cache()->forget('event-admin');
         cache()->forget("my-events-{$userId}", auth()->user()->id);
         $event->cancel();
 
@@ -199,7 +194,7 @@ class EventController extends Controller
     public function getAllEventsOrganizedByUser($userId)
     {
         $events = cache()->rememberForever("my-events-{$userId}", function () use ($userId) {
-            return Event::with(['location', 'organizers.user', 'attendees.user'])
+            return Event::with(['organizers.user', 'attendees.user'])
                 ->whereHas('organizers', function ($query) use ($userId) {
                     $query->where('user_id', $userId);
                 })
@@ -208,5 +203,21 @@ class EventController extends Controller
         });
 
         return view('user.organisations.index', compact('events'));
+    }
+
+    public function getPastsEvents()
+    {
+        $pastsEvents = Event::latest()
+            ->with(['organizers.user', 'attendees.user'])
+            ->where('start_date', '<', now())
+            ->filter(request(['search']))
+            ->orderBy('start_date')
+            ->paginate(4);
+
+        $locations = cache()->rememberForever('locations', function () {
+            return Location::all()
+                ->sortByDesc('zip_code');
+        });
+        return view('events.pasts', compact('pastsEvents', 'locations'));
     }
 }

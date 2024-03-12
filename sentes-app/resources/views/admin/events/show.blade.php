@@ -1,11 +1,25 @@
 <div class="show-wrapper">
     <h1 class="index-title special-elite-regular">GN id :{{ $event->id }}</h1>
+    <header class="event-frame-header border-green-lg {{ $event->is_cancelled ? 'bg-head-cancelled' : ($event->start_date < now() ? 'bg-head-past' : 'bg-header') }} text-frame-title text-large ">
+        <h2 class="text-large special-elite-regular {{ $event->is_cancelled ? 'text-line-through' : ''}}">{{ $event->title }}</h2>
+    </header>
 
-    @include('components.eventCard', ['event' => $event, 'attendees' => $event->attendees, 'organizers' => $event->organizers, 'location' => $event->location])
+    <main class="event-frame-content {{ $event->is_cancelled ? 'bg-content-cancelled' : 'bg-light'}} border-light text-green ">
+
+        @if($event->is_cancelled)
+            <p class="italic"> GN Annulé !</p>
+        @elseif($event->start_date < now())
+            <p> GN terminé !</p>
+        @endif
+
+    @include('components.shows.event', ['event' => $event, 'attendees' => $event->attendees, 'organizers' => $event->organizers, 'location' => $event->location])
 
     <p class="text-green italic">Créé le: {{ $event->created_at->format('d M Y') }}</p>
     <p class="text-green italic">Modifié le: {{ $event->updated_at->format('d M Y') }}</p>
 
+
+</main>
+<aside>
         <div class="show-button-container">
             <div class="w-100">
                 <a href="{{ route('admin.events.index') }}" class="light-button special-elite-regular">
@@ -25,7 +39,7 @@
                 </button>
             </form>
         </div>
-
+</aside>
 
 </div>
 <dialog>

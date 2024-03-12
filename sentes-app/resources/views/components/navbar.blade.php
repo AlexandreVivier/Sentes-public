@@ -49,7 +49,7 @@
                 Mon Profil
             </a>
         </li>
-        @if(auth()->user()->myOrganisations() != null)
+        @if(auth()->user()->isOrganiser() != null)
         <li>
             <a href="{{ route('user.organisations.index', auth()->user()->id) }}" class="special-elite-regular">
                 Mes Orgas

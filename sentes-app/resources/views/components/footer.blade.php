@@ -41,7 +41,7 @@
                             <i class="fa-solid fa-plus"></i>Mon Profil
                         </a>
                     </li>
-                    @if(auth()->user()->myOrganisations() != null)
+                    @if(auth()->user()->isOrganiser() != null)
                     <li>
                         <a href="{{ route('user.organisations.index', auth()->user()->id) }}" class="footer-text">
                             <i class="fa-solid fa-plus"></i>Mes Orgas

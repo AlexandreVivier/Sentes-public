@@ -16,8 +16,6 @@ return new class extends Migration
             $table->timestamps();
             $table->string('title', 99);
             $table->string('description', 99);
-            $table->unsignedBigInteger('author_id')->nullable();
-            $table->foreign('author_id')->references('id')->on('users')->onDelete('set null');
             $table->dateTime('start_date');
             $table->dateTime('end_date')->nullable();
             $table->unsignedBigInteger('max_attendees')->default(1);

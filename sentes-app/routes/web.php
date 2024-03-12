@@ -128,7 +128,9 @@ Route::get('events/{event}', [EventController::class, 'show'])->name('events.sho
 Route::post('events/{event}/subscribe', [AttendeeController::class, 'subscribeToEvent'])->name('attendee.subscribe')->middleware('auth');
 Route::delete('events/{event}/unsubscribe', [AttendeeController::class, 'unsubscribeFromEvent'])->name('attendee.unsubscribe')->middleware('auth');
 
-Route::patch('events/{event}/cancel', [EventController::class, 'cancel'])->name('event.cancel')->middleware('auth');
+Route::patch('events/{event}/cancel', [EventController::class, 'cancel'])->name('event.cancel');
+
+Route::get('pasts', [EventController::class, 'getPastsEvents'])->name('events.past');
 
 //******************** LOCATIONS *******************/
 

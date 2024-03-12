@@ -5,9 +5,6 @@
     @include('components.forms.eventCreate1')
     @include('components.forms.eventCreate2')
 
-    <div class="form-input">
-        <input type="hidden" name="author_id" value="{{ Auth::user()->id }}">
-    </div>
 
             <div class="form-input form-multi-button">
                 <a href="{{ route('admin.events.index') }}" class="light-button special-elite-regular">

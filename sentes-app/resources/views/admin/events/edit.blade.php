@@ -158,10 +158,6 @@
                             @endif
                         </div>
                     </div>
-
-                    <div class="form-input">
-                        <input type="hidden" name="author_id" id="author_id" value="{{ $event->author_id }}">
-                    </div>
                 </div>
             </div>
             <div class="show-button-container">

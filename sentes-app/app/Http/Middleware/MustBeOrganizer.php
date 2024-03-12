@@ -19,9 +19,6 @@ class MustBeOrganizer
         $eventRequested = $request->route('event');
         $event = Event::findOrFail($eventRequested);
 
-        if ($event->author_id != auth()->id()) {
-            abort(403, 'Tu dois être l\'organisateur de ce GN pour le modifier.');
-        }
 
         return $next($request);
     }

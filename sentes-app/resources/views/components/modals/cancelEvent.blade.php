@@ -1,5 +1,5 @@
 <header class="bg-header border-green flex-row justify-center">
-    <h1 class="text-frame-title uppercase">
+    <h1 class="text-frame-title special-elite-regular uppercase">
         Attention {{auth()->user()->login }} !
     </h1>
 </header>

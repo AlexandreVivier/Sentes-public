@@ -28,7 +28,6 @@ class EventFactory extends Factory
             'description' => $this->faker->text(99),
             'location_id' => $this->faker->randomElement(Location::pluck('id')->toArray()),
             'start_date' => $eventDate->modify('+1 day'),
-            'author_id' => $this->faker->randomElement(User::pluck('id')->toArray()),
             'price' => $this->faker->numberBetween(0, 50),
             'max_attendees' => $this->faker->numberBetween(1, 100),
             'image_path' => 'events/images/blank-event.png',

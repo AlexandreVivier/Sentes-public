@@ -21,11 +21,6 @@ class Attendee extends Model
         'is_organizer' => 'boolean',
     ];
 
-    protected $with = [
-        'event',
-        'user',
-    ];
-
     public function event()
     {
         return $this->belongsTo(Event::class, 'event_id');
@@ -36,9 +31,24 @@ class Attendee extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function scopeOrganizers($query)
+    public function getUser()
     {
-        return $query->where('is_organizer', true);
+        return $this->user()->get();
+    }
+
+    public function getUserLogin()
+    {
+        return $this->user->login;
+    }
+
+    public function getEvent()
+    {
+        return $this->event()->get();
+    }
+
+    public function getEventTitle()
+    {
+        return $this->event->title;
     }
 
     public function promoteOrganizer()

@@ -23,4 +23,17 @@
             @endforeach
         </div>
     </div>
+    <div x-data="{ show: false }" class="" @click.away="show = false">
+        <button class="light-button small-button special-elite-regular dropdown-toggle" @click="show = !show">
+                {{ isset($pastsEvents) ? 'Passés' : 'A venir' }}
+            <span class="chevron"><i class="fa-solid fa-chevron-down"></i></span>
+        </button>
+        <div x-show="show" class="dropdown-list small-button">
+            @empty($events)
+            <a href="{{ route('events.index') }}" class="text-green small-button text-normal semi-bold none">A venir</a>
+            @else
+            <a href="{{ route('events.past')}}" class="text-green small-button text-normal semi-bold none">Passés</a>
+            @endempty
+        </div>
+    </div>
 </div>

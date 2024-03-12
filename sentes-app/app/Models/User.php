@@ -68,23 +68,24 @@ class User extends Authenticatable
         return $this->hasMany(Attendee::class, 'user_id');
     }
 
-    public function events()
+    public function allEvents()
     {
-        return $this->hasMany(Event::class, 'author_id');
+        return $this->hasManyThrough(Event::class, Attendee::class, 'user_id', 'id', 'id', 'event_id');
     }
 
-    public function myParticipations()
+    public function getAllFutureEvents()
     {
-        return $this->hasMany(Attendee::class, 'user_id');
+        return $this->allEvents()->where('start_date', '>', now())->where('is_cancelled', false)->get();
     }
 
-    public function myOrganisations()
+
+    public function isOrganiser()
     {
         return $this->hasMany(Attendee::class, 'user_id')->where('is_organizer', true);
     }
 
-    public function myProjects()
+    public function getAllEventsOrganizedByUser()
     {
-        return $this->hasMany(Event::class, 'author_id');
+        return $this->hasManyThrough(Event::class, Attendee::class, 'user_id', 'id', 'id', 'event_id')->where('is_organizer', true)->get();
     }
 }
