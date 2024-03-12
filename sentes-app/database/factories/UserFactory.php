@@ -32,7 +32,7 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
             'accepted_terms' => true,
-            'avatar_path' => 'users/avatars/blank-profile.png',
+            'avatar_path' => 'images/static/blank-profile.png',
         ];
     }
 

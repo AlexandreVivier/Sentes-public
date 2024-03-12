@@ -30,7 +30,7 @@ class EventFactory extends Factory
             'start_date' => $eventDate->modify('+1 day'),
             'price' => $this->faker->numberBetween(0, 50),
             'max_attendees' => $this->faker->numberBetween(1, 100),
-            'image_path' => 'events/images/blank-event.png',
+            'image_path' => 'images/static/blank-event.png',
             'server_link' => 'https://discord.gg/bHP6D3q9fR',
             'tickets_link' => 'https://www.helloasso.com/',
             'file_path' => 'events/files/sentes.pdf',

@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'testeur@gmail.com',
             'is_admin' => true,
             'accepted_terms' => true,
-            'avatar_path' => 'users/avatars/blank-profile.png',
+            'avatar_path' => 'images/static/blank-profile.png',
         ]);
 
         User::factory()->create([
@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
             'password' => 'Thomas18!',
             'email' => 'orga@gmail.com',
             'accepted_terms' => true,
-            'avatar_path' => 'users/avatars/blank-profile.png',
+            'avatar_path' => 'images/static/blank-profile.png',
         ]);
 
         User::factory()->create([
@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
             'password' => 'CommonUser42!',
             'email' => 'user@gmail.com',
             'accepted_terms' => true,
-            'avatar_path' => 'users/avatars/blank-profile.png',
+            'avatar_path' => 'images/static/blank-profile.png',
         ]);
 
         User::factory()->create([
@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
             'password' => 'GeniusHacker42!',
             'email' => 'hacker@gmail.com',
             'accepted_terms' => true,
-            'avatar_path' => 'users/avatars/blank-profile.png',
+            'avatar_path' => 'images/static/blank-profile.png',
         ]);
 
         User::factory(10)->create();

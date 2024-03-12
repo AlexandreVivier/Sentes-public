@@ -19,7 +19,11 @@
                         @foreach($users as $user)
                         <tr>
                             <td class="td-mobile-none">{{ $user->id }}</td>
+                            @if($user->avatar_path === 'images/static/blank-profile.png')
+                            <td><img src="{{ asset('images/static/blank-profile.png') }}" class="avatar-crud user-photo" alt="{{ $user->login }}"/></td>
+                            @else
                             <td ><img src="{{ asset('storage/' . $user->avatar_path) }}" class="avatar-crud user-photo" alt="{{ $user->login }}"/></td>
+                            @endif
                             <td ><a href="{{ route('admin.users.show', $user->id) }}" class="semi-bold text-green italic">{{ $user->login }}</a></td>
                             <td >{{ $user->first_name }}</td>
                             <td >{{ $user->last_name }}</td>

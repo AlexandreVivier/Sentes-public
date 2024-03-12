@@ -151,10 +151,10 @@
                         @enderror
                         <p class="text-green">Image actuelle :</p>
                         <div class="miniature-edit">
-                            @if($event->image_path)
-                                <img src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->title }}" class="border-green-lg"/>
+                            @if($event->image_path === 'images/static/blank-event.png')
+                                <img src="{{ asset('images/static/blank-event.png') }}" alt="{{ $event->title }}" class="border-green-lg"/>
                             @else
-                                <img src="https://4.bp.blogspot.com/-Fn6vUAcfjfc/XKX8XrbIbdI/AAAAAAAAEAY/FCkvO7D3VxoAdp-DCzoKc2TDh_rWc8LEgCLcBGAs/w1200-h630-p-k-no-nu/45463605214_203aba5749_c.jpg" alt="{{ $event->title }}" class="border-green-lg">
+                                <img src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->title }}" class="border-green-lg"/>
                             @endif
                         </div>
                     </div>

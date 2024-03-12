@@ -53,6 +53,8 @@ class AdminController extends Controller
         if (request()->hasFile('avatar_path')) {
             $attributes['avatar_path'] = request('avatar_path')->store('public/users/avatars');
             $attributes['avatar_path'] = str_replace('public/', '', $attributes['avatar_path']);
+        } else {
+            $attributes['avatar_path'] = 'images/static/blank-profile.png';
         }
 
         cache()->forget('users');
@@ -229,6 +231,8 @@ class AdminController extends Controller
         if (request()->hasFie('image_path')) {
             $attributes['image_path'] = request('image_path')->store('public/events/images');
             $attributes['image_path'] = str_replace('public/', '', $attributes['image_path']);
+        } else {
+            $attributes['image_path'] = 'static/images/blank-event.png';
         }
 
         if (request()->hasFile('file_path')) {

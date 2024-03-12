@@ -2,9 +2,17 @@
     <div class="event-image-infos-wrapper">
             <div class="event-image-block border-light">
                 @if(!$event->is_cancelled)
-                    <img src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->title }}">
+                    @if($event->image_path === 'images/static/blank-event.png')
+                        <img src="{{ asset('images/static/blank-event.png') }}" alt="{{ $event->title }}">
+                    @else
+                        <img src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->title }}">
+                    @endif
                 @else
-                    <img src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->title }}" class="cancelled">
+                    @if($event->image_path === 'images/static/blank-event.png')
+                        <img src="{{ asset('images/static/blank-event.png') }}" alt="{{ $event->title }}" class="cancelled">
+                    @else
+                        <img src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->title }}" class="cancelled">
+                    @endif
                 @endif
             </div>
         <div class="event-links">

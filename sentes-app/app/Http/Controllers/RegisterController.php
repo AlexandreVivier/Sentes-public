@@ -28,7 +28,8 @@ class RegisterController extends Controller
             'accepted_terms' => ['required'],
         ]);
 
-        $attributes['avatar_path'] = 'users/avatars/blank-profile.png';
+        $attributes['avatar_path'] = 'images/static/blank-profile.png';
+
 
 
         $user = User::create($attributes);

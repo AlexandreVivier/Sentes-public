@@ -1,7 +1,11 @@
 <div class="user-show">
     <div class="w-100 flex-row justify-center">
+    @if($user->avatar_path === 'images/static/blank-profile.png')
+    <img src="{{ asset('images/static/blank-profile.png') }}" class="avatar-pict user-photo" alt="{{ $user->login }}"/>
+    @else
     <img src="{{ asset('storage/' . $user->avatar_path) }}" class="avatar-pict user-photo" alt="{{ $user->login }}"/>
-    </div>
+    @endif
+</div>
     @if($user->is_admin || $user->id === auth()->user()->id)
         <p class="text-green">{{ $user->email }}</p>
     @endif
