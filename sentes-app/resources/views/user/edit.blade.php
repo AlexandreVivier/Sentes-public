@@ -1,20 +1,20 @@
 <x-layoutLight>
 	<section>
 		<x-basicFrameHeader>
-            <h1>Modifier mon profil</h1>
+            <h1 class="special-elite-regular">Modifier mon profil</h1>
         </x-basicFrameHeader>
         <x-basicFrameContent>
             <form action="{{ route('user.edit', $user->id) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')
-                <h2>
+                <h2 class="special-elite-regular">
                  Informations obligatoires :
                 </h2>
                 <div class="form-wrapper">
                     @include('components.forms.userEdit1')
                 </div>
 
-                <h2>
+                <h2 class="special-elite-regular">
                     Informations supplémentaires :
                    </h2>
 

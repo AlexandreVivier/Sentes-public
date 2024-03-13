@@ -1,7 +1,7 @@
 <x-layoutLight>
 	<section>
 		<x-basicFrameHeader>
-            <h2>
+            <h2 class="special-elite-regular">
                 À propos des Sentes
             </h2>
         </x-basicFrameHeader>

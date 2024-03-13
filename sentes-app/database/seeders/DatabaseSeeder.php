@@ -20,18 +20,18 @@ class DatabaseSeeder extends Seeder
         // **************** USERS ****************
 
         User::factory()->create([
-            'login' => 'Alexandre',
+            'login' => 'Alex_krill',
             'first_name' => 'Alex',
             'last_name' => 'Smith',
             'password' => 'Alexandre14!',
             'email' => 'testeur@gmail.com',
             'is_admin' => true,
             'accepted_terms' => true,
-            'avatar_path' => 'images/static/blank-profile.png',
+            // 'avatar_path' => 'images/static/blank-profile.png',
         ]);
 
         User::factory()->create([
-            'login' => 'Thomas',
+            'login' => 'ThomasMunier',
             'first_name' => 'Thomas',
             'last_name' => 'Smith',
             'password' => 'Thomas18!',
@@ -51,7 +51,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'login' => 'Sylvain',
+            'login' => 'SylvainP',
             'first_name' => 'Hacker',
             'last_name' => 'Smith',
             'password' => 'GeniusHacker42!',
@@ -69,7 +69,7 @@ class DatabaseSeeder extends Seeder
             'number' => 12,
             'street' => 'rue de la paix',
             'city_name' => 'Lizio',
-            'zip_code' => '75000',
+            'zip_code' => '33000',
         ]);
 
         Location::factory()->create([
@@ -77,7 +77,7 @@ class DatabaseSeeder extends Seeder
             'number' => 1,
             'street' => 'rue de la guerre',
             'city_name' => 'Ambon',
-            'zip_code' => '75000',
+            'zip_code' => '56000',
             'addon' => 'Apt 12',
         ]);
 
@@ -86,16 +86,16 @@ class DatabaseSeeder extends Seeder
             'number' => 13,
             'street' => 'rue de la soif',
             'city_name' => 'Le Mans',
-            'zip_code' => '75000',
+            'zip_code' => '33000',
             'bis' => 'bis',
         ]);
 
         Location::factory()->create([
-            'title' => 'Jardin',
+            'title' => 'Jardin de Papy',
             'number' => 12,
             'street' => 'impasse du jardin',
             'city_name' => 'Saulx les chartreux',
-            'zip_code' => '75000',
+            'zip_code' => '91000',
             'addon' => 'privé',
         ]);
 
@@ -106,7 +106,7 @@ class DatabaseSeeder extends Seeder
         // Event in the past
         Event::factory()->create([
             'title' => 'Vinland',
-            'description' => 'Une terre inconnu, des démons familiers',
+            'description' => 'Une terre inconnue, des démons familiers',
             'start_date' => '2024-02-24',
             'end_date' => '2024-02-25',
             'location_id' => 2,
@@ -205,7 +205,7 @@ class DatabaseSeeder extends Seeder
             'location_id' => 4,
             'price' => 10,
             'max_attendees' => 4,
-            'image_path' => 'events/images/les-sentes.png',
+            'image_path' => 'events/images/zad.jpg',
         ]);
 
         Attendee::factory()->create([

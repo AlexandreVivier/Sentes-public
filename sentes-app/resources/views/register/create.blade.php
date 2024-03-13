@@ -1,7 +1,7 @@
 <x-layoutLight>
 	<section>
 		<x-basicFrameHeader>
-			<h1>
+			<h1 class="special-elite-regular">
                 Inscription
             </h1>
 		</x-basicFrameHeader>

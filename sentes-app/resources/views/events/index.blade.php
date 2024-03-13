@@ -9,9 +9,7 @@
                 @include('components.createEventButton', ['message' => 'Inscris-toi pour créer ton GN !', 'link' => route('register')])
             @endauth
         @foreach ($events as $event)
-            @if(!$event->is_cancelled)
             @include('components.indexCard', ['event' => $event])
-            @endif
         @endforeach
 
         </div>

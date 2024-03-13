@@ -6,7 +6,7 @@
 
 <main class="text-green">
     <article>
-        <h1>CONDITIONS GÉNÉRALES D'UTILISATION</h1>
+        <h1 class="special-elite-regular">CONDITIONS GÉNÉRALES D'UTILISATION</h1>
         <p>En vigueur au 15/03/2024</p>
         <p>Les présentes conditions générales d'utilisation (dites « CGU ») ont pour objet l'encadrement juridique
         des modalités de mise à disposition du site et des services par Alexandre Vivier et de définir les
@@ -23,7 +23,7 @@
     </article>
 
     <article>
-        <h2>ARTICLE 1 : LES MENTIONS LÉGALES</h2>
+        <h2 class="special-elite-regular">ARTICLE 1 : LES MENTIONS LÉGALES</h2>
         <p>L’édition et la direction de la publication du site les-sentes.org est assurée par Vivier Alexandre,
         domicilié 2 rue de la guerre.
         Numéro de téléphone est 06 05 04 03 02
@@ -32,7 +32,7 @@
         Kellermann, 59100 Roubaix., avec le numéro de téléphone : 09 72 10 10 07.</p>
     </article>
     <article>
-        <h2>ARTICLE 2 : ACCÈS AU SITE</h2>
+        <h2 class="special-elite-regular">ARTICLE 2 : ACCÈS AU SITE</h2>
         <p>Le site les-sentes.org permet à l'Utilisateur un accès gratuit aux services suivants :
         Le site internet propose les services suivants :
         Espace de création ludique communautaire et calendrier d’événements.
@@ -56,7 +56,7 @@
     </article>
 
     <article>
-        <h2>ARTICLE 3 : COLLECTE DES DONNÉES</h2>
+        <h2 class="special-elite-regular">ARTICLE 3 : COLLECTE DES DONNÉES</h2>
         <p>Le site assure à l'Utilisateur une collecte et un traitement d'informations personnelles dans le respect de la vie privée conformément à la loi n°78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés.</p>
         <p>En vertu de la loi Informatique et Libertés, en date du 6 janvier 1978, l'Utilisateur dispose d'un droit d'accès, de rectification, de suppression et d'opposition de ses données personnelles. L'Utilisateur exerce ce droit :</p>
         <ul>
@@ -65,7 +65,7 @@
     </article>
 
     <article>
-        <h2>ARTICLE 4 : PROPRIÉTÉ INTELLECTUELLE</h2>
+        <h2 class="special-elite-regular">ARTICLE 4 : PROPRIÉTÉ INTELLECTUELLE</h2>
         <p>Les marques, logos, signes ainsi que tous les contenus du site (textes, images, son…) font l'objet d'une protection par le Code de la propriété intellectuelle et plus particulièrement par le droit d'auteur.</p>
         <p>L'Utilisateur doit solliciter l'autorisation préalable du site pour toute reproduction, publication, copie des différents contenus. Il s'engage à une utilisation des contenus du site dans un cadre strictement privé, toute utilisation à des fins commerciales et publicitaires est strictement interdite.</p>
         <p>Toute représentation totale ou partielle de ce site par quelque procédé que ce soit, sans l’autorisation expresse de l’exploitant du site Internet constituerait une contrefaçon sanctionnée par l’article L 335-2 et suivants du Code de la propriété intellectuelle.</p>
@@ -73,7 +73,7 @@
     </article>
 
     <article>
-        <h2>ARTICLE 5 : RESPONSABILITÉ</h2>
+        <h2 class="special-elite-regular">ARTICLE 5 : RESPONSABILITÉ</h2>
         <p>Les sources des informations diffusées sur le site les-sentes.org sont réputées fiables mais le site ne garantit pas qu’il soit exempt de défauts, d’erreurs ou d’omissions.</p>
         <p>Les informations communiquées sont présentées à titre indicatif et général sans valeur contractuelle.</p>
         <p>Malgré des mises à jour régulières, le site les-sentes.org ne peut être tenu responsable de la modification des dispositions administratives et juridiques survenant après la publication. De même, le site ne peut être tenue responsable de l’utilisation et de l’interprétation de l’information contenue dans ce site.</p>
@@ -83,12 +83,12 @@
     </article>
 
     <article>
-        <h2>ARTICLE 6 : LIENS HYPERTEXTES</h2>
+        <h2 class="special-elite-regular">ARTICLE 6 : LIENS HYPERTEXTES</h2>
         <p>Des liens hypertextes peuvent être présents sur le site. L’Utilisateur est informé qu’en cliquant sur ces liens, il sortira du site les-sentes.org. Ce dernier n’a pas de contrôle sur les pages web sur lesquelles aboutissent ces liens et ne saurait, en aucun cas, être responsable de leur contenu.</p>
     </article>
 
     <article>
-        <h2>ARTICLE 7 : COOKIES</h2>
+        <h2 class="special-elite-regular">ARTICLE 7 : COOKIES</h2>
         <p>L’Utilisateur est informé que lors de ses visites sur le site, un cookie peut s’installer automatiquement sur son logiciel de navigation.</p>
         <p>Les cookies sont de petits fichiers stockés temporairement sur le disque dur de l’ordinateur de l’Utilisateur par votre navigateur et qui sont nécessaires à l’utilisation du site les-sentes.org. Les cookies ne contiennent pas d’information personnelle et ne peuvent pas être utilisés pour identifier quelqu’un. Un cookie contient un identifiant unique, généré aléatoirement et donc anonyme. Certains cookies expirent à la fin de la visite de l’Utilisateur, d’autres restent.</p>
         <p>L’information contenue dans les cookies est utilisée pour améliorer le site les-sentes.org.</p>
@@ -99,7 +99,7 @@
     </article>
 
     <article>
-        <h2>ARTICLE 8 : PUBLICATION PAR L’UTILISATEUR</h2>
+        <h2 class="special-elite-regular">ARTICLE 8 : PUBLICATION PAR L’UTILISATEUR</h2>
         <p>Le site permet aux membres de publier les contenus suivants : événements et contenu de ces événements.</p>
         <p>Dans ses publications, le membre s’engage à respecter les règles de la Netiquette (règles de bonne conduite de l’internet) et les règles de droit en vigueur.</p>
         <p>Le site peut exercer une modération sur les publications et se réserve le droit de refuser leur mise en ligne, sans avoir à s’en justifier auprès du membre.</p>
@@ -110,7 +110,7 @@
     </article>
 
     <article>
-        <h2>ARTICLE 9 : DROIT APPLICABLE ET JURIDICTION COMPÉTENTE</h2>
+        <h2 class="special-elite-regular">ARTICLE 9 : DROIT APPLICABLE ET JURIDICTION COMPÉTENTE</h2>
         <p>La législation française s'applique au présent contrat. En cas d'absence de résolution amiable d'un litige né entre les parties, les tribunaux français seront seuls compétents pour en connaître.</p>
         <p>Pour toute question relative à l’application des présentes CGU, vous pouvez joindre l’éditeur aux coordonnées inscrites à l’ARTICLE 1.</p>
         <p>CGU réalisées sur http://legalplace.fr/</p>

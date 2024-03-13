@@ -90,6 +90,20 @@ class AdminController extends Controller
 
         cache()->forget('users');
         cache()->forget("user-{$user->id}", $user->id);
+        $organizedEvents = $user->allEvents()->get();
+
+        cache()->forget('events');
+
+        foreach ($organizedEvents as $event) {
+            cache()->forget("event-{$event->id}", $event->id);
+        }
+        foreach ($organizedEvents as $event) {
+            $organizers = $event->organizers()->get();
+            foreach ($organizers as $organizer) {
+                cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+            }
+        }
+
         $user->update($attributes);
         session()->flash('success', 'Le compte a bien été modifié !');
 
@@ -102,10 +116,22 @@ class AdminController extends Controller
         foreach ($attendees as $attendee) {
             $attendee->delete();
         }
+
         cache()->forget('users');
         cache()->forget("user-{$user->id}", $user->id);
-        cache()->forget("my-events-{$user->id}", $user->id);
+        $organizedEvents = $user->allEvents()->get();
+
         cache()->forget('events');
+
+        foreach ($organizedEvents as $event) {
+            cache()->forget("event-{$event->id}", $event->id);
+        }
+        foreach ($organizedEvents as $event) {
+            $organizers = $event->organizers()->get();
+            foreach ($organizers as $organizer) {
+                cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+            }
+        }
         $user->delete();
         session()->flash('success', 'Le compte a bien été supprimé !');
 
@@ -290,9 +316,13 @@ class AdminController extends Controller
             $attributes['file_path'] = str_replace('public/', '', $attributes['file_path']);
         }
 
+        $organizers = $event->organizers()->get();
+
         cache()->forget('events');
         cache()->forget("event-{$event->id}", $event->id);
-        // TODO    foreach($orga)     cache()->forget("my-events-{$orgaId}", $orga->id);
+        foreach ($organizers as $organizer) {
+            cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+        }
         $event->update($attributes);
         session()->flash('success', 'L\'évènement a bien été modifié !');
 
@@ -301,9 +331,20 @@ class AdminController extends Controller
 
     public function eventDestroy(Event $event)
     {
+
+        $organizers = $event->organizers()->get();
+
         cache()->forget('events');
         cache()->forget("event-{$event->id}", $event->id);
+        foreach ($organizers as $organizer) {
+            cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+        }
+        $attendees = $event->attendees()->get();
+        foreach ($attendees as $attendee) {
+            $attendee->delete();
+        }
         $event->delete();
+
 
         session()->flash('success', 'L\'évènement a bien été supprimé !');
 

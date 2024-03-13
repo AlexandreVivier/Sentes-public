@@ -1,7 +1,7 @@
 <x-layoutLight>
 	<section>
 		<x-basicFrameHeader>
-            <h2>
+            <h2 class="special-elite-regular">
                 {{ $user->login }}
                 @if($user->is_admin)
                 <span class="italic">  (Admin du site) </span>

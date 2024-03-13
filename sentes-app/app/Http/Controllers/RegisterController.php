@@ -64,6 +64,23 @@ class RegisterController extends Controller
             $attributes['avatar_path'] = str_replace('public/', '', $attributes['avatar_path']);
         }
 
+
+        cache()->forget('users');
+        cache()->forget("user-{$user->id}", $user->id);
+        $organizedEvents = $user->allEvents()->get();
+
+        cache()->forget('events');
+
+        foreach ($organizedEvents as $event) {
+            cache()->forget("event-{$event->id}", $event->id);
+        }
+        foreach ($organizedEvents as $event) {
+            $organizers = $event->organizers()->get();
+            foreach ($organizers as $organizer) {
+                cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+            }
+        }
+
         $user->update($attributes);
 
         session()->flash('success', 'Ton proﬁl a bien été mis à jour !');
@@ -94,6 +111,23 @@ class RegisterController extends Controller
         $attendees = Attendee::where('user_id', $user->id)->get();
         foreach ($attendees as $attendee) {
             $attendee->delete();
+        }
+
+
+        cache()->forget('users');
+        cache()->forget("user-{$user->id}", $user->id);
+        $organizedEvents = $user->allEvents()->get();
+
+        cache()->forget('events');
+
+        foreach ($organizedEvents as $event) {
+            cache()->forget("event-{$event->id}", $event->id);
+        }
+        foreach ($organizedEvents as $event) {
+            $organizers = $event->organizers()->get();
+            foreach ($organizers as $organizer) {
+                cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+            }
         }
         $user->delete();
 

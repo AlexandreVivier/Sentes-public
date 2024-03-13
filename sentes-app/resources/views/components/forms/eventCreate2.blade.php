@@ -51,7 +51,7 @@
             <label for="price" class="text-shadowed">
                 Participation aux frais :
             </label>
-            <input type="number" min=1 name="price" id="price" value="{{ old('price') }} €" placeholder="€" >
+            <input type="number" min=1 name="price" id="price" value="{{ old('price') }}" placeholder="€" >
             @error('price')
             <p>
                 {{ $message }}
@@ -71,6 +71,11 @@
                     HelloAsso
                 </a> ou toute autre plateforme de ton choix.
             </p>
+            @error('tickets_link')
+            <p>
+                {{ $message }}
+            </p>
+            @enderror
         </div>
 
         <div class="form-input">
@@ -81,7 +86,7 @@
             <p class="text-small italic text-green">
                 Format .pdf uniquement.
             </p>
-            @error('image_path')
+            @error('file_path')
             <p>
                 {{ $message }}
             </p>
@@ -96,6 +101,11 @@
             <p class="text-normal-small italic text-green">
                 Assure-toi que le lien coche les <a href="#" class="text-green italic semi-bold" id="discordHelp" >options "jamais" et "illimité"</a> avant de le poster.
             </p>
+            @error('server_link')
+            <p>
+                {{ $message }}
+            </p>
+            @enderror
         </div>
     </div>
 </div>

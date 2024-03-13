@@ -1,7 +1,7 @@
 <x-layoutLight>
 	<section>
 		<x-basicFrameHeader>
-			<h1>
+			<h1 class="special-elite-regular">
                 Créer un nouveau GN
             </h1>
 		</x-basicFrameHeader>

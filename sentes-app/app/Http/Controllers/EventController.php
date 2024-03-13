@@ -36,8 +36,6 @@ class EventController extends Controller
 
     public function store()
     {
-        $authorId = auth()->id();
-
         $attributes = request()->validate([
             'title' => ['required', 'max:99', Rule::unique('events', 'title')],
             'description' => ['required', 'max:99'],
@@ -76,10 +74,10 @@ class EventController extends Controller
         }
 
         $attributes = request()->validate([
-            'title' => ['max:99'],
-            'description' => ['max:99'],
-            'start_date' => ['date', 'after:now'],
-            'location_id' => [Rule::exists('locations', 'id')],
+            // 'title' => ['max:99'],
+            // 'description' => ['max:99'],
+            // 'start_date' => ['date', 'after:now'],
+            // 'location_id' => [Rule::exists('locations', 'id')],
             'price' => ['nullable', 'numeric', 'min:1'],
             'max_attendees' => ['nullable', 'numeric', 'min:1'],
             'image_path' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png'],
@@ -94,7 +92,7 @@ class EventController extends Controller
             $attributes['image_path'] = request('image_path')->store('public/events/images');
             $attributes['image_path'] = str_replace('public/', '', $attributes['image_path']);
         } else {
-            $attributes['image_path'] = 'events/images/blank-event.png';
+            $attributes['image_path'] = 'images/static/blank-event.png';
         }
 
         if (request()->hasFile('file_path')) {
@@ -102,11 +100,13 @@ class EventController extends Controller
             $attributes['file_path'] = str_replace('public/', '', $attributes['file_path']);
         }
 
-        $userId = auth()->user()->id;
+        $organizers = $event->organizers()->get();
 
         cache()->forget('events');
         cache()->forget("event-{$event->id}", $event->id);
-        cache()->forget("my-events-{$userId}", auth()->user()->id);
+        foreach ($organizers as $organizer) {
+            cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+        }
         $event->update($attributes);
 
         session()->flash('success', 'Ton évènement a bien été créé !');
@@ -132,8 +132,17 @@ class EventController extends Controller
             abort(403, 'Tu dois être orga de ce GN pour le supprimer !');
         }
 
+        $organizers = $event->organizers()->get();
+
         cache()->forget('events');
         cache()->forget("event-{$event->id}", $event->id);
+        foreach ($organizers as $organizer) {
+            cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+        }
+        $attendees = $event->attendees()->get();
+        foreach ($attendees as $attendee) {
+            $attendee->delete();
+        }
         $event->delete();
 
         return redirect(route('events.index'));
@@ -146,12 +155,13 @@ class EventController extends Controller
         if (!$orga) {
             abort(403, 'Tu dois être orga de ce GN pour l\'annuler !');
         }
-
-        $userId = auth()->user()->id;
+        $organizers = $event->organizers()->get();
 
         cache()->forget('events');
         cache()->forget("event-{$event->id}", $event->id);
-        cache()->forget("my-events-{$userId}", auth()->user()->id);
+        foreach ($organizers as $organizer) {
+            cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+        }
         $event->cancel();
 
         session()->flash('success', 'Ton évènement a bien été annulé !');

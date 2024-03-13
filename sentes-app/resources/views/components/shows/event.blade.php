@@ -58,9 +58,13 @@
                 Le {{ $event->formatDate($event->start_date) }}
             @endif
         </h4>
+        @if($event->location)
         <h4 class="text-normal special-elite-regular semi-bold text-green">{{ $event->location->title }}
             <span class="uppercase semi-bold special-elite-regular"> - {{ $event->location->city_name }} {{ $event->location->zip_code }}</span>
         </h4>
+        @else
+        <h4 class="text-normal special-elite-regular semi-bold text-green">Lieu à définir</h4>
+        @endif
         <p class="text-normal text-green">
         @if ($event->price)
             Montant : {{ $event->price }} € -
