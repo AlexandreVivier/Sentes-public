@@ -1,0 +1,215 @@
+$color_1: #d3d4cc;
+$color_2: #EFF0E9;
+$color_3: #FFF;
+$background-color_1: #353C34;
+
+.nav {
+	width: 100%;
+	background: linear-gradient(180deg, rgba(73,86,70,1) 0%, rgb(42, 45, 40) 100%);
+	box-shadow: 0px 3px 25px rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	padding: 1rem;
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	white-space: nowrap;
+	>.nav-header {
+		flex: 0.95;
+		z-index: 100;
+		display: flex;
+		justify-content: space-between;
+		margin: 0 1rem 0 0.2rem;
+		>.nav-title {
+			>a {
+				font-size: larger;
+				text-decoration: none;
+				color: $color_1;
+				-webkit-text-stroke: 1px #fff;
+				text-shadow: 1px 1px 2px rgb(24, 24, 24);
+			}
+			font-size: 1.2rem;
+			color: $color_1;
+			text-shadow: 1px 1px 2px rgb(24, 24, 24);
+		}
+		>.nav-about {
+			display: flex;
+			align-items: center;
+			padding: 0 1rem;
+			margin-right: 1rem;
+			border: 2px solid #EFF0E9;
+			border-image: linear-gradient(to bottom, #23232300, #7f897e68, #a9afa6, #7f897e68, #23232300) 1;
+			>a {
+				text-decoration: none;
+				font-size: 1rem;
+				display: flex;
+				align-items: center;
+				text-transform: uppercase;
+				color: $color_1;
+				text-shadow: 1px 1px 2px rgb(24, 24, 24);
+			}
+		}
+	}
+	>.nav-btn {
+		display: inline-block;
+		position: absolute;
+		z-index: 100;
+		right: 0;
+		top: 0;
+		padding-top: 0.2rem;
+		>label {
+			display: inline-block;
+			width: 50px;
+			height: 50px;
+			padding: 13px;
+			>span {
+				display: block;
+				width: 25px;
+				height: 10px;
+				border-top: 2px solid #EFF0E9;
+				border-image: linear-gradient(to right, #a9afa6, #d3d4cc, #EFF0E9, #d3d4cc, #a9afa6) 1;
+				text-shadow: 1px 1px 2px rgb(24, 24, 24);
+			}
+		}
+	}
+	>.nav-list {
+		position: absolute;
+		z-index: 100;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		width: 100%;
+		background-color: $background-color_1;
+		height: 0;
+		transition: all 0.3s ease-in;
+		top: 40px;
+		left: 0;
+		overflow: hidden;
+		>li {
+			list-style-type: none;
+			margin-top: 1.5rem;
+			font-size: 1.2rem;
+			a {
+				text-decoration: none;
+				color: $color_2;
+				text-shadow: 1px 1px 2px rgb(24, 24, 24);
+				cursor: pointer;
+			}
+		}
+		>form {
+			>button {
+				margin-top: 1.5rem;
+				font-size: 1.2rem;
+				color: $color_2;
+				text-shadow: 1px 1px 2px rgb(24, 24, 24);
+				cursor: pointer;
+			}
+		}
+	}
+	>#nav-check {
+		&:checked {
+			~ {
+				.nav-list {
+					height: auto;
+					background: linear-gradient(0deg, rgba(73,86,70,0) 0%, rgba(73,86,70,0.8) 3%, rgba(42, 45, 40, 0.9) 100%);
+					overflow-y: scroll;
+					padding-bottom: 1.2rem;
+				}
+			}
+		}
+		display: none;
+	}
+}
+@media (min-width: 360px) {
+	.nav {
+		>.nav-header {
+			>.nav-title {
+				font-size: 1.7rem;
+			}
+			>.nav-about {
+				>a {
+					font-size: 1.2rem;
+				}
+			}
+		}
+		>.nav-btn {
+			top: 0.5rem;
+		}
+	}
+}
+@media (min-width: 1024px) {
+	.nav {
+		padding: 0.5rem;
+		>.nav-list {
+			position: relative;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+			align-items: center;
+			height: 100%;
+			width: auto;
+			min-width: 450px;
+			gap: 2rem;
+			top: 0;
+			margin: 0;
+			overflow: visible;
+			background: transparent;
+			>li {
+				width: 100%;
+				height: 100%;
+				margin-top: 0;
+				>a {
+					padding-top: 1rem;
+					padding-bottom: 1rem;
+					&:hover {
+						transition: all 0.2s ease-in;
+						color: $color_3;
+						text-shadow: 2px 2px 0px black;
+					}
+				}
+			}
+			>form {
+				>button {
+					width: 100%;
+					height: 100%;
+					margin-top: 0;
+					padding-top: 1rem;
+					padding-bottom: 1rem;
+					&:hover {
+						transition: all 0.2s ease-in;
+						color: $color_3;
+						text-shadow: 2px 2px 0px black;
+					}
+				}
+			}
+		}
+		>.nav-header {
+			>.nav-title {
+				>a {
+					padding-top: 1rem;
+					padding-bottom: 1rem;
+					&:hover {
+						transition: all 0.2s ease-in;
+						color: $color_3;
+						text-shadow: 2px 2px 0px black;
+						-webkit-text-stroke: 1px #353c34;
+					}
+				}
+				font-size: 2rem;
+			}
+			>.nav-about {
+				>a {
+					&:hover {
+						transition: all 0.2s ease-in;
+						color: $color_3;
+						text-shadow: 2px 2px 0px black;
+					}
+				}
+			}
+		}
+		>.nav-btn {
+			display: none;
+		}
+	}
+}

@@ -49,13 +49,11 @@
                 Mon Profil
             </a>
         </li>
-        @if(auth()->user()->isOrganiser() != null)
         <li>
             <a href="{{ route('user.organisations.index', auth()->user()->id) }}" class="special-elite-regular">
                 Mes Orgas
             </a>
         </li>
-        @endif
         <form method="POST" action="/logout">
             @csrf
             <button type="submit" class="special-elite-regular">

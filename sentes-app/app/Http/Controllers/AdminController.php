@@ -201,17 +201,46 @@ class AdminController extends Controller
             'addon' => 'nullable',
         ]);
 
+
+        $locationEvents = $location->events()->get();
+
+        foreach ($locationEvents as $event) {
+            cache()->forget("event-{$event->id}", $event->id);
+        }
+
+        foreach ($locationEvents as $event) {
+            $attendees = $event->attendees()->get();
+            foreach ($attendees as $attendee) {
+                cache()->forget("my-events-{$attendee->user_id}", $attendee->user_id);
+            }
+        }
+        cache()->forget('events');
+        cache()->forget("location-{$location->id}", $location->id);
         cache()->forget('locations');
         $location->update($attributes);
         session()->flash('success', 'Le lieu a bien été modifié !');
 
-        return view('admin.locations.show', compact('location'));
+        return view('admin.show', compact('location'));
     }
 
     public function locationDestroy(Location $location)
     {
+
+        $locationEvents = $location->events()->get();
+
+        foreach ($locationEvents as $event) {
+            cache()->forget("event-{$event->id}", $event->id);
+        }
+
+        foreach ($locationEvents as $event) {
+            $attendees = $event->attendees()->get();
+            foreach ($attendees as $attendee) {
+                cache()->forget("my-events-{$attendee->user_id}", $attendee->user_id);
+            }
+        }
+        cache()->forget('events');
         cache()->forget('locations');
-        // Events ?
+        cache()->forget("location-{$location->id}", $location->id);
         $location->delete();
         session()->flash('success', 'Le lieu a bien été supprimé !');
 
@@ -254,11 +283,11 @@ class AdminController extends Controller
         ]);
 
 
-        if (request()->hasFie('image_path')) {
+        if (request()->hasFile('image_path')) {
             $attributes['image_path'] = request('image_path')->store('public/events/images');
             $attributes['image_path'] = str_replace('public/', '', $attributes['image_path']);
         } else {
-            $attributes['image_path'] = 'static/images/blank-event.png';
+            $attributes['image_path'] = 'images/static/blank-event.png';
         }
 
         if (request()->hasFile('file_path')) {

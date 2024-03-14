@@ -3,12 +3,12 @@
     <table class="fixed_headers">
         <thead>
         <tr>
-            <th class="td-mobile-none">Id</th>
+            <th class="td-mobile-none special-elite-regular">Id</th>
             @foreach($titles as $title)
             @if($title == 'Avatar' || $title == 'Nom' || $title == 'Orga(s)'  || $title == 'Pseudo'  || $title == 'Titre' || $title == 'Prénom' || $title == 'Nom' || $title == 'Ville' || $title == 'Date de début' || $title == 'Auteur' || $title == 'Code Postal')
-            <th>{{ $title }}</th>
+            <th class="special-elite-regular">{{ $title }}</th>
             @else
-            <th class="td-mobile-none">{{ $title }}</th>
+            <th class="td-mobile-none special-elite-regular">{{ $title }}</th>
             @endif
             @endforeach
         </tr>

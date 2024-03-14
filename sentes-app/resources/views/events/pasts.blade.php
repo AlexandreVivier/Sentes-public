@@ -4,9 +4,13 @@
        @include('components.dropdown', ['locations' => $locations])
         <div class="index-grid">
             @auth
-                @include('components.createEventButton', ['message' => 'Créé ton GN !', 'link' =>  route('events.create') ])
+                @include('components.createEventButton', ['buttonText' => 'Créé ton GN !',
+                'messageText' => 'L\'application des Sentes contient tous les outils pour t\'accompagner dans la création de ton GN.',
+                'link' =>  route('events.create') ])
             @else
-                @include('components.createEventButton', ['message' => 'Inscris-toi pour créer ton GN !', 'link' => route('register')])
+                @include('components.createEventButton', ['message' => 'Inscris-toi pour profiter des possibilités du site !',
+                'messageText' => '',
+                'link' => route('register')])
             @endauth
 
         @foreach ($pastsEvents as $event)

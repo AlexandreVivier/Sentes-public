@@ -6,7 +6,7 @@
             </h1>
 		</x-basicFrameHeader>
 		<x-basicFrameContent>
-			<form method="POST" action="/session" class="w-50">
+			<form method="POST" action="/session" class="login-form">
 				@csrf
 
 				<div class="form-input">
@@ -52,6 +52,7 @@
 
 			</form>
 		</x-basicFrameContent>
+        {{-- <div class="h-50vh"></div> --}}
 	</section>
 </x-layoutLight>
 

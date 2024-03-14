@@ -41,7 +41,26 @@ class EventController extends Controller
             'description' => ['required', 'max:99'],
             'start_date' => ['required', 'date', 'after:now'],
             'location_id' => ['required', Rule::exists('locations', 'id')],
+            'price' => ['nullable', 'numeric', 'min:1'],
+            'max_attendees' => ['nullable', 'numeric', 'min:1'],
+            'image_path' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png'],
+            'end_date' => ['nullable', 'date', 'after:start_date'],
+            'file_path' => ['nullable', 'file', 'max:2048', 'mimes:pdf'],
+            'server_link' => ['nullable', 'url', 'starts_with:https://discord.gg/'],
+            'tickets_link' => ['nullable', 'url', 'starts_with:https://'],
         ]);
+
+        if (request()->hasFile('image_path')) {
+            $attributes['image_path'] = request('image_path')->store('public/events/images');
+            $attributes['image_path'] = str_replace('public/', '', $attributes['image_path']);
+        } else {
+            $attributes['image_path'] = 'images/static/blank-event.png';
+        }
+
+        if (request()->hasFile('file_path')) {
+            $attributes['file_path'] = request('file_path')->store('public/events/files');
+            $attributes['file_path'] = str_replace('public/', '', $attributes['file_path']);
+        }
 
         cache()->forget('events');
 
@@ -51,7 +70,7 @@ class EventController extends Controller
             'user_id' => auth()->user()->id,
             'is_organizer' => true,
         ]);
-
+        session()->flash('success', 'Ton évènement a bien été créé !');
         return redirect(route('events.edit', $event));
     }
 
@@ -74,10 +93,6 @@ class EventController extends Controller
         }
 
         $attributes = request()->validate([
-            // 'title' => ['max:99'],
-            // 'description' => ['max:99'],
-            // 'start_date' => ['date', 'after:now'],
-            // 'location_id' => [Rule::exists('locations', 'id')],
             'price' => ['nullable', 'numeric', 'min:1'],
             'max_attendees' => ['nullable', 'numeric', 'min:1'],
             'image_path' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png'],
@@ -109,7 +124,7 @@ class EventController extends Controller
         }
         $event->update($attributes);
 
-        session()->flash('success', 'Ton évènement a bien été créé !');
+        session()->flash('success', 'Ton évènement a bien été mis à jour !');
         return redirect(route('events.show', $event));
     }
 
@@ -166,39 +181,6 @@ class EventController extends Controller
 
         session()->flash('success', 'Ton évènement a bien été annulé !');
         return redirect(route('events.index'));
-    }
-
-    public function getEventOrganizers($eventId)
-    {
-        $event = Event::find($eventId);
-        $organizers = $event->attendees()->organizers()->get();
-        if ($organizers) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public function GetAllEventOrganizersLogins($eventId)
-    {
-        $event = Event::find($eventId);
-        $organizers = $event->organizers()->get();
-        $organizersLogins = [];
-        foreach ($organizers as $organizer) {
-            $organizersLogins[] = $organizer->user->login;
-        }
-        return $organizersLogins;
-    }
-
-    public function checkIfUserIsOrganizer($eventId)
-    {
-        $event = Event::find($eventId);
-        $isOrganizer = $event->attendees()->where('user_id', auth()->id())->where('is_organizer', true)->exists();
-        if ($isOrganizer) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public function getAllEventsOrganizedByUser($userId)

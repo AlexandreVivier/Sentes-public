@@ -3,11 +3,12 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build && xcopy /Y public\\build\\assets\\app-*.css public\\css\\app.css"
     },
     "devDependencies": {
         "axios": "^1.6.4",
         "laravel-vite-plugin": "^1.0.0",
+        "sass": "^1.72.0",
         "vite": "^5.0.0"
     }
 }
