@@ -3,7 +3,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build && xcopy /Y public\\build\\assets\\app-*.css public\\css\\app.css"
+        "build": "vite build && xcopy /Y public\\build\\assets\\app-*.css public\\app.css"
     },
     "devDependencies": {
         "axios": "^1.6.4",
