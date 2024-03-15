@@ -6,7 +6,7 @@
 
         <div class="index-grid">
 
-                @include('components.createEventButton', ['buttonText' => 'Propose un GN à {{ $location->title }} !',
+                @include('components.createEventButton', ['buttonText' => 'Propose un GN à ' . $location->title . '!',
                 'messageText' => 'L\'application des Sentes contient tous les outils pour t\'accompagner dans la création de ton GN.',
                  'link' =>  route('events.create') ])
 

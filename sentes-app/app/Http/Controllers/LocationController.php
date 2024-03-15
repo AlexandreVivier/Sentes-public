@@ -68,13 +68,13 @@ class LocationController extends Controller
 
     public function getEventsByLocation(Location $location)
     {
-        $events = cache()->rememberForever("location-{$location->id}", function () use ($location) {
-            return Event::with(['organizers.user', 'attendees.user'])
-                ->where('location_id', $location->id)
-                ->where('is_cancelled', false)
-                ->where('start_date', '>', now())
-                ->paginate(4);
-        });
+        $events = Event::with(['organizers.user', 'attendees.user'])
+            ->where('location_id', $location->id)
+            ->where('is_cancelled', false)
+            ->where('start_date', '>', now())
+            ->filter(request(['search']))
+            ->paginate(4);
+
 
         $locations = cache()->rememberForever('locations', function () {
             return Location::all()

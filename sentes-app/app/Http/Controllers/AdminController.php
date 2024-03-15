@@ -215,7 +215,6 @@ class AdminController extends Controller
             }
         }
         cache()->forget('events');
-        cache()->forget("location-{$location->id}", $location->id);
         cache()->forget('locations');
         $location->update($attributes);
         session()->flash('success', 'Le lieu a bien été modifié !');
@@ -240,7 +239,6 @@ class AdminController extends Controller
         }
         cache()->forget('events');
         cache()->forget('locations');
-        cache()->forget("location-{$location->id}", $location->id);
         $location->delete();
         session()->flash('success', 'Le lieu a bien été supprimé !');
 
