@@ -132,6 +132,10 @@ class AdminController extends Controller
                 cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
             }
         }
+        $attendees = $user->attendees()->get();
+        foreach ($attendees as $attendee) {
+            $attendee->delete();
+        }
         $user->delete();
         session()->flash('success', 'Le compte a bien été supprimé !');
 
@@ -280,18 +284,8 @@ class AdminController extends Controller
             'tickets_link' => ['nullable', 'url', 'starts_with:https://'],
         ]);
 
+        $attributes['image_path'] = 'images/static/blank-event.png';
 
-        if (request()->hasFile('image_path')) {
-            $attributes['image_path'] = request('image_path')->store('public/events/images');
-            $attributes['image_path'] = str_replace('public/', '', $attributes['image_path']);
-        } else {
-            $attributes['image_path'] = 'images/static/blank-event.png';
-        }
-
-        if (request()->hasFile('file_path')) {
-            $attributes['file_path'] = request('file_path')->store('public/events/files');
-            $attributes['file_path'] = str_replace('public/', '', $attributes['file_path']);
-        }
 
         cache()->forget('events');
         $event = Event::create($attributes);

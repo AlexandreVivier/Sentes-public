@@ -104,8 +104,6 @@ class RegisterController extends Controller
             abort(403, 'Tu n\'as pas le droit de voir cette page');
         }
 
-        cache()->forget('users');
-        cache()->forget("user-{$user->id}", $user->id);
         cache()->forget("my-events-{$user->id}", $user->id);
         cache()->forget('events');
         $attendees = Attendee::where('user_id', $user->id)->get();
@@ -128,6 +126,10 @@ class RegisterController extends Controller
             foreach ($organizers as $organizer) {
                 cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
             }
+        }
+        $attendees = $user->attendees()->get();
+        foreach ($attendees as $attendee) {
+            $attendee->delete();
         }
         $user->delete();
 

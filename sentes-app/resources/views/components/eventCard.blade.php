@@ -40,6 +40,7 @@
     </div>
 </main>
 
+@if(auth()->user())
 <dialog id="cancelEvent">
     @include('components.modals.cancelEvent')
 </dialog>
@@ -47,5 +48,6 @@
 <dialog id="unsubscribeUser">
     @include('components.modals.unsubscribeUser')
 </dialog>
+@endif
 @include('components.scripts.cancelEvent')
 @include('components.scripts.unsubscribeUser')
