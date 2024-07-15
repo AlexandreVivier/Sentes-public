@@ -21,7 +21,7 @@ class AttendeeFactory extends Factory
         return [
             'event_id' => $this->faker->randomElement(Event::pluck('id')->toArray()),
             'user_id' => $this->faker->randomElement(User::pluck('id')->toArray()),
-            'has_payed' => $this->faker->boolean(),
+            'has_paid' => $this->faker->boolean(),
             'is_organizer' => $this->faker->boolean(),
         ];
     }

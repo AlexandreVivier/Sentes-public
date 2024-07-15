@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\User;
 use App\Models\Attendee;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -33,9 +34,9 @@ class RegisterController extends Controller
 
 
         $user = User::create($attributes);
-
+        event(new Registered($user));
         auth()->login($user);
-        session()->flash('success', 'Ton compte a bien été créé ! Bienvenue, ' . auth()->user()->login . ' !');
+        session()->flash('success', 'Ton compte a bien été créé ! Vérifie ta boîte mail pour activer ton compte !');
 
         return redirect('/');
     }
@@ -57,6 +58,19 @@ class RegisterController extends Controller
             'email' => ['required', 'email', 'max:191', Rule::unique('users', 'email')->ignore($user->id)],
             'city' =>  ['nullable', 'max:50'],
             'avatar_path' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'biography' => ['nullable', 'max:500'],
+            'pronouns' => ['nullable', 'max:10'],
+            'first_aid_qualifications' => ['nullable', 'max:100'],
+            'allergies' => ['nullable', 'max:100'],
+            'medical_conditions' => ['nullable', 'max:100'],
+            'diet_restrictions' => ['nullable', 'max:100'],
+            'red_flag_people' => ['nullable', 'max:100'],
+            'emergency_contact_name' => ['nullable', 'max:100'],
+            'emergency_contact_phone_number' => ['nullable', 'max:20'],
+            'discord_username' => ['nullable', 'max:50'],
+            'facebook_username' => ['nullable', 'max:50'],
+            'trigger_warnings' => ['nullable', 'max:100'],
+            'phone_number' => ['nullable', 'max:20'],
         ]);
 
         if (request()->hasFile('avatar_path')) {
@@ -78,6 +92,7 @@ class RegisterController extends Controller
             $organizers = $event->organizers()->get();
             foreach ($organizers as $organizer) {
                 cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+                cache()->forget("my-subscribed-events-{$organizer->user_id}", $organizer->user_id);
             }
         }
 
@@ -105,6 +120,7 @@ class RegisterController extends Controller
         }
 
         cache()->forget("my-events-{$user->id}", $user->id);
+        cache()->forget("my-subscribed-events-{$user->id}", $user->id);
         cache()->forget('events');
         $attendees = Attendee::where('user_id', $user->id)->get();
         foreach ($attendees as $attendee) {
@@ -125,6 +141,7 @@ class RegisterController extends Controller
             $organizers = $event->organizers()->get();
             foreach ($organizers as $organizer) {
                 cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+                cache()->forget("my-subscribed-events-{$organizer->user_id}", $organizer->user_id);
             }
         }
         $attendees = $user->attendees()->get();

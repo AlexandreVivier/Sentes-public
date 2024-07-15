@@ -1,7 +1,7 @@
 <x-layoutDoom>
 
     <div class="bg-light dashboard-frame border-light">
-        <div class="flex-row w-100 justify-center">
+        <div class="flex-row w-75 justify-center">
                 <h1 class="index-title special-elite-regular">Menu Administration :</h1>
         </div>
 

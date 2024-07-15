@@ -18,8 +18,10 @@ return new class extends Migration
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->boolean('has_payed')->nullable()->default(false);
+            $table->boolean('has_paid')->nullable()->default(false);
             $table->boolean('is_organizer')->nullable()->default(false);
+            $table->boolean('is_subscribed')->nullable()->default(true);
+            $table->boolean('in_choir')->nullable()->default(false);
             $table->unique(['user_id', 'event_id']);
         });
     }

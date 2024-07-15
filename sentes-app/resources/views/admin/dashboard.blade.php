@@ -5,7 +5,7 @@
         <tr>
             <th class="td-mobile-none special-elite-regular">Id</th>
             @foreach($titles as $title)
-            @if($title == 'Avatar' || $title == 'Nom' || $title == 'Orga(s)'  || $title == 'Pseudo'  || $title == 'Titre' || $title == 'Prénom' || $title == 'Nom' || $title == 'Ville' || $title == 'Date de début' || $title == 'Auteur' || $title == 'Code Postal')
+            @if($title === 'Avatar' || $title === 'Nom' || $title === 'Orga(s)'  || $title === 'Pseudo'  || $title === 'Titre' || $title === 'Prénom' || $title === 'Nom' || $title === 'Ville' || $title === 'Date de début' || $title === 'Auteur' || $title === 'Code Postal')
             <th class="special-elite-regular">{{ $title }}</th>
             @else
             <th class="td-mobile-none special-elite-regular">{{ $title }}</th>
@@ -28,7 +28,7 @@
                             <td >{{ $user->first_name }}</td>
                             <td >{{ $user->last_name }}</td>
                             <td class="td-mobile-none">{{ $user->email }}</td>
-                            <td class="td-mobile-none">{{ $user->created_at->format('d M Y') }}</td>
+                            <td class="td-mobile-none">{{ $user->getFormatedDate($user->created_at) }}</td>
                         </tr>
                         @endforeach
                 @endisset
@@ -42,7 +42,7 @@
                             <td class="td-mobile-none">{{ $location->street }}</td>
                             <td >{{ $location->city_name }}</td>
                             <td >{{ $location->zip_code }}</td>
-                            <td class="td-mobile-none">{{ $location->created_at->format('d M Y') }}</td>
+                            <td class="td-mobile-none">{{ $location->getFormatedDate($location->created_at) }}</td>
                         </tr>
                         @endforeach
                 @endisset

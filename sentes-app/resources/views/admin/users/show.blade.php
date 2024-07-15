@@ -4,7 +4,7 @@
     <p class="text-green"><span class="semi-bold">Pseudo: </span>{{ $user->login }}</p>
     </div>
     @include('components.shows.user', ['user' => $user])
-    <p class="text-green italic">Dernière modification le: {{ $user->updated_at->format('d M Y') }}</p>
+    <p class="text-green italic">Dernière modification le: {{ $user->getFormatedDate($user->updated_at) }}</p>
 
     <div class="show-button-container">
         <div class="w-100">

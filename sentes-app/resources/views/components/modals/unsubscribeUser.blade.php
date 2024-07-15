@@ -10,13 +10,7 @@
         Tu es sur le point de te désinscrire de ce GN.
     </p>
     <p>
-        Toutes les informations de ton inscription seront définitivement effacées, comme le paiement de la PàF si tu l'as déjà effectué.
-    </p>
-    <p>
-        N'hésite pas à contacter l'organisation avant de confirmer ta désinscription.
-    </p>
-    <p>
-        Cette action est irréversible !
+        Tu pourras à tout moment te réinscrire si tu changes d'avis, tes informations sont conservées et disponibles pour les orgas.
     </p>
 </main>
 
@@ -25,7 +19,7 @@
 
         <div class="w-50">
             <button type="button" class="light-button special-elite-regular" onclick="window.history.back()">
-                Je vais y réfléchir.
+                Non, je reste inscrit·e.
             </button>
         </div>
 
@@ -37,7 +31,4 @@
             </button>
         </form>
     </div>
-    <p class="text-small italic">
-        Il te sera toujours possible de te réinscrire si tu changes d'avis, et reprocéder aux actions que tu avais déjà effectuées.
-    </p>
 </footer>

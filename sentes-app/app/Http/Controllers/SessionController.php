@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class SessionController extends Controller
 {
@@ -21,6 +22,14 @@ class SessionController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
+
+        $user = User::where('email', $credentials['email'])->first();
+        if (!$user->email_verified_at) {
+            throw ValidationException::withMessages([
+                'email' => 'Tu dois d\'abord valider ton adresse email.',
+            ]);
+        }
+
 
         if (auth()->attempt($credentials, $remember)) {
             session()->regenerate();

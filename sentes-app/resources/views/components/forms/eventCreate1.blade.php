@@ -52,7 +52,7 @@
             </option>
 
             @foreach ($locations as $location)
-            <option value="{{ $location->id }}" {{ old('location_id') == $location->id ? 'selected' : '' }}>
+            <option value="{{ $location->id }}" {{ old('location_id') === $location->id ? 'selected' : '' }}>
                 {{ $location->title }}
             </option>
             @endforeach

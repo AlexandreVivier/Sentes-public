@@ -73,7 +73,7 @@ class LocationController extends Controller
             ->where('is_cancelled', false)
             ->where('start_date', '>', now())
             ->filter(request(['search']))
-            ->paginate(4);
+            ->paginate(4)->withQueryString();
 
 
         $locations = cache()->rememberForever('locations', function () {

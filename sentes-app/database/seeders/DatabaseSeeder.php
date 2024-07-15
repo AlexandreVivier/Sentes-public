@@ -27,7 +27,20 @@ class DatabaseSeeder extends Seeder
             'email' => 'testeur@gmail.com',
             'is_admin' => true,
             'accepted_terms' => true,
-            // 'avatar_path' => 'images/static/blank-profile.png',
+            'avatar_path' => 'images/static/blank-profile.png',
+            'biography' => 'Je suis un organisateur et administrateur du site',
+            'pronouns' => 'il/lui',
+            'diet_restrictions' => 'Sans gluten',
+            'allergies' => 'Arachides',
+            'medical_conditions' => 'Diabète',
+            'emergency_contact_name' => 'Jeanne',
+            'emergency_contact_phone_number' => '0606060606',
+            'red_flag_people' => 'Paul',
+            'first_aid_qualifications' => 'PSC1',
+            'phone_number' => '0606060606',
+            'discord_username' => 'krill1984',
+            'facebook_username' => 'Alex Krill',
+            'trigger_warnings' => 'Attention, je refuse le jeu feel good',
         ]);
 
         User::factory()->create([
@@ -90,14 +103,14 @@ class DatabaseSeeder extends Seeder
             'bis' => 'bis',
         ]);
 
-        Location::factory()->create([
-            'title' => 'Jardin de Papy',
-            'number' => 12,
-            'street' => 'impasse du jardin',
-            'city_name' => 'Saulx les chartreux',
-            'zip_code' => '91000',
-            'addon' => 'privé',
-        ]);
+        // Location::factory()->create([
+        //     'title' => 'Jardin de Papy',
+        //     'number' => 12,
+        //     'street' => 'impasse du jardin',
+        //     'city_name' => 'Saulx les chartreux',
+        //     'zip_code' => '91000',
+        //     'addon' => 'privé',
+        // ]);
 
         Location::factory(2)->create();
 
@@ -144,7 +157,7 @@ class DatabaseSeeder extends Seeder
             'event_id' => 2,
             'user_id' => 3,
             'is_organizer' => true,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         // Event with everything ok
@@ -164,7 +177,7 @@ class DatabaseSeeder extends Seeder
             'event_id' => 3,
             'user_id' => 1,
             'is_organizer' => true,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
 
@@ -172,28 +185,28 @@ class DatabaseSeeder extends Seeder
             'event_id' => 3,
             'user_id' => 3,
             'is_organizer' => true,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 3,
             'user_id' => 4,
             'is_organizer' => true,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 3,
             'user_id' => 5,
             'is_organizer' => false,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 3,
             'user_id' => 6,
             'is_organizer' => false,
-            'has_payed' => false,
+            'has_paid' => false,
         ]);
 
         // Full event
@@ -212,28 +225,28 @@ class DatabaseSeeder extends Seeder
             'event_id' => 4,
             'user_id' => 4,
             'is_organizer' => true,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 4,
             'user_id' => 5,
             'is_organizer' => true,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 4,
             'user_id' => 6,
             'is_organizer' => false,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 4,
             'user_id' => 7,
             'is_organizer' => false,
-            'has_payed' => false,
+            'has_paid' => false,
         ]);
 
         // Other events
@@ -252,7 +265,7 @@ class DatabaseSeeder extends Seeder
             'event_id' => 5,
             'user_id' => 1,
             'is_organizer' => true,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         // Event with 4 organizers and 10 attendees
@@ -270,84 +283,84 @@ class DatabaseSeeder extends Seeder
             'event_id' => 5,
             'user_id' => 5,
             'is_organizer' => true,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 5,
             'user_id' => 6,
             'is_organizer' => true,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 5,
             'user_id' => 7,
             'is_organizer' => true,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 5,
             'user_id' => 8,
             'is_organizer' => true,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 5,
             'user_id' => 9,
             'is_organizer' => false,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 5,
             'user_id' => 10,
             'is_organizer' => false,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 5,
             'user_id' => 11,
             'is_organizer' => false,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 5,
             'user_id' => 12,
             'is_organizer' => false,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 5,
             'user_id' => 13,
             'is_organizer' => false,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 5,
             'user_id' => 14,
             'is_organizer' => false,
-            'has_payed' => true,
+            'has_paid' => true,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 5,
             'user_id' => 2,
             'is_organizer' => false,
-            'has_payed' => false,
+            'has_paid' => false,
         ]);
 
         Attendee::factory()->create([
             'event_id' => 5,
             'user_id' => 3,
             'is_organizer' => false,
-            'has_payed' => false,
+            'has_paid' => false,
         ]);
 
         Event::factory(20)->create()->each(function ($event) {
@@ -355,8 +368,13 @@ class DatabaseSeeder extends Seeder
                 'event_id' => $event->id,
                 'user_id' => rand(1, 13),
                 'is_organizer' => true,
-                'has_payed' => true,
+                'has_paid' => true,
             ]);
         });
+
+        foreach (Event::all() as $event) {
+            $event->attendee_count = $event->getAttendeesCount();
+            $event->save();
+        }
     }
 }

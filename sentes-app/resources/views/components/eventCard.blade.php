@@ -12,32 +12,27 @@
 
     @include('components.shows.event', ['event' => $event, 'attendees' => $event->attendees, 'organizers' => $event->organizers])
 
+    @auth
     <div class="flex-row w-100">
-        @if (auth()->user() && !$event->is_cancelled && $event->start_date > now())
-            @if (in_array(auth()->user()->id, $organizers->pluck('user_id')->toArray()))
-                <form method="post" action="{{ route('event.cancel', $event->id) }}" class="event-button-grid">
-                    @csrf
-                    @method('PATCH')
-                    <button type="submit" class="transparent-button special-elite-regular" id="cancel">Annuler l'évènement</button>
-                </form>
-            @elseif (!in_array(auth()->user()->id, $attendees->pluck('user_id')->toArray()) && $event->max_attendees > $event->attendees->count())
-                <form method="POST" action="{{ route('attendee.subscribe', $event->id) }}" class="event-button-grid">
-                    @csrf
-                    <button type="submit" class="light-button special-elite-regular">T'inscrire !</button>
-                </form>
-            @elseif(in_array(auth()->user()->id, $attendees->pluck('user_id')->toArray()))
-                <form method="post" action="{{ route('attendee.unsubscribe', $event->id) }}" class="event-button-grid">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="light-button special-elite-regular" id="unsubscribe">Te désinscrire</button>
-                </form>
-                @elseif($event->max_attendees === $event->attendees->count())
-                <div class="w-100 flex-row justify-center">
-                    <p class="text-green special-elite-regular text-large"> GN Complet !</p>
-                </div>
-            @endif
+        @if (in_array(auth()->user()->id, $organizers->pluck('user_id')->toArray()))
+                @include('events.components.organizerButtons')
+        @elseif (!in_array(auth()->user()->id, $organizers->pluck('user_id')->toArray())
+        && in_array(auth()->user()->id, $attendees->pluck('user_id')->toArray()))
+                @include('events.components.attendeeButtons')
+        @elseif ($event->max_attendees === $event->attendees->count())
+        <div class="w-100 flex-row justify-center">
+            <p class="text-green special-elite-regular text-large"> GN Complet !</p>
+        </div>
+        @elseif (!in_array(auth()->user()->id, $attendees->pluck('user_id')->toArray())
+        && !$event->is_cancelled
+        && $event->start_date > now())
+            <form method="POST" action="{{ route('attendee.subscribe', $event->id) }}" class="event-button-grid">
+                @csrf
+                <button type="submit" class="light-button special-elite-regular">T'inscrire !</button>
+            </form>
         @endif
     </div>
+    @endauth
 </main>
 
 @if(auth()->user())

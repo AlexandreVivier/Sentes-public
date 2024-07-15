@@ -83,6 +83,9 @@ tbody > tr:nth-of-type(even)
 	font-size: larger;
 	width: 30px;
 	height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .avatar-crud
@@ -125,6 +128,12 @@ tfoot td
 /* MD SCREENS */
 @media (min-width: 768px)
 {
+
+    .dashboard-frame
+    {
+        width: 75%;
+    }
+
 	.show-wrapper
 	{
 		display: flex;
@@ -182,6 +191,10 @@ tfoot td
 /* LG SCREENS */
 @media (min-width: 1024px)
 {
+    .dashboard-frame
+    {
+        width: 65%;
+    }
 	.admin-container
 	{
 		width: 100%;

@@ -1,4 +1,4 @@
-<header class="bg-header border-green flex-row justify-center">
+{{-- <header class="bg-header border-green flex-row justify-center">
     <h1 class="text-frame-title special-elite-regular uppercase">
         Attention {{$user->login }} !
     </h1>
@@ -40,4 +40,4 @@
     <p class="text-small italic">
         Si tu veux discuter d'une solution pour suspendre et masquer ton compte/tes infos temporairement, tu peux contacter un admin.
     </p>
-</footer>
+</footer> --}}

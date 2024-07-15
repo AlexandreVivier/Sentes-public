@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Notification;
+use Carbon\Carbon;
 
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -18,19 +20,20 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'first_name',
-        'last_name',
-        'login',
-        'email',
-        'password',
-        'avatar_path',
-        'city',
-        'accepted_terms',
-        'is_admin',
-        'is_banned'
-    ];
+    // protected $fillable = [
+    //     'first_name',
+    //     'last_name',
+    //     'login',
+    //     'email',
+    //     'password',
+    //     'avatar_path',
+    //     'city',
+    //     'accepted_terms',
+    //     'is_admin',
+    //     'is_banned'
+    // ];
 
+    protected $guarded = [];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -48,10 +51,20 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        // 'password' => 'hashed',
         'is_admin' => 'boolean',
         'is_banned' => 'boolean'
     ];
+
+    protected function formatDate($date)
+    {
+        return Carbon::parse($date)->isoFormat('Do MMM YYYY');
+    }
+
+    public function getFormatedDate($value)
+    {
+        return $this->formatDate($value);
+    }
 
     public function getFullNameAttribute(): string
     {
@@ -84,7 +97,7 @@ class User extends Authenticatable
         return $this->hasMany(Attendee::class, 'user_id')->where('is_organizer', true);
     }
 
-    public function getAllEventsOrganizedByUser()
+    public function getAllFutureEventsOrganizedByUser()
     {
         return $this->hasManyThrough(Event::class, Attendee::class, 'user_id', 'id', 'id', 'event_id')->where('is_organizer', true)->get();
     }

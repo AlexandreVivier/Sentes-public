@@ -24,7 +24,7 @@
                 <span class="uppercase">{{ optional($event->location)->city_name }}</span>
             </p>
             <p class="semi-bold">Du {{ $event->formatDate($event->start_date) }} au {{ $event->formatDate($event->end_date ?? $event->start_date) }}</p>
-            <p class="text-normal text-green">Inscrit·es : {{ $event->getAttendeesCount() }} / {{ $event->max_attendees }}</p>
+            <p class="text-normal text-green">Inscrit·es : {{ $event->attendee_count }} / {{ $event->max_attendees }}</p>
             <div class="w-100 flex-row justify-center">
                 <p class="italic text-center w-75 text-light-green special-elite-regular">"{{ $event->description }}"</p>
             </div>

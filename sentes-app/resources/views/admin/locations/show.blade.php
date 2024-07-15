@@ -2,8 +2,8 @@
     <h1 class="index-title special-elite-regular">Lieu id :{{ $location->id }}</h1>
     <p class="text-green"><span class="semi-bold">Nom: </span>{{ $location->title }}</p>
     <p class="text-green"><span class="semi-bold">Adresse complète :</span> {{ $location->number }} {{ $location->street }}, {{ $location->zip_code }} {{ $location->city_name }}</p>
-    <p class="text-green italic">Créé le: {{ $location->created_at->format('d M Y') }}</p>
-    <p class="text-green italic">Modifié le: {{ $location->updated_at->format('d M Y') }}</p>
+    <p class="text-green italic">Créé le: {{ $location->getFormatedDate($location->created_at) }}</p>
+    <p class="text-green italic">Modifié le: {{ $location->getFormatedDate($location->updated_at) }}</p>
 
     <div class="show-button-container">
         <div class="w-100">

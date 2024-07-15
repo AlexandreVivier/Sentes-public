@@ -16,11 +16,22 @@
 
                 <h2 class="special-elite-regular">
                     Informations supplémentaires :
-                   </h2>
+                </h2>
+                <p class="text-small italic text-green">
+                    Ces informations seront affichées publiquement sur votre profil.
+                </p>
 
                 <div class="form-wrapper">
                     @include('components.forms.userEdit2')
                 </div>
+
+                <p class="text-small italic text-green">
+                    Ces informations seront affichées uniquement pour les orgas des jeux sur lesquels vous êtes inscrit.e et les admins.
+                </p>
+                <div class="form-wrapper">
+                    @include('components.forms.userEdit3')
+                </div>
+
                 <div class="user-button-container">
                     <div class="w-100">
                         <button type="submit" class="green-button special-elite-regular w-100">
@@ -34,15 +45,7 @@
                     </div>
                 </div>
             </form>
-            <div class="user-button-container w-75">
-                <form action="{{ route('user.delete', $user->id) }}" method="post" class="w-100">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="transparent-button special-elite-regular w-100" id="delete">
-                        <span class="text-normal">Supprimer mon compte</span>
-                    </button>
-                </form>
-            </div>
+
 
 
         </x-basicFrameContent>

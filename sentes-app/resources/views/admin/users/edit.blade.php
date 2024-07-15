@@ -16,6 +16,9 @@
             <div class="form-wrapper">
                     @include('components.forms.userEdit2')
             </div>
+            <div class="form-wrapper">
+                @include('components.forms.userEdit3')
+            </div>
 
             <div class="show-button-container">
             <div class="form-input">

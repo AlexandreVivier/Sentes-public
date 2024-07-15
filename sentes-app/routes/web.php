@@ -7,6 +7,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AttendeeController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\NotificationController;
 use App\Models\User;
 use App\Models\Event;
 use Illuminate\Auth\Events\PasswordReset;
@@ -14,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Str;
 
 /*
@@ -112,29 +114,60 @@ Route::post('/reset-password', function (Request $request) {
         : abort(403, __($status));
 })->middleware('guest')->name('password.update');
 
+//******************** EMAIL VERIFICATION ************************//
+// Notice :
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+// La view envoyée est celle sur laquelle les users non vérifiés sont redirigés si ils tentent de se co.
+// Penser au flashing message.
+
+// Email verification request :
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return view('home');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+// Resend email verification link :
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('success', 'Un nouveau lien de vérification t\'a été envoyé par mail !');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 //******************** EVENTS ************************//
 
 Route::get('events', [EventController::class, 'index'])->name('events.index');
 
-Route::get('events/create', [EventController::class, 'create'])->name('events.create')->middleware('auth');
-Route::post('events', [EventController::class, 'store'])->name('events.store')->middleware('auth');
+Route::get('events/create', [EventController::class, 'create'])->name('events.create')->middleware(['auth', 'verified']);
+Route::post('events', [EventController::class, 'store'])->name('events.store')->middleware(['auth', 'verified']);
 
 Route::get('events/create/{event}', [EventController::class, 'edit'])->name('events.edit');
 Route::patch('events/create/{event}/2', [EventController::class, 'update'])->name('events.update');
 
 Route::get('events/{event}', [EventController::class, 'show'])->name('events.show');
 
-Route::post('events/{event}/subscribe', [AttendeeController::class, 'subscribeToEvent'])->name('attendee.subscribe')->middleware('auth');
-Route::delete('events/{event}/unsubscribe', [AttendeeController::class, 'unsubscribeFromEvent'])->name('attendee.unsubscribe')->middleware('auth');
+Route::post('events/{event}/subscribe', [AttendeeController::class, 'subscribeToEvent'])->name('attendee.subscribe')->middleware(['auth', 'verified']);
+Route::delete('events/{event}/unsubscribe', [AttendeeController::class, 'unsubscribeFromEvent'])->name('attendee.unsubscribe')->middleware(['auth', 'verified']);
 
 Route::patch('events/{event}/cancel', [EventController::class, 'cancel'])->name('event.cancel');
 
 Route::get('pasts', [EventController::class, 'getPastsEvents'])->name('events.past');
 
+Route::get('events/{event}/edit', [EventController::class, 'change'])->name('event.change')->middleware(['auth', 'verified']);
+Route::patch('events/{event}', [EventController::class, 'modify'])->name('event.modify')->middleware(['auth', 'verified']);
+
+Route::patch('events/{event}/debrief', [EventController::class, 'postDateInfosUpdate'])->name('event.post.date.infos')->middleware(['auth', 'verified']);
+
+Route::get('events/{event}/attendees', [AttendeeController::class, 'show'])->name('event.attendees.manage')->middleware(['auth', 'verified']);
+
+Route::patch('events/{event}/attendees/promote', [AttendeeController::class, 'promoteOrganizer'])->name('event.attendees.promote')->middleware(['auth', 'verified']);
+Route::patch('events/{event}/attendees/demote', [AttendeeController::class, 'demoteYourselfFromOrganizers'])->name('event.organizer.demote.self')->middleware(['auth', 'verified']);
+Route::patch('events/{event}/attendees', [AttendeeController::class, 'setPaymentStatus'])->name('event.attendees.set.payment.status')->middleware(['auth', 'verified']);
+
 //******************** LOCATIONS *******************/
 
-Route::get('locations/{location}', [LocationController::class, 'getEventsByLocation'])->name('locations.show')->middleware('auth');
+Route::get('locations/{location}', [LocationController::class, 'getEventsByLocation'])->name('locations.show');
 
 //******************** ADMIN CRUD *******************/
 
@@ -176,10 +209,30 @@ Route::post('admin/locations', [AdminController::class, 'locationStore'])->name(
 
 //*********************PROFILES AND USERS ***********************/
 
-Route::get('user/public/profile/{user}', [RegisterController::class, 'show'])->name('profile.show')->middleware('auth');
-Route::get('user/profile', [RegisterController::class, 'myProfile'])->name('profile.myProfile')->middleware('auth');
-Route::get('users/{user}/edit', [RegisterController::class, 'edit'])->name('user.edit')->middleware('auth');
-Route::patch('users/{user}/edit', [RegisterController::class, 'update'])->name('user.update')->middleware('auth');
-Route::delete('users/{user}/delete', [RegisterController::class, 'destroy'])->name('user.delete')->middleware('auth');
+Route::get('user/public/profile/{user}', [RegisterController::class, 'show'])->name('profile.show')->middleware(['auth', 'verified']);
+Route::get('user/profile', [RegisterController::class, 'myProfile'])->name('profile.myProfile')->middleware(['auth', 'verified']);
+Route::get('users/{user}/edit', [RegisterController::class, 'edit'])->name('user.edit')->middleware(['auth', 'verified']);
+Route::patch('users/{user}/edit', [RegisterController::class, 'update'])->name('user.update')->middleware(['auth', 'verified']);
+Route::delete('users/{user}/delete', [RegisterController::class, 'destroy'])->name('user.delete')->middleware(['auth', 'verified']);
 
-Route::get('user/organisations/{user}/index', [EventController::class, 'getAllEventsOrganizedByUser'])->name('user.organisations.index')->middleware('auth');
+Route::get('user/organisations/{user}/index', [EventController::class, 'getAllFutureEventsOrganizedByUser'])->name('user.organisations.index')->middleware(['auth', 'verified']);
+Route::get('user/organisations/pasts/{user}/index', [EventController::class, 'getAllPastEventsOrganizedByUser'])->name('user.organisations.past.index')->middleware(['auth', 'verified']);
+Route::get('user/organisations/cancelled/{user}/index', [EventController::class, 'getAllCancelledEventsOrganizedByUser'])->name('user.organisations.cancelled.index')->middleware(['auth', 'verified']);
+
+Route::get('user/events/{user}/index', [EventController::class, 'getAllFutureEventsSubscribedByUser'])->name('user.events.index')->middleware(['auth', 'verified']);
+Route::get('user/events/pasts/{user}/index', [EventController::class, 'getAllPastEventsSubscribedByUser'])->name('user.events.past.index')->middleware(['auth', 'verified']);
+Route::get('user/events/cancelled/{user}/index', [EventController::class, 'getAllCancelledEventsSubscribedByUser'])->name('user.events.cancelled.index')->middleware(['auth', 'verified']);
+
+
+//******************** NOTIFICATIONS ************************//
+
+Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index')->middleware(['auth', 'verified']);
+Route::get('notifications/{id}/markAsRead', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead')->middleware(['auth', 'verified']);
+Route::get('notifications/markAllAsRead', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead')->middleware(['auth', 'verified']);
+Route::get('notifications/{id}/markAsUnread', [NotificationController::class, 'markAsUnread'])->name('notifications.markAsUnread')->middleware(['auth', 'verified']);
+Route::get('notifications/markAllAsUnread', [NotificationController::class, 'markAllAsUnread'])->name('notifications.markAllAsUnread')->middleware(['auth', 'verified']);
+
+Route::get('notifications/{id}/delete', [NotificationController::class, 'delete'])->name('notifications.delete')->middleware(['auth', 'verified']);
+Route::get('notifications/deleteAll', [NotificationController::class, 'deleteAll'])->name('notifications.deleteAll')->middleware(['auth', 'verified']);
+
+Route::get('notifications/{id}', [NotificationController::class, 'show'])->name('notifications.show')->middleware(['auth', 'verified']);

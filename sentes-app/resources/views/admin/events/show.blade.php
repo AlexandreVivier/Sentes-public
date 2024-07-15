@@ -14,8 +14,8 @@
 
     @include('components.shows.event', ['event' => $event, 'attendees' => $event->attendees, 'organizers' => $event->organizers, 'location' => $event->location])
 
-    <p class="text-green italic">Créé le: {{ $event->created_at->format('d M Y') }}</p>
-    <p class="text-green italic">Modifié le: {{ $event->updated_at->format('d M Y') }}</p>
+    <p class="text-green italic">Créé le: {{ $event->getFormatedDate($event->created_at) }}</p>
+    <p class="text-green italic">Modifié le: {{ $event->getFormatedDate($event->updated_at) }}</p>
 
 
 </main>

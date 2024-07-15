@@ -29,7 +29,7 @@
                             </a>
                         </li>
                     @endif
-                    @if($event->tickets_link)
+                    @if($event->tickets_link && $event->start_date > now())
                         <li>
                             <a href="{{ $event->tickets_link }}" class="text-green none semi-bold event-link link" target="_blank">
                                 <i class="fa-solid fa-ticket"></i>
@@ -42,6 +42,38 @@
                             <a href="{{ $event->server_link }}" class="text-green none semi-bold event-link link" target="_blank">
                                 <i class="fa-brands fa-discord"></i>
                                 Serveur Discord
+                            </a>
+                        </li>
+                    @endif
+                    @if($event->photos_link)
+                        <li>
+                            <a href="{{ $event->photos_link }}" class="text-green none semi-bold event-link link" target="_blank">
+                                <i class="fa-solid fa-images"></i>
+                                Album photo du GN
+                            </a>
+                        </li>
+                    @endif
+                    @if($event->video_link)
+                        <li>
+                            <a href="{{ $event->video_link }}" class="text-green none semi-bold event-link link" target="_blank">
+                                <i class="fa-solid fa-video"></i>
+                                Vidéo du GN
+                            </a>
+                        </li>
+                    @endif
+                    @if($event->retex_form_link)
+                        <li>
+                            <a href="{{ $event->retex_form_link }}" class="text-green none semi-bold event-link link" target="_blank">
+                                <i class="fa-solid fa-file-circle-question"></i>
+                                Formulaire de débrief
+                            </a>
+                        </li>
+                    @endif
+                    @if($event->retex_document_path)
+                        <li>
+                            <a href="{{ asset('storage/' . $event->retex_document_path) }}" class="text-green none semi-bold event-link link" target="_blank">
+                                <i class="fa-regular fa-file-pdf"></i>
+                                Document de débrief
                             </a>
                         </li>
                     @endif
@@ -69,7 +101,7 @@
         @if ($event->price)
             Montant : {{ $event->price }} € -
         @endif
-        Inscrit·es : {{ $event->getAttendeesCount() }} / {{ $event->max_attendees }}</p>
+        Inscrit·es : {{ $event->attendee_count }} / {{ $event->max_attendees }}</p>
         <h3 class="special-elite-regular text-green">Orgas :</h3>
         <ul class="event-attendees">
             @if ($event->organizers->isNotEmpty())
@@ -85,14 +117,46 @@
         <h3 class="special-elite-regular text-green">Participant·es :</h3>
         <ul class="event-attendees">
             @if ($event->attendees->isNotEmpty())
-                @foreach ($event->getNonOrganizersLoginAndIdInArray() as $attendee)
+                @foreach ($event->getNonOrganizersInfosInArray() as $attendee)
                     <li>
                         <a href=" {{ route('profile.show', $attendee['id']) }}" class="text-green special-elite-regular event-link link none">
                             <i class="fa-regular fa-user"></i>{{ $attendee['login'] }}
+                            @auth
+                            @if ($attendee['has_paid']
+                             && auth()->user()->is_admin
+                             || in_array(auth()->user()->id, $organizers->pluck('user_id')->toArray())
+                            && $attendee['has_paid'])
+                                <i class="fa-solid fa-euro"></i>
+                            @endif
+                            @endauth
                         </a>
                     </li>
                 @endforeach
             @endif
         </ul>
+        @auth
+        @if(in_array(auth()->user()->id, $organizers->pluck('user_id')->toArray())
+        && $event->getUnsubscribedAttendeesCount() > 0
+        || auth()->user()->is_admin
+        && $event->getUnsubscribedAttendeesCount() > 0)
+        <h3 class="special-elite-regular text-green">Désistements :</h3>
+        <ul class="event-attendees">
+            @foreach ($event->getUnsubscribedAttendeesInfosInArray() as $attendee)
+                <li>
+                    <a href=" {{ route('profile.show', $attendee['id']) }}" class="text-light-green special-elite-regular event-link italic link none">
+                        @if ($attendee['is_organizer'])
+                            <i class="fa-solid fa-user"></i>{{ $attendee['login'] }}
+                        @else
+                            <i class="fa-regular fa-user"></i>{{ $attendee['login'] }}
+                        @endif
+                         @if ($attendee['has_paid'])
+                            <i class="fa-solid fa-euro"></i>
+                         @endif
+                    </a>
+                </li>
+            @endforeach
+        </ul>
+        @endif
+        @endauth
     </div>
 </section>

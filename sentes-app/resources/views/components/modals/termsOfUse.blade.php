@@ -46,7 +46,7 @@
         <p>Pour accéder aux services, l’Utilisateur doit ensuite s'identifier à l'aide de son identifiant et de son mot
         de passe qui lui seront communiqués après son inscription.</p>
         <p>Tout Utilisateur membre régulièrement inscrit pourra également solliciter sa désinscription en se
-        rendant à la page dédiée sur son espace personnel. Celle-ci sera effective dans un délai raisonnable.
+        rendant à la page dédiée sur son espace personnel. Celle-ci sera effective sans délai.
         Tout événement dû à un cas de force majeure ayant pour conséquence un dysfonctionnement du site
         ou serveur et sous réserve de toute interruption ou modification en cas de maintenance, n'engage
         pas la responsabilité de les-sentes.org. Dans ces cas, l’Utilisateur accepte ainsi ne pas tenir rigueur à

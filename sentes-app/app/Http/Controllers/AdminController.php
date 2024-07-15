@@ -8,6 +8,9 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\Attendee;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\EventUpdated;
+use App\Notifications\NewEvent;
 
 class AdminController extends Controller
 {
@@ -81,6 +84,19 @@ class AdminController extends Controller
             'is_banned' => ['boolean'],
             'avatar_path' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png'],
             'city' => ['nullable', 'max:50'],
+            'biography' => ['nullable', 'max:500'],
+            'pronouns' => ['nullable', 'max:10'],
+            'first_aid_qualifications' => ['nullable', 'max:100'],
+            'allergies' => ['nullable', 'max:100'],
+            'medical_conditions' => ['nullable', 'max:100'],
+            'diet_restrictions' => ['nullable', 'max:100'],
+            'red_flag_people' => ['nullable', 'max:100'],
+            'emergency_contact_name' => ['nullable', 'max:100'],
+            'emergency_contact_phone_number' => ['nullable', 'max:20'],
+            'discord_username' => ['nullable', 'max:50'],
+            'facebook_username' => ['nullable', 'max:50'],
+            'trigger_warnings' => ['nullable', 'max:100'],
+            'phone_number' => ['nullable', 'max:20'],
         ]);
 
         if (request()->hasFile('avatar_path')) {
@@ -101,6 +117,7 @@ class AdminController extends Controller
             $organizers = $event->organizers()->get();
             foreach ($organizers as $organizer) {
                 cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+                cache()->forget("my-subscribed-events-{$organizer->user_id}", $organizer->user_id);
             }
         }
 
@@ -113,6 +130,14 @@ class AdminController extends Controller
     public function userDestroy(User $user)
     {
         $attendees = $user->attendees()->get();
+
+        foreach ($attendees as $attendee) {
+            $event = $attendee->event;
+            $event->attendee_count -= 1;
+            $event->save();
+            cache()->forget("event-{$event->id}", $event->id);
+        }
+
         foreach ($attendees as $attendee) {
             $attendee->delete();
         }
@@ -130,9 +155,10 @@ class AdminController extends Controller
             $organizers = $event->organizers()->get();
             foreach ($organizers as $organizer) {
                 cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+                cache()->forget("my-subscribed-events-{$organizer->user_id}", $organizer->user_id);
             }
         }
-        $attendees = $user->attendees()->get();
+
         foreach ($attendees as $attendee) {
             $attendee->delete();
         }
@@ -155,7 +181,7 @@ class AdminController extends Controller
     public function locationIndex()
     {
         $locations = cache()->rememberForever('locations', function () {
-            return Location::all();
+            return Location::all()->sortBy('id');
         });
         $titles = ['Nom', 'Numéro', 'Rue', 'Ville', 'Code Postal', 'Créé le'];
 
@@ -216,6 +242,7 @@ class AdminController extends Controller
             $attendees = $event->attendees()->get();
             foreach ($attendees as $attendee) {
                 cache()->forget("my-events-{$attendee->user_id}", $attendee->user_id);
+                cache()->forget("my-subscribed-events-{$attendee->user_id}", $attendee->user_id);
             }
         }
         cache()->forget('events');
@@ -239,6 +266,7 @@ class AdminController extends Controller
             $attendees = $event->attendees()->get();
             foreach ($attendees as $attendee) {
                 cache()->forget("my-events-{$attendee->user_id}", $attendee->user_id);
+                cache()->forget("my-subscribed-events-{$attendee->user_id}", $attendee->user_id);
             }
         }
         cache()->forget('events');
@@ -246,7 +274,7 @@ class AdminController extends Controller
         $location->delete();
         session()->flash('success', 'Le lieu a bien été supprimé !');
 
-        return redirect(route('admin.index'));
+        return redirect(route('admin.locations.index'));
     }
 
     public function locationShow(Location $location)
@@ -257,7 +285,7 @@ class AdminController extends Controller
     // ****************** EVENTS ****************** //
     public function eventIndex()
     {
-        $events = Event::with(['organizers.user'])->get();
+        $events = Event::with(['organizers.user'])->orderBy('id')->get();
         $titles = ['Titre', 'Entête', 'Date de début', 'Lieu', 'Orga(s)'];
 
         return view('admin.index', compact('events', 'titles'));
@@ -284,8 +312,17 @@ class AdminController extends Controller
             'tickets_link' => ['nullable', 'url', 'starts_with:https://'],
         ]);
 
-        $attributes['image_path'] = 'images/static/blank-event.png';
+        if (request()->hasFile('image_path')) {
+            $attributes['image_path'] = request('image_path')->store('public/events/images');
+            $attributes['image_path'] = str_replace('public/', '', $attributes['image_path']);
+        } else {
+            $attributes['image_path'] = 'images/static/blank-event.png';
+        }
 
+        if (request()->hasFile('file_path')) {
+            $attributes['file_path'] = request('file_path')->store('public/events/files');
+            $attributes['file_path'] = str_replace('public/', '', $attributes['file_path']);
+        }
 
         cache()->forget('events');
         $event = Event::create($attributes);
@@ -294,6 +331,13 @@ class AdminController extends Controller
             'user_id' => auth()->user()->id,
             'is_organizer' => true,
         ]);
+        $event->attendee_count += 1;
+        $event->save();
+
+        $author = auth()->user();
+
+        $users = User::all();
+        Notification::sendNow($users, new NewEvent($event, $author));
 
         session()->flash('success', 'L\'évènement a bien été créé !');
 
@@ -319,6 +363,10 @@ class AdminController extends Controller
             'file_path' => ['nullable', 'file', 'max:2048', 'mimes:pdf'],
             'server_link' => ['nullable', 'url', 'starts_with:https://discord.gg/'],
             'tickets_link' => ['nullable', 'url', 'starts_with:https://'],
+            'photos_link' => ['nullable', 'url', 'starts_with:https://'],
+            'video_link' => ['nullable', 'url', 'starts_with:https://'],
+            'retex_form_link' => ['nullable', 'url', 'starts_with:https://'],
+            'retex_document_path' => ['nullable', 'file', 'max:2048', 'mimes:pdf'],
         ]);
 
         if (request('is_cancelled')) {
@@ -337,14 +385,26 @@ class AdminController extends Controller
             $attributes['file_path'] = str_replace('public/', '', $attributes['file_path']);
         }
 
+        if (request()->hasFile('retex_document_path')) {
+            $attributes['retex_document_path'] = request('retex_document_path')->store('public/events/files');
+            $attributes['retex_document_path'] = str_replace('public/', '', $attributes['retex_document_path']);
+        }
+
         $organizers = $event->organizers()->get();
 
         cache()->forget('events');
         cache()->forget("event-{$event->id}", $event->id);
         foreach ($organizers as $organizer) {
             cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+            cache()->forget("my-subscribed-events-{$organizer->user_id}", $organizer->user_id);
         }
         $event->update($attributes);
+
+        $attendees = $event->attendees()->where('is_subscribed', true)->get();
+        $attendees = User::whereIn('id', $attendees->pluck('user_id'))->get();
+        Notification::sendNow($attendees, new EventUpdated($event));
+
+
         session()->flash('success', 'L\'évènement a bien été modifié !');
 
         return view('admin.show', compact('event'));
@@ -359,6 +419,7 @@ class AdminController extends Controller
         cache()->forget("event-{$event->id}", $event->id);
         foreach ($organizers as $organizer) {
             cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+            cache()->forget("my-subscribed-events-{$organizer->user_id}", $organizer->user_id);
         }
         $attendees = $event->attendees()->get();
         foreach ($attendees as $attendee) {
@@ -369,7 +430,7 @@ class AdminController extends Controller
 
         session()->flash('success', 'L\'évènement a bien été supprimé !');
 
-        return redirect(route('admin.index'));
+        return redirect(route('admin.events.index'));
     }
 
     public function eventShow(Event $event)

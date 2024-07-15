@@ -33,6 +33,9 @@
                 <p class="text-green text-medium italic text-interline">
                     Les données collectées par l’intermédiaire des formulaires (concernant la création des GN et leurs informations pratiques) sont suceptbles d'être partagées avec des plateformes partenaires pour en augmenter la visibilité.
                 </p>
+                <p class="text-green text-medium italic text-interline">
+                    Les données relative aux utilisateurs ne sont lisibles que des utilisateurs, des administrateurs du site, et des organisateurs auxquels les utilisateurs se sont inscrits.
+                </p>
                 <p class="text-green">
                     Conformément à la loi « informatique et libertés » du 6 janvier 1978 modifiée et au Règlement européen sur la protection des données personnelles, vous bénéficiez d’un droit d’accès, de rectification, de portabilité et d’effacement de vos données ou encore de limitation du traitement. Vous pouvez également, pour des motifs légitimes, vous opposer au traitement des données vous concernant.
                 </p>

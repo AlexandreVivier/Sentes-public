@@ -1,5 +1,5 @@
 <x-layoutDoom>
-    <div class="bg-light flex-col justify-center w-100 border-light">
+    <div class="bg-light flex-col justify-center w-75 border-light">
         <section class="admin-container">
 
             @isset($user)

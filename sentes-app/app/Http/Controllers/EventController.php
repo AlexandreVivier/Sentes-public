@@ -4,27 +4,35 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\User;
 use App\Models\Location;
 use App\Models\Attendee;
-use App\Models\User;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\NewEvent;
+use App\Notifications\EventUpdated;
+use App\Notifications\EventCancelled;
+
+// temp
+use App\Jobs\TestJob;
 
 class EventController extends Controller
 {
     public function index()
     {
+
         $events = Event::with(['organizers.user', 'attendees.user'])
             ->where('start_date', '>', now())
             ->where('is_cancelled', false)
             ->filter(request(['search']))
             ->orderBy('start_date')
-            ->paginate(4);
+            ->paginate(4)->withQueryString();
 
         $locations = cache()->rememberForever('locations', function () {
             return Location::all()
                 ->sortByDesc('zip_code');
         });
+
         return view('events.index', compact('events', 'locations'));
     }
 
@@ -70,6 +78,18 @@ class EventController extends Controller
             'user_id' => auth()->user()->id,
             'is_organizer' => true,
         ]);
+        $event->attendee_count += 1;
+        $event->save();
+
+        //Send notification to every user
+        $users = User::all();
+
+        $author = auth()->user();
+        Notification::sendNow($users, new NewEvent($event, $author));
+
+        // TEMPOR
+        // TestJob::dispatch();
+
         session()->flash('success', 'Ton évènement a bien été créé !');
         return redirect(route('events.edit', $event));
     }
@@ -100,7 +120,6 @@ class EventController extends Controller
             'file_path' => ['nullable', 'file', 'max:2048', 'mimes:pdf'],
             'server_link' => ['nullable', 'url', 'starts_with:https://discord.gg/'],
             'tickets_link' => ['nullable', 'url', 'starts_with:https://'],
-
         ]);
 
         if (request()->hasFile('image_path')) {
@@ -121,6 +140,7 @@ class EventController extends Controller
         cache()->forget("event-{$event->id}", $event->id);
         foreach ($organizers as $organizer) {
             cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+            cache()->forget("my-subscribed-events-{$organizer->user_id}", $organizer->user_id);
         }
         $event->update($attributes);
 
@@ -153,6 +173,7 @@ class EventController extends Controller
         cache()->forget("event-{$event->id}", $event->id);
         foreach ($organizers as $organizer) {
             cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+            cache()->forget("my-subscribed-events-{$organizer->user_id}", $organizer->user_id);
         }
         $attendees = $event->attendees()->get();
         foreach ($attendees as $attendee) {
@@ -176,25 +197,113 @@ class EventController extends Controller
         cache()->forget("event-{$event->id}", $event->id);
         foreach ($organizers as $organizer) {
             cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+            cache()->forget("my-subscribed-events-{$organizer->user_id}", $organizer->user_id);
         }
         $event->cancel();
+
+        $attendees = $event->attendees()->where('is_subscribed', true)->get();
+        $attendees = User::whereIn('id', $attendees->pluck('user_id'))->get();
+        Notification::sendNow($attendees, new EventCancelled($event));
 
         session()->flash('success', 'Ton évènement a bien été annulé !');
         return redirect(route('events.index'));
     }
 
-    public function getAllEventsOrganizedByUser($userId)
+    public function getAllFutureEventsOrganizedByUser($userId)
     {
         $events = cache()->rememberForever("my-events-{$userId}", function () use ($userId) {
             return Event::with(['organizers.user', 'attendees.user'])
                 ->whereHas('organizers', function ($query) use ($userId) {
                     $query->where('user_id', $userId);
                 })
+                ->where('start_date', '>', now())
+                ->where('is_cancelled', false)
                 ->orderBy('start_date')
                 ->get();
         });
 
-        return view('user.organisations.index', compact('events'));
+        return view('user.organisations.index', compact('events', 'userId'));
+    }
+
+    public function getAllPastEventsOrganizedByUser($userId)
+    {
+        $events = Event::with(['organizers.user', 'attendees.user'])
+            ->whereHas('organizers', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->where('start_date', '<', now())
+            ->where('is_cancelled', false)
+            ->orderBy('start_date')
+            ->paginate(4)->withQueryString();
+
+        $pastsEvents = true;
+
+        return view('user.organisations.index', compact('events', 'pastsEvents', 'userId'));
+    }
+
+    public function getAllCancelledEventsOrganizedByUser($userId)
+    {
+        $events = Event::with(['organizers.user', 'attendees.user'])
+            ->whereHas('organizers', function ($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->where('is_cancelled', true)
+            ->orderBy('start_date')
+            ->paginate(4)->withQueryString();
+
+        $cancelledEvents = true;
+
+        return view('user.organisations.index', compact('events', 'cancelledEvents', 'userId'));
+    }
+
+    public function getAllFutureEventsSubscribedByUser($userId)
+    {
+        $events = cache()->rememberForever("my-subscribed-events-{$userId}", function () use ($userId) {
+            return Event::with(['organizers.user', 'attendees.user'])
+                ->whereHas('attendees', function ($query) use ($userId) {
+                    $query->where('user_id', $userId)
+                        ->where('is_subscribed', true);
+                })
+                ->where('start_date', '>', now())
+                ->where('is_cancelled', false)
+                ->orderBy('start_date')
+                ->get();
+        });
+
+        return view('user.events.index', compact('events', 'userId'));
+    }
+
+    public function getAllPastEventsSubscribedByUser($userId)
+    {
+        $events = Event::with(['organizers.user', 'attendees.user'])
+            ->whereHas('attendees', function ($query) use ($userId) {
+                $query->where('user_id', $userId)
+                    ->where('is_subscribed', true);
+            })
+            ->where('start_date', '<', now())
+            ->where('is_cancelled', false)
+            ->orderBy('start_date')
+            ->paginate(4)->withQueryString();
+
+        $pastsEvents = true;
+
+        return view('user.events.index', compact('events', 'pastsEvents', 'userId'));
+    }
+
+    public function getAllCancelledEventsSubscribedByUser($userId)
+    {
+        $events = Event::with(['organizers.user', 'attendees.user'])
+            ->whereHas('attendees', function ($query) use ($userId) {
+                $query->where('user_id', $userId)
+                    ->where('is_subscribed', true);
+            })
+            ->where('is_cancelled', true)
+            ->orderBy('start_date')
+            ->paginate(4)->withQueryString();
+
+        $cancelledEvents = true;
+
+        return view('user.events.index', compact('events', 'cancelledEvents', 'userId'));
     }
 
     public function getPastsEvents()
@@ -204,12 +313,128 @@ class EventController extends Controller
             ->where('start_date', '<', now())
             ->filter(request(['search']))
             ->orderBy('start_date')
-            ->paginate(4);
+            ->paginate(4)->withQueryString();
 
         $locations = cache()->rememberForever('locations', function () {
             return Location::all()
                 ->sortByDesc('zip_code');
         });
         return view('events.pasts', compact('pastsEvents', 'locations'));
+    }
+
+    public function change(Event $event)
+    {
+        $orga = $event->organizers()->where('user_id', auth()->id())->first();
+        if (!$orga) {
+            abort(403, 'Tu dois être orga de ce GN pour le modifier !');
+        }
+
+        return view('events.edit', compact('event'), ['locations' => Location::all()]);
+    }
+
+    public function modify(Event $event)
+    {
+
+        $orga = $event->organizers()->where('user_id', auth()->id())->first();
+        if (!$orga) {
+            abort(403, 'Tu dois être orga de ce GN pour le modifier !');
+        }
+
+        $attributes = request()->validate([
+            'title' => ['required', 'max:99', Rule::unique('events', 'title')->ignore($event->id)],
+            'description' => ['required', 'max:99'],
+            'start_date' => ['required', 'date', 'after:now'],
+            'location_id' => ['required', Rule::exists('locations', 'id')],
+            'price' => ['nullable', 'numeric', 'min:1'],
+            'max_attendees' => ['nullable', 'numeric', 'min:1'],
+            'image_path' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png'],
+            'end_date' => ['nullable', 'date', 'after:start_date'],
+            'file_path' => ['nullable', 'file', 'max:2048', 'mimes:pdf'],
+            'server_link' => ['nullable', 'url', 'starts_with:https://discord.gg/'],
+            'tickets_link' => ['nullable', 'url', 'starts_with:https://'],
+        ]);
+        if (request('is_cancelled')) {
+
+            $attendees = $event->attendees()->where('is_subscribed', true)->get();
+            $attendees = User::whereIn('id', $attendees->pluck('user_id'))->get();
+            Notification::sendNow($attendees, new EventCancelled($event));
+            $event->cancel();
+        } else {
+            $event->uncancel();
+        }
+
+        if (request()->hasFile('image_path')) {
+            $attributes['image_path'] = request('image_path')->store('public/events/images');
+            $attributes['image_path'] = str_replace('public/', '', $attributes['image_path']);
+        } else {
+            $attributes['image_path'] = 'images/static/blank-event.png';
+        }
+
+        if (request()->hasFile('file_path')) {
+            $attributes['file_path'] = request('file_path')->store('public/events/files');
+            $attributes['file_path'] = str_replace('public/', '', $attributes['file_path']);
+        }
+
+        $organizers = $event->organizers()->get();
+
+        cache()->forget('events');
+        cache()->forget("event-{$event->id}", $event->id);
+        foreach ($organizers as $organizer) {
+            cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+            cache()->forget("my-subscribed-events-{$organizer->user_id}", $organizer->user_id);
+        }
+        $event->update($attributes);
+
+        $attendees = $event->attendees()->where('is_subscribed', true)->get();
+        $attendees = User::whereIn('id', $attendees->pluck('user_id'))->get();
+        Notification::sendNow($attendees, new EventUpdated($event));
+
+
+        session()->flash('success', 'Ton évènement a bien été mis à jour !');
+        return redirect(route('events.show', $event));
+    }
+
+    public function postDateInfosUpdate(Event $event)
+    {
+        $orga = $event->organizers()->where('user_id', auth()->id())->first();
+        if (!$orga) {
+            abort(403, 'Tu dois être orga de ce GN pour le modifier !');
+        }
+
+        $attributes = request()->validate([
+            'photos_link' => ['nullable', 'url', 'starts_with:https://'],
+            'video_link' => ['nullable', 'url', 'starts_with:https://'],
+            'retex_form_link' => ['nullable', 'url', 'starts_with:https://'],
+            'retex_document_path' => ['nullable', 'file', 'max:2048', 'mimes:pdf'],
+        ]);
+
+        if (request()->hasFile('retex_document_path')) {
+            $attributes['retex_document_path'] = request('retex_document_path')->store('public/events/files');
+            $attributes['retex_document_path'] = str_replace('public/', '', $attributes['retex_document_path']);
+        }
+
+        $organizers = $event->organizers()->get();
+
+        cache()->forget('events');
+        cache()->forget("event-{$event->id}", $event->id);
+        foreach ($organizers as $organizer) {
+            cache()->forget("my-events-{$organizer->user_id}", $organizer->user_id);
+            cache()->forget("my-subscribed-events-{$organizer->user_id}", $organizer->user_id);
+        }
+        if (request()->hasFile('retex_document_path')) {
+            $event->update(['retex_document_path' => $attributes['retex_document_path']]);
+        }
+        if (request()->has('retex_form_link')) {
+            $event->update(['retex_form_link' => $attributes['retex_form_link']]);
+        }
+        if (request()->has('video_link')) {
+            $event->update(['video_link' => $attributes['video_link']]);
+        }
+        if (request()->has('photos_link')) {
+            $event->update(['photos_link' => $attributes['photos_link']]);
+        }
+
+        session()->flash('success', 'Ton évènement a bien été mis à jour !');
+        return redirect(route('events.show', $event));
     }
 }
