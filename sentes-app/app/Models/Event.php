@@ -106,55 +106,65 @@ class Event extends Model
         });
     }
 
-    public function getSubscribedAttendeesInfosInArray()
+    // public function getSubscribedAttendeesInfosInArray()
+    // {
+    //     return $this->attendees()->where('is_subscribed', true)->get()->map(function ($attendee) {
+    //         return [
+    //             'login' => $attendee->user->login,
+    //             'first_name' => $attendee->user->first_name,
+    //             'last_name' => $attendee->user->last_name,
+    //             'diet_restrictions' => $attendee->user->diet_restrictions,
+    //             'allergies' => $attendee->user->allergies,
+    //             'red_flag_people' => $attendee->user->red_flag_people,
+    //             'medical_conditions' => $attendee->user->medical_conditions,
+    //             'emergency_contact_name' => $attendee->user->emergency_contact_name,
+    //             'emergency_contact_phone_number' => $attendee->user->emergency_contact_phone_number,
+    //             'phone_number' => $attendee->user->phone_number,
+    //             'trigger_warnings' => $attendee->user->trigger_warnings,
+    //             'pronouns' => $attendee->user->pronouns,
+    //             'first_aid_qualifications' => $attendee->user->first_aid_qualifications,
+    //             'id' => $attendee->user->id,
+    //             'has_paid' => $attendee->has_paid,
+    //             'is_organizer' => $attendee->is_organizer,
+    //             'in_choir' => $attendee->in_choir,
+    //         ];
+    //     });
+    // }
+
+    public function getSubscribedAttendeesInfos()
     {
-        return $this->attendees()->where('is_subscribed', true)->get()->map(function ($attendee) {
-            return [
-                'login' => $attendee->user->login,
-                'first_name' => $attendee->user->first_name,
-                'last_name' => $attendee->user->last_name,
-                'diet_restrictions' => $attendee->user->diet_restrictions,
-                'allergies' => $attendee->user->allergies,
-                'red_flag_people' => $attendee->user->red_flag_people,
-                'medical_conditions' => $attendee->user->medical_conditions,
-                'emergency_contact_name' => $attendee->user->emergency_contact_name,
-                'emergency_contact_phone_number' => $attendee->user->emergency_contact_phone_number,
-                'phone_number' => $attendee->user->phone_number,
-                'trigger_warnings' => $attendee->user->trigger_warnings,
-                'pronouns' => $attendee->user->pronouns,
-                'first_aid_qualifications' => $attendee->user->first_aid_qualifications,
-                'id' => $attendee->user->id,
-                'has_paid' => $attendee->has_paid,
-                'is_organizer' => $attendee->is_organizer,
-                'in_choir' => $attendee->in_choir,
-            ];
-        });
+        return $this->attendees()->where('is_subscribed', true)->get();
     }
 
-    public function getUnsubscribedAttendeesInfosInArray()
+    public function getUnsubscribedAttendeesInfos()
     {
-        return $this->attendees()->where('is_subscribed', false)->get()->map(function ($attendee) {
-            return [
-                'login' => $attendee->user->login,
-                'first_name' => $attendee->user->first_name,
-                'last_name' => $attendee->user->last_name,
-                'diet_restrictions' => $attendee->user->diet_restrictions,
-                'allergies' => $attendee->user->allergies,
-                'red_flag_people' => $attendee->user->red_flag_people,
-                'medical_conditions' => $attendee->user->medical_conditions,
-                'emergency_contact_name' => $attendee->user->emergency_contact_name,
-                'emergency_contact_phone_number' => $attendee->user->emergency_contact_phone_number,
-                'phone_number' => $attendee->user->phone_number,
-                'trigger_warnings' => $attendee->user->trigger_warnings,
-                'pronouns' => $attendee->user->pronouns,
-                'first_aid_qualifications' => $attendee->user->first_aid_qualifications,
-                'id' => $attendee->user->id,
-                'has_paid' => $attendee->has_paid,
-                'is_organizer' => $attendee->is_organizer,
-                'in_choir' => $attendee->in_choir,
-            ];
-        });
+        return $this->attendees()->where('is_subscribed', false)->get();
     }
+
+    // public function getUnsubscribedAttendeesInfosInArray()
+    // {
+    //     return $this->attendees()->where('is_subscribed', false)->get()->map(function ($attendee) {
+    //         return [
+    //             'login' => $attendee->user->login,
+    //             'first_name' => $attendee->user->first_name,
+    //             'last_name' => $attendee->user->last_name,
+    //             'diet_restrictions' => $attendee->user->diet_restrictions,
+    //             'allergies' => $attendee->user->allergies,
+    //             'red_flag_people' => $attendee->user->red_flag_people,
+    //             'medical_conditions' => $attendee->user->medical_conditions,
+    //             'emergency_contact_name' => $attendee->user->emergency_contact_name,
+    //             'emergency_contact_phone_number' => $attendee->user->emergency_contact_phone_number,
+    //             'phone_number' => $attendee->user->phone_number,
+    //             'trigger_warnings' => $attendee->user->trigger_warnings,
+    //             'pronouns' => $attendee->user->pronouns,
+    //             'first_aid_qualifications' => $attendee->user->first_aid_qualifications,
+    //             'id' => $attendee->user->id,
+    //             'has_paid' => $attendee->has_paid,
+    //             'is_organizer' => $attendee->is_organizer,
+    //             'in_choir' => $attendee->in_choir,
+    //         ];
+    //     });
+    // }
 
     public function getUnsubscribedAttendeesCount()
     {

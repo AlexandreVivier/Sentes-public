@@ -321,11 +321,15 @@ class NotificationTest extends TestCase
         // Se connecter en orga et promouvoir un user en orga :
 
         $organizer = User::where('login', 'organizer')->first();
+
+        $attendeeId = DB::table('attendees')
+            ->where('event_id', $event->id)
+            ->where('user_id', $user->id)
+            ->where('is_subscribed', true)->first()->id;
+
         $this->actingAs($organizer);
 
-        $this->patch(route('event.attendees.promote', $event->id), [
-            'user_id' => $user->id,
-        ]);
+        $this->patch(route('event.attendees.promote', [$event->id, $attendeeId]));
 
         // check coté front orga pour la notif :
         $this->get(route('notifications.index'))

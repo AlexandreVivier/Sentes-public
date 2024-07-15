@@ -141,15 +141,15 @@
         && $event->getUnsubscribedAttendeesCount() > 0)
         <h3 class="special-elite-regular text-green">Désistements :</h3>
         <ul class="event-attendees">
-            @foreach ($event->getUnsubscribedAttendeesInfosInArray() as $attendee)
+            @foreach ($event->getUnsubscribedAttendeesInfos() as $attendee)
                 <li>
-                    <a href=" {{ route('profile.show', $attendee['id']) }}" class="text-light-green special-elite-regular event-link italic link none">
-                        @if ($attendee['is_organizer'])
-                            <i class="fa-solid fa-user"></i>{{ $attendee['login'] }}
+                    <a href=" {{ route('profile.show', $attendee->user->id) }}" class="text-light-green special-elite-regular event-link italic link none">
+                        @if ($attendee->is_organizer)
+                            <i class="fa-solid fa-user"></i>{{ $attendee->user->login }}
                         @else
-                            <i class="fa-regular fa-user"></i>{{ $attendee['login'] }}
+                            <i class="fa-regular fa-user"></i>{{ $attendee->user->login }}
                         @endif
-                         @if ($attendee['has_paid'])
+                         @if ($attendee->has_paid)
                             <i class="fa-solid fa-euro"></i>
                          @endif
                     </a>

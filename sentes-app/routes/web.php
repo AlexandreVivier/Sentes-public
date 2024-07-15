@@ -161,7 +161,7 @@ Route::patch('events/{event}/debrief', [EventController::class, 'postDateInfosUp
 
 Route::get('events/{event}/attendees', [AttendeeController::class, 'show'])->name('event.attendees.manage')->middleware(['auth', 'verified']);
 
-Route::patch('events/{event}/attendees/promote', [AttendeeController::class, 'promoteOrganizer'])->name('event.attendees.promote')->middleware(['auth', 'verified']);
+Route::patch('events/{event}/attendees/{user}/promote', [AttendeeController::class, 'promoteOrganizer'])->name('event.attendees.promote')->middleware(['auth', 'verified']);
 Route::patch('events/{event}/attendees/demote', [AttendeeController::class, 'demoteYourselfFromOrganizers'])->name('event.organizer.demote.self')->middleware(['auth', 'verified']);
 Route::patch('events/{event}/attendees', [AttendeeController::class, 'setPaymentStatus'])->name('event.attendees.set.payment.status')->middleware(['auth', 'verified']);
 

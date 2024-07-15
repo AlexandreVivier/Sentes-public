@@ -26,34 +26,34 @@
 <h3 class="text-green special-elite-regular">Inscrit·es : {{ $event->attendee_count }} / {{ $event->max_attendees }}</h3>
 <ul class="event-attendees-manage">
     @if ($event->attendees->isNotEmpty())
-        @foreach ($event->getSubscribedAttendeesInfosInArray() as $attendee)
-                @if ($attendee['is_organizer'])
+        @foreach ($event->getSubscribedAttendeesInfos() as $attendee)
+                @if ($attendee->is_organizer)
                 <li x-data="{ show: false }" @click.away="show = false">
                     <div class="attendee-manage">
                         <p @click="show = !show" class="text-green special-elite-regular event-link link none semi-bold">
-                            <i class="fa-solid fa-user"></i>{{ $attendee['login'] }}
-                            @if ($attendee['has_paid'])
+                            <i class="fa-solid fa-user"></i>{{ $attendee->user->login }}
+                            @if ($attendee->has_paid)
                                 <i class="fa-solid fa-euro"></i>
                             @endif
-                            @if ($attendee['in_choir'])
+                            @if ($attendee->in_choir)
                                 <i class="fa-solid fa-music"></i>
                             @endif
-                            @if ($attendee['first_aid_qualifications'])
+                            @if ($attendee->user->first_aid_qualifications)
                                 <i class="fa-solid fa-briefcase-medical"></i>
                             @endif
                         </p>
 
                         <div class="attendee-manage-buttons">
-                            @if ($attendee['id'] === auth()->user()->id)
+                            @if ($attendee->user_id === auth()->user()->id)
                                 <button type="submit" class="light-button chip" id="demoteSelf"><i class="fa-regular fa-user"></i></button>
                             @endif
                             <form method="POST" action="{{ route('event.attendees.set.payment.status', $event->id) }}">
                                 @csrf
                                 @method('PATCH')
-                                <input type="hidden" name="user_id" value="{{ $attendee['id'] }}">
-                                <input type="hidden" name="has_paid" value="{{ $attendee['has_paid'] ? 0 : 1 }}">
+                                <input type="hidden" name="user_id" value="{{ $attendee->user_id }}">
+                                <input type="hidden" name="has_paid" value="{{ $attendee->has_paid ? 0 : 1 }}">
                                 <button type="submit" class="light-button chip">
-                                    @if ($attendee['has_paid'])
+                                    @if ($attendee->has_paid)
                                         <i class="fa-brands fa-creative-commons-nc-eu"></i>
                                     @else
                                         <i class="fa-solid fa-euro"></i>
@@ -63,58 +63,58 @@
                         </div>
                     </div>
                     <div x-show="show" class="attendee-manage-infos">
-                            <a href="{{ route('profile.show', $attendee['id']) }}" class="transparent-button special-elite-regular">Voir le profil</a>
+                            <a href="{{ route('profile.show', $attendee->user->id) }}" class="transparent-button special-elite-regular">Voir le profil</a>
                             <p class="text-green text-normal semi-bold none">Nom complet :
-                                <span class="italic normal-weight">{{ $attendee['first_name'] }} {{ $attendee['last_name'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->first_name }} {{ $attendee->user->last_name }}</span>
                             </p>
                             <p class="text-green text-normal semi-bold none">
                                 Pronoms :
-                                <span class="italic normal-weight">{{ isset($attendee['pronouns'])? $attendee['pronouns'] : 'Non renseignés' }}</span>
+                                <span class="italic normal-weight">{{ isset($attendee->user->pronouns)? $attendee->user->pronouns : 'Non renseignés' }}</span>
                             </p>
                             <p class="text-green text-normal semi-bold none">
                                 Téléphone :
-                                <span class="italic normal-weight">{{ isset($attendee['phone_number']) ? $attendee['phone_number'] : 'Non renseigné' }}</span>
+                                <span class="italic normal-weight">{{ isset($attendee->user->phone_number) ? $attendee->user->phone_number : 'Non renseigné' }}</span>
                             </p>
-                            @if ($attendee['first_aid_qualifications'])
+                            @if ($attendee->user->first_aid_qualifications)
                             <p class="text-green text-normal semi-bold none">
                                 Qualifications de secourisme :
-                                <span class="italic normal-weight">{{ $attendee['first_aid_qualifications'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->first_aid_qualifications }}</span>
                             </p>
                             @endif
-                            @if ($attendee['emergency_contact_name'])
+                            @if ($attendee->user->emergency_contact_name)
                             <p class="text-green text-normal semi-bold none">
                                 Contact d'urgence :
-                                <span class="italic normal-weight">{{ $attendee['emergency_contact_name'] }} au {{ $attendee['emergency_contact_phone_number'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->emergency_contact_name }} au {{ $attendee->user->emergency_contact_phone_number }}</span>
                             </p>
                             @endif
-                            @if ($attendee['allergies'])
+                            @if ($attendee->user->allergies)
                             <p class="text-green text-normal semi-bold none">
                                 Allergies :
-                                <span class="italic normal-weight">{{ $attendee['allergies'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->allergies }}</span>
                             </p>
                             @endif
-                            @if ($attendee['medical_conditions'])
+                            @if ($attendee->user->medical_conditions)
                             <p class="text-green text-normal semi-bold none">
                                 Conditions médicales :
-                                <span class="italic normal-weight">{{ $attendee['medical_conditions'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->medical_conditions }}</span>
                             </p>
                             @endif
-                            @if ($attendee['diet_restrictions'])
+                            @if ($attendee->user->diet_restrictions)
                             <p class="text-green text-normal semi-bold none">
                                 Restrictions alimentaires :
-                                <span class="italic normal-weight">{{ $attendee['diet_restrictions'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->diet_restrictions }}</span>
                             </p>
                             @endif
-                            @if ($attendee['red_flag_people'])
+                            @if ($attendee->user->red_flag_people)
                             <p class="text-green text-normal semi-bold none">
                                 Restrictions de personnes :
-                                <span class="italic normal-weight">{{ $attendee['red_flag_people'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->red_flag_people }}</span>
                             </p>
                             @endif
-                            @if ($attendee['trigger_warnings'])
+                            @if ($attendee->user->trigger_warnings)
                             <p class="text-green text-normal semi-bold none">
                                 Restrictions de sujets :
-                                <span class="italic normal-weight">{{ $attendee['trigger_warnings'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->trigger_warnings }}</span>
                             </p>
                             @endif
                     </div>
@@ -124,27 +124,29 @@
                 <li x-data="{ show: false }" @click.away="show = false">
                     <div class="attendee-manage">
                         <p @click="show = !show" class="text-green special-elite-regular event-link link none">
-                            <i class="fa-regular fa-user"></i>{{ $attendee['login'] }}
-                            @if ($attendee['has_paid'])
+                            <i class="fa-regular fa-user"></i>{{ $attendee->user->login }}
+                            @if ($attendee->has_paid)
                                 <i class="fa-solid fa-euro"></i>
                             @endif
-                            @if ($attendee['in_choir'])
+                            @if ($attendee->in_choir)
                                 <i class="fa-solid fa-music"></i>
                             @endif
-                            @if ($attendee['first_aid_qualifications'])
+                            @if ($attendee->user->first_aid_qualifications)
                                 <i class="fa-solid fa-briefcase-medical"></i>
                             @endif
                         </p>
 
                         <div class="attendee-manage-buttons">
-                            <button class="light-button chip" id="promoteOrga"><i class="fa-solid fa-user"></i></button>
+                            <button class="light-button chip" id="promoteOrga-{{ $attendee->id }}">
+                                <i class="fa-solid fa-user"></i>
+                            </button>
                             <form method="POST" action="{{ route('event.attendees.set.payment.status', $event->id) }}">
                                 @csrf
                                 @method('PATCH')
-                                <input type="hidden" name="user_id" value="{{ $attendee['id'] }}">
-                                <input type="hidden" name="has_paid" value="{{ $attendee['has_paid'] ? 0 : 1 }}">
+                                <input type="hidden" name="user_id" value="{{ $attendee->id }}">
+                                <input type="hidden" name="has_paid" value="{{ $attendee->has_paid ? 0 : 1 }}">
                                 <button type="submit" class="light-button chip">
-                                    @if ($attendee['has_paid'])
+                                    @if ($attendee->has_paid)
                                         <i class="fa-brands fa-creative-commons-nc-eu"></i>
                                     @else
                                         <i class="fa-solid fa-euro"></i>
@@ -154,58 +156,58 @@
                         </div>
                     </div>
                     <div x-show="show" class="attendee-manage-infos">
-                            <a href="{{ route('profile.show', $attendee['id']) }}" class="transparent-button special-elite-regular">Voir le profil</a>
+                            <a href="{{ route('profile.show', $attendee->user_id) }}" class="transparent-button special-elite-regular">Voir le profil</a>
                             <p class="text-green text-normal semi-bold none">Nom complet :
-                                <span class="italic normal-weight">{{ $attendee['first_name'] }} {{ $attendee['last_name'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->first_name }} {{ $attendee->user->last_name }}</span>
                             </p>
                             <p class="text-green text-normal semi-bold none">
                                 Pronoms :
-                                <span class="italic normal-weight">{{ isset($attendee['pronouns'])? $attendee['pronouns'] : 'Non renseignés' }}</span>
+                                <span class="italic normal-weight">{{ isset($attendee->user->pronouns)? $attendee->user->pronouns : 'Non renseignés' }}</span>
                             </p>
                             <p class="text-green text-normal semi-bold none">
                                 Téléphone :
-                                <span class="italic normal-weight">{{ isset($attendee['phone_number']) ? $attendee['phone_number'] : 'Non renseigné' }}</span>
+                                <span class="italic normal-weight">{{ isset($attendee->user->phone_number) ? $attendee->user->phone_number : 'Non renseigné' }}</span>
                             </p>
-                            @if ($attendee['first_aid_qualifications'])
+                            @if ($attendee->user->first_aid_qualifications)
                             <p class="text-green text-normal semi-bold none">
                                 Qualifications de secourisme :
-                                <span class="italic normal-weight">{{ $attendee['first_aid_qualifications'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->first_aid_qualifications }}</span>
                             </p>
                             @endif
-                            @if ($attendee['emergency_contact_name'])
+                            @if ($attendee->user->emergency_contact_name)
                             <p class="text-green text-normal semi-bold none">
                                 Contact d'urgence :
-                                <span class="italic normal-weight">{{ $attendee['emergency_contact_name'] }} au {{ $attendee['emergency_contact_phone_number'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->emergency_contact_name }} au {{ $attendee->user->emergency_contact_phone_number }}</span>
                             </p>
                             @endif
-                            @if ($attendee['allergies'])
+                            @if ($attendee->user->allergies)
                             <p class="text-green text-normal semi-bold none">
                                 Allergies :
-                                <span class="italic normal-weight">{{ $attendee['allergies'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->allergies }}</span>
                             </p>
                             @endif
-                            @if ($attendee['medical_conditions'])
+                            @if ($attendee->user->medical_conditions)
                             <p class="text-green text-normal semi-bold none">
                                 Conditions médicales :
-                                <span class="italic normal-weight">{{ $attendee['medical_conditions'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->medical_conditions }}</span>
                             </p>
                             @endif
-                            @if ($attendee['diet_restrictions'])
+                            @if ($attendee->user->diet_restrictions)
                             <p class="text-green text-normal semi-bold none">
                                 Restrictions alimentaires :
-                                <span class="italic normal-weight">{{ $attendee['diet_restrictions'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->diet_restrictions }}</span>
                             </p>
                             @endif
-                            @if ($attendee['red_flag_people'])
+                            @if ($attendee->user->red_flag_people)
                             <p class="text-green text-normal semi-bold none">
                                 Restrictions de personnes :
-                                <span class="italic normal-weight">{{ $attendee['red_flag_people'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->red_flag_people }}</span>
                             </p>
                             @endif
-                            @if ($attendee['trigger_warnings'])
+                            @if ($attendee->user->trigger_warnings)
                             <p class="text-green text-normal semi-bold none">
                                 Restrictions de sujets :
-                                <span class="italic normal-weight">{{ $attendee['trigger_warnings'] }}</span>
+                                <span class="italic normal-weight">{{ $attendee->user->trigger_warnings }}</span>
                             </p>
                             @endif
                     </div>
@@ -216,15 +218,15 @@
 </ul>
 <h3 class="special-elite-regular italic text-light-green">Désistements :</h3>
         <ul class="event-attendees-manage">
-            @foreach ($event->getUnsubscribedAttendeesInfosInArray() as $attendee)
+            @foreach ($event->getUnsubscribedAttendeesInfos() as $attendee)
                 <li class="attendee-manage">
-                    <a href=" {{ route('profile.show', $attendee['id']) }}" class="text-light-green special-elite-regular event-link italic link none">
-                        @if ($attendee['is_organizer'])
-                            <i class="fa-solid fa-user"></i>{{ $attendee['login'] }}
+                    <a href=" {{ route('profile.show', $attendee->user->id) }}" class="text-light-green special-elite-regular event-link italic link none">
+                        @if ($attendee->is_organizer)
+                            <i class="fa-solid fa-user"></i>{{ $attendee->user->login }}
                         @else
-                            <i class="fa-regular fa-user"></i>{{ $attendee['login'] }}
+                            <i class="fa-regular fa-user"></i>{{ $attendee->user->login }}
                         @endif
-                         @if ($attendee['has_paid'])
+                         @if ($attendee->has_paid)
                             <i class="fa-solid fa-euro"></i>
                          @endif
                     </a>
@@ -232,10 +234,10 @@
                         <form method="POST" action="{{ route('event.attendees.set.payment.status', $event->id) }}">
                             @csrf
                             @method('PATCH')
-                            <input type="hidden" name="user_id" value="{{ $attendee['id'] }}">
-                            <input type="hidden" name="has_paid" value="{{ $attendee['has_paid'] ? 0 : 1 }}">
+                            <input type="hidden" name="user_id" value="{{ $attendee->id }}">
+                            <input type="hidden" name="has_paid" value="{{ $attendee->has_paid ? 0 : 1 }}">
                             <button type="submit" class="light-button chip">
-                                @if ($attendee['has_paid'])
+                                @if ($attendee->has_paid)
                                     <i class="fa-brands fa-creative-commons-nc-eu"></i>
                                 @else
                                     <i class="fa-solid fa-euro"></i>
@@ -254,11 +256,13 @@
     @include('components.modals.demoteSelf')
 </dialog>
 
-<dialog id="promoteOrgaModal">
-    @include('components.modals.promoteOrga')
-</dialog>
+@foreach($attendees as $attendee)
+    <dialog id="promoteOrgaModal-{{ $attendee->id }}">
+        @include('components.modals.promoteOrga', ['attendee' => $attendee])
+    </dialog>
+@endforeach
 @endif
 @include('components.scripts.demoteSelf')
-@include('components.scripts.promoteOrga')
+@include('components.scripts.promoteOrga', ['attendee' => $attendee])
 <div class="h-70vh"></div>
 </x-layoutDoom>

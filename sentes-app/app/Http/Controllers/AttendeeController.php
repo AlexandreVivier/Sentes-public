@@ -104,18 +104,18 @@ class AttendeeController extends Controller
         return view('events.attendees.show', compact('event', 'attendees'));
     }
 
-    public function promoteOrganizer(Event $event)
+    public function promoteOrganizer(Event $event, $attendee)
     {
         $orga = $event->organizers()->where('user_id', auth()->id())->first();
         if (!$orga) {
             abort(403, 'Tu dois être orga de ce GN pour le modifier !');
         }
+        $attendee = Attendee::where('event_id', $event->id)->where('id', $attendee)->first();
+        $user = $attendee->user;
 
-        $user = User::find(request('user_id'));
-        $attendee = Attendee::where('event_id', $event->id)->where('user_id', $user->id)->first();
         $attendee->promoteOrganizer();
 
-        cache()->forget("my-events-{$user->id}", $user->id);
+        cache()->forget("my-events-{$user->id}");
 
         $orgas = $event->organizers()->get();
         $orgas = User::whereIn('id', $orgas->pluck('user_id'))->get();
