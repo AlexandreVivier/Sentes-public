@@ -1,7 +1,7 @@
 <x-layoutDark>
 
     <section>
-            @include('components.eventCard', ['event' => $event, 'attendees' => $attendees, 'organizers' => $organizers, 'location' => $location])
+            @include('components.eventCard', ['event' => $event])
     </section>
 
 </x-layoutDark>

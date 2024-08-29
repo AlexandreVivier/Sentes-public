@@ -209,6 +209,22 @@ class DatabaseSeeder extends Seeder
             'has_paid' => false,
         ]);
 
+        Attendee::factory()->create([
+            'event_id' => 3,
+            'user_id' => 7,
+            'is_organizer' => false,
+            'has_paid' => false,
+            'is_subscribed' => false,
+        ]);
+
+        Attendee::factory()->create([
+            'event_id' => 3,
+            'user_id' => 8,
+            'is_organizer' => false,
+            'has_paid' => true,
+            'is_subscribed' => false,
+        ]);
+
         // Full event
 
         Event::factory()->create([

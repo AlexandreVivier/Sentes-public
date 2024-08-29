@@ -10,27 +10,34 @@
         <p> GN terminé !</p>
     @endif
 
-    @include('components.shows.event', ['event' => $event, 'attendees' => $event->attendees, 'organizers' => $event->organizers])
+    @include('components.shows.event', ['event' => $event])
 
     @auth
     <div class="flex-row w-100">
-        @if (in_array(auth()->user()->id, $organizers->pluck('user_id')->toArray()))
+        @switch($event->checkAuthAttendeeStatus())
+            @case('null')
+                @if($event->start_date > now())
+                <form method="POST" action="{{ route('attendee.subscribe', $event->id) }}" class="event-button-grid">
+                    @csrf
+                    <button type="submit" class="light-button special-elite-regular">T'inscrire !</button>
+                </form>
+                @endif
+            @break
+            @case('organizer')
                 @include('events.components.organizerButtons')
-        @elseif (!in_array(auth()->user()->id, $organizers->pluck('user_id')->toArray())
-        && in_array(auth()->user()->id, $attendees->pluck('user_id')->toArray()))
+            @break
+            @case('subscribed')
                 @include('events.components.attendeeButtons')
-        @elseif ($event->max_attendees === $event->attendees->count())
-        <div class="w-100 flex-row justify-center">
-            <p class="text-green special-elite-regular text-large"> GN Complet !</p>
-        </div>
-        @elseif (!in_array(auth()->user()->id, $attendees->pluck('user_id')->toArray())
-        && !$event->is_cancelled
-        && $event->start_date > now())
-            <form method="POST" action="{{ route('attendee.subscribe', $event->id) }}" class="event-button-grid">
-                @csrf
-                <button type="submit" class="light-button special-elite-regular">T'inscrire !</button>
-            </form>
-        @endif
+            @break
+            @case('unsubscribed')
+                @if($event->start_date > now())
+                <form method="POST" action="{{ route('attendee.subscribe', $event->id) }}" class="event-button-grid">
+                    @csrf
+                    <button type="submit" class="light-button special-elite-regular">Te réinscrire !</button>
+                </form>
+                @endif
+                @break
+        @endswitch
     </div>
     @endauth
 </main>

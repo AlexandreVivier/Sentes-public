@@ -39,6 +39,7 @@ class Event extends Model
 
     protected $with = [
         'location',
+        'attendees',
     ];
 
     public function location()
@@ -78,58 +79,87 @@ class Event extends Model
         })->implode(', ');
     }
 
-    public function getOrganizerLogin($organizer)
+    public function checkAuthAttendeeStatus()
     {
-        return $organizer->user->login;
+        $auth = $this->attendees()->where('user_id', auth()->id())->first();
+        switch ($auth) {
+            case null:
+                return 'null';
+                break;
+            case $auth->is_organizer:
+                return 'organizer';
+                break;
+            case $auth->is_subscribed:
+                return 'subscribed';
+                break;
+            case !$auth->is_subscribed:
+                return 'unsubscribed';
+                break;
+            default:
+                return 'error';
+        }
     }
 
-    public function checkIfAuthIsOrganizer()
+    public function checkIfAuthIsOrganizerOrAdmin()
     {
-        return $this->organizers()->where('user_id', auth()->id())->exists();
+        $attendee = $this->attendees()->where('user_id', auth()->id())->first();
+        if ($attendee === null) {
+            return false;
+        }
+        if ($attendee->is_organizer || auth()->user()->is_admin) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public function getNonOrganizersAttendeesLogin()
+    public function getOrganizersDataInArray()
     {
-        return $this->attendees()->where('is_subscribed', true)->where('is_organizer', false)->get()->map(function ($attendee) {
-            return $attendee->user->login;
-        })->implode(', ');
-    }
-
-    public function getNonOrganizersInfosInArray()
-    {
-        return $this->attendees()->where('is_subscribed', true)->where('is_organizer', false)->get()->map(function ($attendee) {
+        $attendees = $this->organizers;
+        $attendeesId = $attendees->pluck('user_id');
+        $users = User::whereIn('id', $attendeesId)->get();
+        $users = $users->map(function ($user) use ($attendees) {
+            $attendee = $attendees->where('user_id', $user->id)->first();
             return [
-                'login' => $attendee->user->login,
-                'id' => $attendee->user->id,
-                'has_paid' => $attendee->has_paid
+                'login' => $user->login,
+                'id' => $user->id,
+                'has_paid' => $attendee->has_paid,
             ];
         });
+        return $users;
     }
 
-    // public function getSubscribedAttendeesInfosInArray()
-    // {
-    //     return $this->attendees()->where('is_subscribed', true)->get()->map(function ($attendee) {
-    //         return [
-    //             'login' => $attendee->user->login,
-    //             'first_name' => $attendee->user->first_name,
-    //             'last_name' => $attendee->user->last_name,
-    //             'diet_restrictions' => $attendee->user->diet_restrictions,
-    //             'allergies' => $attendee->user->allergies,
-    //             'red_flag_people' => $attendee->user->red_flag_people,
-    //             'medical_conditions' => $attendee->user->medical_conditions,
-    //             'emergency_contact_name' => $attendee->user->emergency_contact_name,
-    //             'emergency_contact_phone_number' => $attendee->user->emergency_contact_phone_number,
-    //             'phone_number' => $attendee->user->phone_number,
-    //             'trigger_warnings' => $attendee->user->trigger_warnings,
-    //             'pronouns' => $attendee->user->pronouns,
-    //             'first_aid_qualifications' => $attendee->user->first_aid_qualifications,
-    //             'id' => $attendee->user->id,
-    //             'has_paid' => $attendee->has_paid,
-    //             'is_organizer' => $attendee->is_organizer,
-    //             'in_choir' => $attendee->in_choir,
-    //         ];
-    //     });
-    // }
+    public function getNonOrganizersDataInArray()
+    {
+        $attendees = $this->attendees()->where('is_subscribed', true)->where('is_organizer', false)->get();
+        $attendeesId = $attendees->pluck('user_id');
+        $users = User::whereIn('id', $attendeesId)->get();
+        $users = $users->map(function ($user) use ($attendees) {
+            $attendee = $attendees->where('user_id', $user->id)->first();
+            return [
+                'login' => $user->login,
+                'id' => $user->id,
+                'has_paid' => $attendee->has_paid,
+            ];
+        });
+        return $users;
+    }
+
+    public function getUnsubscribedAttendeesDataInArray()
+    {
+        $attendees = $this->attendees()->where('is_subscribed', false)->get();
+        $attendeesId = $attendees->pluck('user_id');
+        $users = User::whereIn('id', $attendeesId)->get();
+        $users = $users->map(function ($user) use ($attendees) {
+            $attendee = $attendees->where('user_id', $user->id)->first();
+            return [
+                'login' => $user->login,
+                'id' => $user->id,
+                'has_paid' => $attendee->has_paid,
+            ];
+        });
+        return $users;
+    }
 
     public function getSubscribedAttendeesInfos()
     {
@@ -140,31 +170,6 @@ class Event extends Model
     {
         return $this->attendees()->where('is_subscribed', false)->get();
     }
-
-    // public function getUnsubscribedAttendeesInfosInArray()
-    // {
-    //     return $this->attendees()->where('is_subscribed', false)->get()->map(function ($attendee) {
-    //         return [
-    //             'login' => $attendee->user->login,
-    //             'first_name' => $attendee->user->first_name,
-    //             'last_name' => $attendee->user->last_name,
-    //             'diet_restrictions' => $attendee->user->diet_restrictions,
-    //             'allergies' => $attendee->user->allergies,
-    //             'red_flag_people' => $attendee->user->red_flag_people,
-    //             'medical_conditions' => $attendee->user->medical_conditions,
-    //             'emergency_contact_name' => $attendee->user->emergency_contact_name,
-    //             'emergency_contact_phone_number' => $attendee->user->emergency_contact_phone_number,
-    //             'phone_number' => $attendee->user->phone_number,
-    //             'trigger_warnings' => $attendee->user->trigger_warnings,
-    //             'pronouns' => $attendee->user->pronouns,
-    //             'first_aid_qualifications' => $attendee->user->first_aid_qualifications,
-    //             'id' => $attendee->user->id,
-    //             'has_paid' => $attendee->has_paid,
-    //             'is_organizer' => $attendee->is_organizer,
-    //             'in_choir' => $attendee->in_choir,
-    //         ];
-    //     });
-    // }
 
     public function getUnsubscribedAttendeesCount()
     {

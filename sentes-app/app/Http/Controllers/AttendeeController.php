@@ -17,7 +17,6 @@ class AttendeeController extends Controller
 
     public function subscribeToEvent(Event $event)
     {
-        // $eventAttendesCount = $event->attendees()->where('is_subscribed', true)->count();
         $eventAttendesCount = $event->attendee_count;
 
         if ($eventAttendesCount >= $event->max_attendees) {
@@ -76,6 +75,10 @@ class AttendeeController extends Controller
         $user = auth()->user();
         $attendee = Attendee::where('event_id', $event->id)->where('user_id', $user->id)->first();
         $attendee->unsubscribe();
+        if ($attendee->is_organizer) {
+            $attendee->is_organizer = false;
+            $attendee->save();
+        }
         $event->attendee_count -= 1;
         $event->save();
 

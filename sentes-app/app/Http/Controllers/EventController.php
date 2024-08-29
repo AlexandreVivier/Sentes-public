@@ -153,11 +153,8 @@ class EventController extends Controller
         $event = cache()->rememberForever("event-{$event->id}", function () use ($event) {
             return $event;
         });
-        $attendees = $event->attendees()->get();
-        $organizers = $event->organizers()->get();
-        $location = $event->location()->first();
 
-        return view('events.show', compact('event', 'attendees', 'organizers', 'location'));
+        return view('events.show', compact('event'));
     }
 
     public function destroy(Event $event)
