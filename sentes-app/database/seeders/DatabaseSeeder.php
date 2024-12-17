@@ -8,6 +8,18 @@ use App\Models\User;
 use App\Models\Location;
 use App\Models\Event;
 use App\Models\Attendee;
+use App\Models\Archetype;
+use App\Models\ArchetypeList;
+use App\Models\ArchetypeCategory;
+use App\Models\Community;
+use App\Models\CommunityList;
+use App\Models\RitualList;
+use App\Models\Ritual;
+use App\Models\Background;
+use App\Models\BackgroundList;
+use App\Models\Miscellaneous;
+use App\Models\MiscellaneousCategory;
+use App\Models\MiscellaneousList;
 
 class DatabaseSeeder extends Seeder
 {
@@ -114,6 +126,300 @@ class DatabaseSeeder extends Seeder
 
         Location::factory(2)->create();
 
+        // **************** ARCHETYPES ****************
+
+        // create 2 archetypes categories
+
+        ArchetypeCategory::factory()->create([
+            'name' => 'Missions de vie',
+            'description' => 'Pour un GN Les Sentes',
+            'author_id' => 1,
+        ]);
+
+        ArchetypeCategory::factory()->create([
+            'name' => 'Destins',
+            'description' => 'Pour un GN Les Sentes',
+            'author_id' => 1,
+        ]);
+        // create 3 archetypes lists
+        ArchetypeList::factory()->create([
+            'name' => 'Fantasy',
+            'description' => 'Missions de vie fantasy',
+            'archetype_category_id' => 1,
+            'author_id' => 1,
+        ]);
+
+        ArchetypeList::factory()->create([
+            'name' => 'Science-fiction',
+            'description' => 'Missions de vie science-fiction',
+            'archetype_category_id' => 1,
+            'author_id' => 1,
+        ]);
+
+        ArchetypeList::factory()->create([
+            'name' => 'Horreur',
+            'description' => 'Missions de vie horreur post-apo',
+            'archetype_category_id' => 1,
+            'author_id' => 1,
+        ]);
+
+        ArchetypeList::factory()->create([
+            'name' => 'Fantasy',
+            'description' => 'Destins fantasy',
+            'archetype_category_id' => 2,
+            'author_id' => 1,
+        ]);
+
+        ArchetypeList::factory()->create([
+            'name' => 'Science-fiction',
+            'description' => 'Destins science-fiction',
+            'archetype_category_id' => 2,
+            'author_id' => 1,
+        ]);
+
+        ArchetypeList::factory()->create([
+            'name' => 'Horreur',
+            'description' => 'Destins horreur post-apo',
+            'archetype_category_id' => 2,
+            'author_id' => 1,
+        ]);
+
+        // create 13 archetypes for each list
+
+        Archetype::factory(13)->create([
+            'archetype_list_id' => 1,
+            'author_id' => 1,
+        ]);
+
+        Archetype::factory(13)->create([
+            'archetype_list_id' => 2,
+            'author_id' => 1,
+        ]);
+
+        Archetype::factory(13)->create([
+            'archetype_list_id' => 3,
+            'author_id' => 1,
+        ]);
+
+        Archetype::factory(13)->create([
+            'archetype_list_id' => 4,
+            'author_id' => 1,
+        ]);
+
+        Archetype::factory(13)->create([
+            'archetype_list_id' => 5,
+            'author_id' => 1,
+        ]);
+
+        Archetype::factory(13)->create([
+            'archetype_list_id' => 6,
+            'author_id' => 1,
+        ]);
+
+        // **************** COMMUNITIES ****************
+
+        // create 3 community lists
+
+        CommunityList::factory()->create([
+            'name' => 'Fantasy',
+            'description' => 'Communautés fantasy',
+            'author_id' => 1,
+        ]);
+
+        CommunityList::factory()->create([
+            'name' => 'Science-fiction',
+            'description' => 'Communautés science-fiction',
+            'author_id' => 1,
+        ]);
+
+        CommunityList::factory()->create([
+            'name' => 'Horreur',
+            'description' => 'Communautés horreur post-apo',
+            'author_id' => 1,
+        ]);
+
+        // create 5 communities for each list
+
+        Community::factory(5)->create([
+            'community_list_id' => 1,
+            'author_id' => 1,
+        ]);
+
+        Community::factory(5)->create([
+            'community_list_id' => 2,
+            'author_id' => 1,
+        ]);
+
+        Community::factory(5)->create([
+            'community_list_id' => 3,
+            'author_id' => 1,
+        ]);
+
+        // **************** RITUALS ****************
+
+        // create 3 ritual lists
+
+        RitualList::factory()->create([
+            'name' => 'Fantasy',
+            'description' => 'Rituels fantasy',
+            'author_id' => 1,
+        ]);
+
+        RitualList::factory()->create([
+            'name' => 'Science-fiction',
+            'description' => 'Rituels science-fiction',
+            'author_id' => 1,
+        ]);
+
+        RitualList::factory()->create([
+            'name' => 'Horreur',
+            'description' => 'Rituels horreur post-apo',
+            'author_id' => 1,
+        ]);
+
+        // create 15 rituals for each list
+
+        Ritual::factory(15)->create([
+            'ritual_list_id' => 1,
+            'author_id' => 1,
+        ]);
+
+        Ritual::factory(15)->create([
+            'ritual_list_id' => 2,
+            'author_id' => 1,
+        ]);
+
+        Ritual::factory(15)->create([
+            'ritual_list_id' => 3,
+            'author_id' => 1,
+        ]);
+
+        // **************** BACKGROUNDS ****************
+
+        // create 2 background lists
+
+        BackgroundList::factory()->create([
+            'name' => 'hobbit',
+            'description' => 'Backgrounds pour un GN Hobbit',
+            'author_id' => 1,
+        ]);
+
+        BackgroundList::factory()->create([
+            'name' => 'Anaon',
+            'description' => 'Backgrounds pour le Pardon des Anaon',
+            'author_id' => 1,
+        ]);
+
+        // create 5 backgrounds for each list
+
+        Background::factory(5)->create([
+            'background_list_id' => 1,
+            'author_id' => 1,
+        ]);
+
+        Background::factory(5)->create([
+            'background_list_id' => 2,
+            'author_id' => 1,
+        ]);
+
+        // **************** MISCELLANEOUS ****************
+
+        // create 3 miscellaneous categories
+
+        MiscellaneousCategory::factory()->create([
+            'name' => 'Contes',
+            'description' => 'Contes pour un classique GN Les Sentes',
+            'author_id' => 2,
+        ]);
+
+        MiscellaneousCategory::factory()->create([
+            'name' => 'Souvenirs',
+            'description' => 'Souvenirs pour un classique GN Les Sentes',
+            'author_id' => 1,
+        ]);
+
+        MiscellaneousCategory::factory()->create([
+            'name' => 'Questions',
+            'description' => 'Questions pour un GN Sentes de type Entrevue',
+            'author_id' => 4,
+        ]);
+
+        // create miscellaneous lists for each category
+
+        MiscellaneousList::factory()->create([
+            'name' => 'Fantasy',
+            'description' => 'Contes fantasy pour un classique GN Les Sentes',
+            'miscellaneous_category_id' => 1,
+            'author_id' => 2,
+        ]);
+
+        MiscellaneousList::factory()->create([
+            'name' => 'Viking',
+            'description' => 'Contes nordiques pour un classique GN Les Sentes',
+            'miscellaneous_category_id' => 1,
+            'author_id' => 5,
+        ]);
+
+        MiscellaneousList::factory()->create([
+            'name' => 'Science-fiction',
+            'description' => 'Souvenirs science-fiction pour un classique GN Les Sentes',
+            'miscellaneous_category_id' => 2,
+            'author_id' => 2,
+        ]);
+
+        MiscellaneousList::factory()->create([
+            'name' => 'Horreur',
+            'description' => 'Souvenirs horreur pour un GN Sentes de type Entrevue',
+            'miscellaneous_category_id' => 2,
+            'author_id' => 4,
+        ]);
+
+        MiscellaneousList::factory()->create([
+            'name' => 'western',
+            'description' => 'Souvenirs westerns pour un classique GN Les Sentes',
+            'miscellaneous_category_id' => 2,
+            'author_id' => 1,
+        ]);
+
+        MiscellaneousList::factory()->create([
+            'name' => 'Test Sédentaire',
+            'description' => 'Questions Sédentaires pour un GN Sentes de type Entrevue',
+            'miscellaneous_category_id' => 3,
+            'author_id' => 2,
+        ]);
+
+        // create 5 miscellaneous for each list
+
+        Miscellaneous::factory(5)->create([
+            'miscellaneous_list_id' => 1,
+            'author_id' => 2,
+        ]);
+
+        Miscellaneous::factory(5)->create([
+            'miscellaneous_list_id' => 2,
+            'author_id' => 5,
+        ]);
+
+        Miscellaneous::factory(5)->create([
+            'miscellaneous_list_id' => 3,
+            'author_id' => 2,
+        ]);
+
+        Miscellaneous::factory(5)->create([
+            'miscellaneous_list_id' => 4,
+            'author_id' => 4,
+        ]);
+
+        Miscellaneous::factory(5)->create([
+            'miscellaneous_list_id' => 5,
+            'author_id' => 1,
+        ]);
+
+        Miscellaneous::factory(15)->create([
+            'miscellaneous_list_id' => 6,
+            'author_id' => 2,
+        ]);
+
         // **************** EVENTS ****************
 
         // Event in the past
@@ -163,14 +469,26 @@ class DatabaseSeeder extends Seeder
         // Event with everything ok
 
         Event::factory()->create([
-            'title' => 'Hiver Nucléaire',
-            'description' => ' la tyrannie, la mort, la réconciliation',
-            'start_date' => date('Y-m-d', strtotime('+1 day')),
+            'title' => 'Asraï : bal du printemps',
+            'description' => 'Bal d\'ouverture, toutes les créatures sont invitées',
+            'start_date' => date('Y-m-d', strtotime('+7 day')),
             'location_id' => 3,
             'price' => 10,
             'max_attendees' => 25,
-            'image_path' => 'events/images/hiver-nucleaire.png',
+            'image_path' => 'events/images/asrai.png',
         ]);
+
+        // Create archetype_list_event for this event with archetype_list_id = 1
+
+        $event = Event::find(3);
+        $list = ArchetypeList::find(1);
+
+        // Assurez-vous que $event et $list existent
+        // if ($event && $list) {
+        //     $event->archetypesLists()->attach($list->id);
+        // }
+
+
 
         // Attendees and organizers for this event :
         Attendee::factory()->create([
@@ -379,7 +697,31 @@ class DatabaseSeeder extends Seeder
             'has_paid' => false,
         ]);
 
-        Event::factory(20)->create()->each(function ($event) {
+        Event::factory()->create([
+            'title' => 'Hiver Nucléaire',
+            'description' => ' la tyrannie, la mort, la réconciliation',
+            'start_date' => date('Y-m-d', strtotime('+1 day')),
+            'location_id' => 3,
+            'price' => 10,
+            'max_attendees' => 25,
+            'image_path' => 'events/images/hiver-nucleaire.png',
+        ]);
+
+        Attendee::factory()->create([
+            'event_id' => 6,
+            'user_id' => 1,
+            'is_organizer' => true,
+            'has_paid' => true,
+        ]);
+
+        Attendee::factory()->create([
+            'event_id' => 6,
+            'user_id' => 2,
+            'is_organizer' => true,
+            'has_paid' => true,
+        ]);
+
+        Event::factory(10)->create()->each(function ($event) {
             Attendee::factory()->create([
                 'event_id' => $event->id,
                 'user_id' => rand(1, 13),

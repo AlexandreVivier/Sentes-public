@@ -8,6 +8,19 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AttendeeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ArchetypeController;
+use App\Http\Controllers\ArchetypeCategoryController;
+use App\Http\Controllers\ArchetypeListController;
+use App\Http\Controllers\ContentController;
+use App\Http\Controllers\RitualController;
+use App\Http\Controllers\RitualListController;
+use App\Http\Controllers\BackgroundController;
+use App\Http\Controllers\BackgroundListController;
+use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\CommunityListController;
+use App\Http\Controllers\MiscellaneousController;
+use App\Http\Controllers\MiscellaneousListController;
+use App\Http\Controllers\MiscellaneousCategoryController;
 use App\Models\User;
 use App\Models\Event;
 use Illuminate\Auth\Events\PasswordReset;
@@ -137,7 +150,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 //******************** EVENTS ************************//
 
-Route::get('events', [EventController::class, 'index'])->name('events.index');
+Route::get('events/all', [EventController::class, 'index'])->name('events.index');
 
 Route::get('events/create', [EventController::class, 'create'])->name('events.create')->middleware(['auth', 'verified']);
 Route::post('events', [EventController::class, 'store'])->name('events.store')->middleware(['auth', 'verified']);
@@ -163,11 +176,125 @@ Route::get('events/{event}/attendees', [AttendeeController::class, 'show'])->nam
 
 Route::patch('events/{event}/attendees/{user}/promote', [AttendeeController::class, 'promoteOrganizer'])->name('event.attendees.promote')->middleware(['auth', 'verified']);
 Route::patch('events/{event}/attendees/demote', [AttendeeController::class, 'demoteYourselfFromOrganizers'])->name('event.organizer.demote.self')->middleware(['auth', 'verified']);
-Route::patch('events/{event}/attendees', [AttendeeController::class, 'setPaymentStatus'])->name('event.attendees.set.payment.status')->middleware(['auth', 'verified']);
+Route::patch('events/{event}/attendees/{user}/status', [AttendeeController::class, 'setPaymentStatus'])->name('event.attendees.set.payment.status')->middleware(['auth', 'verified']);
+
+//******************** CONTENT *******************/
+
+Route::get('events/{event}/content', [ContentController::class, 'index'])->name('event.content.index')->middleware(['auth', 'verified']);
+Route::get('events/{event}/content/create', [ContentController::class, 'create'])->name('event.content.create')->middleware(['auth', 'verified']);
+Route::post('events/{event}/content', [ContentController::class, 'store'])->name('event.content.store')->middleware(['auth', 'verified']);
+Route::delete('events/{event}/content/{content}', [ContentController::class, 'destroy'])->name('event.content.destroy')->middleware(['auth', 'verified']);
+Route::get('events/{event}/content/{content}/edit', [ContentController::class, 'edit'])->name('event.content.edit')->middleware(['auth', 'verified']);
+Route::patch('events/{event}/content/{content}/list', [ContentController::class, 'tableUpdate'])->name('content.table.update')->middleware(['auth', 'verified']);
+Route::get('events/content/creation', [ContentController::class, 'creationIndex'])->name('event.content.creation')->middleware(['auth', 'verified']);
+Route::get('events/content/{user}/creations', [ContentController::class, 'getCreationsByUser'])->name('event.content.creation.index')->middleware(['auth', 'verified']);
 
 //******************** LOCATIONS *******************/
 
 Route::get('locations/{location}', [LocationController::class, 'getEventsByLocation'])->name('locations.show');
+
+//******************** ARCHETYPES *******************/
+// Categories
+Route::get('archetypes/categories', [ArchetypeCategoryController::class, 'index'])->name('archetypes.categories.index');
+Route::get('archetypes/categories/create', [ArchetypeCategoryController::class, 'create'])->name('archetypes.categories.create');
+Route::post('archetypes/categories', [ArchetypeCategoryController::class, 'store'])->name('archetypes.categories.store');
+Route::get('archetypes/categories/{archetypeCategory}/edit', [ArchetypeCategoryController::class, 'edit'])->name('archetypes.categories.edit');
+Route::patch('archetypes/categories/{archetypeCategory}', [ArchetypeCategoryController::class, 'update'])->name('archetypes.categories.update');
+Route::delete('archetypes/categories/{archetypeCategory}', [ArchetypeCategoryController::class, 'destroy'])->name('archetypes.categories.destroy');
+Route::get('archetypes/categories/{archetypeCategory}', [ArchetypeCategoryController::class, 'getArchetypeListsByCategory'])->name('archetypes.lists.categories.show');
+
+//Archetypes Listes
+Route::get('archetypes/list', [ArchetypeListController::class, 'index'])->name('archetypes.list.index');
+Route::get('archetypes/list/{archetypeList}', [ArchetypeListController::class, 'show'])->name('archetypes.list.show');
+Route::get('archetypes/create', [ArchetypeListController::class, 'create'])->name('archetypes.list.create');
+Route::post('archetypes/store', [ArchetypeListController::class, 'store'])->name('archetypes.list.store');
+Route::get('archetypes/{archetypeList}/edit', [ArchetypeListController::class, 'edit'])->name('archetypes.list.edit');
+Route::patch('archetypes/list/update/{archetypeList}', [ArchetypeListController::class, 'update'])->name('archetypes.list.update');
+Route::delete('archetypes/list/delete/{archetypeList}', [ArchetypeListController::class, 'destroy'])->name('archetypes.list.destroy');
+
+//Archetypes
+Route::get('archetypes/{archetypeList}/create', [ArchetypeController::class, 'create'])->name('archetypes.create');
+Route::post('archetypes/{archetypeList}', [ArchetypeController::class, 'store'])->name('archetypes.store');
+Route::get('archetypes/edit/{archetype}', [ArchetypeController::class, 'edit'])->name('archetypes.edit');
+Route::patch('archetypes/update/{archetype}', [ArchetypeController::class, 'update'])->name('archetypes.update');
+Route::delete('archetypes/delete/{archetype}', [ArchetypeController::class, 'destroy'])->name('archetypes.destroy');
+
+//******************** COMMUNITIES *******************/
+//Community Listes
+Route::get('communities/list/index', [CommunityListController::class, 'index'])->name('communities.list.index');
+Route::get('communities/{communityList}', [CommunityListController::class, 'show'])->name('communities.list.show');
+Route::get('communities/list/create', [CommunityListController::class, 'create'])->name('communities.list.create');
+Route::post('communities', [CommunityListController::class, 'store'])->name('communities.list.store');
+Route::get('communities/{communityList}/edit', [CommunityListController::class, 'edit'])->name('communities.list.edit');
+Route::patch('communities/{communityList}', [CommunityListController::class, 'update'])->name('communities.list.update');
+Route::delete('communities/{communityList}', [CommunityListController::class, 'destroy'])->name('communities.list.destroy');
+
+//Communities
+Route::get('communities/{communityList}/create', [CommunityController::class, 'create'])->name('communities.create');
+Route::post('communities/{communityList}', [CommunityController::class, 'store'])->name('communities.store');
+Route::get('communities/edit/{community}', [CommunityController::class, 'edit'])->name('communities.edit');
+Route::patch('communities/update/{community}', [CommunityController::class, 'update'])->name('communities.update');
+Route::delete('communities/delete/{community}', [CommunityController::class, 'destroy'])->name('communities.destroy');
+
+//******************** RITUALS *******************/
+//Ritual Listes
+Route::get('rituals/list/index', [RitualListController::class, 'index'])->name('rituals.list.index');
+Route::get('rituals/{ritualList}', [RitualListController::class, 'show'])->name('rituals.list.show');
+Route::get('rituals/list/create', [RitualListController::class, 'create'])->name('rituals.list.create');
+Route::post('rituals', [RitualListController::class, 'store'])->name('rituals.list.store');
+Route::get('rituals/{ritualList}/edit', [RitualListController::class, 'edit'])->name('rituals.list.edit');
+Route::patch('rituals/{ritualList}', [RitualListController::class, 'update'])->name('rituals.list.update');
+Route::delete('rituals/{ritualList}', [RitualListController::class, 'destroy'])->name('rituals.list.destroy');
+
+//Rituals
+Route::get('rituals/{ritualList}/create', [RitualController::class, 'create'])->name('rituals.create');
+Route::post('rituals/{ritualList}', [RitualController::class, 'store'])->name('rituals.store');
+Route::get('rituals/edit/{ritual}', [RitualController::class, 'edit'])->name('rituals.edit');
+Route::patch('rituals/update/{ritual}', [RitualController::class, 'update'])->name('rituals.update');
+Route::delete('rituals/delete/{ritual}', [RitualController::class, 'destroy'])->name('rituals.destroy');
+
+//******************** BACKGROUNDS *******************/
+//Background Listes
+Route::get('backgrounds/list/index', [BackgroundListController::class, 'index'])->name('backgrounds.list.index');
+Route::get('backgrounds/{backgroundList}', [BackgroundListController::class, 'show'])->name('backgrounds.list.show');
+Route::get('backgrounds/list/create', [BackgroundListController::class, 'create'])->name('backgrounds.list.create');
+Route::post('backgrounds', [BackgroundListController::class, 'store'])->name('backgrounds.list.store');
+Route::get('backgrounds/{backgroundList}/edit', [BackgroundListController::class, 'edit'])->name('backgrounds.list.edit');
+Route::patch('backgrounds/{backgroundList}', [BackgroundListController::class, 'update'])->name('backgrounds.list.update');
+Route::delete('backgrounds/{backgroundList}', [BackgroundListController::class, 'destroy'])->name('backgrounds.list.destroy');
+
+//Backgrounds
+Route::get('backgrounds/{backgroundList}/create', [BackgroundController::class, 'create'])->name('backgrounds.create');
+Route::post('backgrounds/{backgroundList}', [BackgroundController::class, 'store'])->name('backgrounds.store');
+Route::get('backgrounds/edit/{background}', [BackgroundController::class, 'edit'])->name('backgrounds.edit');
+Route::patch('backgrounds/update/{background}', [BackgroundController::class, 'update'])->name('backgrounds.update');
+Route::delete('backgrounds/delete/{background}', [BackgroundController::class, 'destroy'])->name('backgrounds.destroy');
+
+//******************** MISCELLANEOUS ****************/
+//Miscellaneous Categories
+Route::get('miscellaneous/categories', [MiscellaneousCategoryController::class, 'index'])->name('miscellaneous.categories.index');
+Route::get('miscellaneous/categories/create', [MiscellaneousCategoryController::class, 'create'])->name('miscellaneous.categories.create');
+Route::post('miscellaneous/categories', [MiscellaneousCategoryController::class, 'store'])->name('miscellaneous.categories.store');
+Route::get('miscellaneous/categories/{miscellaneousCategory}/edit', [MiscellaneousCategoryController::class, 'edit'])->name('miscellaneous.categories.edit');
+Route::patch('miscellaneous/categories/{miscellaneousCategory}', [MiscellaneousCategoryController::class, 'update'])->name('miscellaneous.categories.update');
+Route::delete('miscellaneous/categories/{miscellaneousCategory}', [MiscellaneousCategoryController::class, 'destroy'])->name('miscellaneous.categories.destroy');
+Route::get('miscellaneous/categories/{miscellaneousCategory}', [MiscellaneousCategoryController::class, 'getAllMiscellaneousListsByCategory'])->name('miscellaneous.lists.categories.show');
+
+//Miscellaneous Listes
+Route::get('miscellaneous/list', [MiscellaneousListController::class, 'index'])->name('miscellaneous.list.index');
+Route::get('miscellaneous/list/{miscellaneousList}', [MiscellaneousListController::class, 'show'])->name('miscellaneous.list.show');
+Route::get('miscellaneous/create', [MiscellaneousListController::class, 'create'])->name('miscellaneous.list.create');
+Route::post('miscellaneous/store', [MiscellaneousListController::class, 'store'])->name('miscellaneous.list.store');
+Route::get('miscellaneous/{miscellaneousList}/edit', [MiscellaneousListController::class, 'edit'])->name('miscellaneous.list.edit');
+Route::patch('miscellaneous/list/update/{miscellaneousList}', [MiscellaneousListController::class, 'update'])->name('miscellaneous.list.update');
+Route::delete('miscellaneous/list/delete/{miscellaneousList}', [MiscellaneousListController::class, 'destroy'])->name('miscellaneous.list.destroy');
+
+//Miscellaneous
+Route::get('miscellaneous/{miscellaneousList}/create', [MiscellaneousController::class, 'create'])->name('miscellaneous.create');
+Route::post('miscellaneous/{miscellaneousList}', [MiscellaneousController::class, 'store'])->name('miscellaneous.store');
+Route::get('miscellaneous/edit/{miscellaneous}', [MiscellaneousController::class, 'edit'])->name('miscellaneous.edit');
+Route::patch('miscellaneous/update/{miscellaneous}', [MiscellaneousController::class, 'update'])->name('miscellaneous.update');
+Route::delete('miscellaneous/delete/{miscellaneous}', [MiscellaneousController::class, 'destroy'])->name('miscellaneous.destroy');
 
 //******************** ADMIN CRUD *******************/
 

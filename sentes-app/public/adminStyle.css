@@ -75,7 +75,12 @@ th,  td
 
 tbody > tr:nth-of-type(even)
 {
-	background-color: rgba(232, 228, 222, 0.763);
+	background-color: rgba(234, 226, 214, 0.7);
+}
+
+tbody > tr
+{
+    background-color: rgba(209, 220, 198, 0.25)
 }
 
 .chip
@@ -83,6 +88,16 @@ tbody > tr:nth-of-type(even)
 	font-size: larger;
 	width: 30px;
 	height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chip-large
+{
+    font-size: larger;
+    width: 30px;
+    height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -111,6 +126,7 @@ tfoot td
 	justify-content: center;
 	align-items: center;
 	gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 .show-article
@@ -181,6 +197,11 @@ tfoot td
 		max-width: 200px;
 	}
 
+    .chip-large
+{
+    width: 50px;
+    height: 50px;
+}
 	.show-button-container
 	{
 		flex-direction: row;

@@ -337,7 +337,7 @@ class AdminController extends Controller
         $author = auth()->user();
 
         $users = User::all();
-        Notification::sendNow($users, new NewEvent($event, $author));
+        Notification::send($users, new NewEvent($event, $author));
 
         session()->flash('success', 'L\'évènement a bien été créé !');
 
@@ -402,7 +402,7 @@ class AdminController extends Controller
 
         $attendees = $event->attendees()->where('is_subscribed', true)->get();
         $attendees = User::whereIn('id', $attendees->pluck('user_id'))->get();
-        Notification::sendNow($attendees, new EventUpdated($event));
+        Notification::send($attendees, new EventUpdated($event));
 
 
         session()->flash('success', 'L\'évènement a bien été modifié !');

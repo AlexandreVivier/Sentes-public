@@ -10,6 +10,7 @@
                     <li class="w-30"><a href="{{ route('admin.users.index') }}" class="light-button special-elite-regular">Membres</a></li>
                     <li class="w-30"><a href="{{ route('admin.locations.index') }}" class="light-button special-elite-regular">Lieux</a></li>
                     <li class="w-30"><a href="{{ route('admin.events.index') }}" class="light-button special-elite-regular">GN</a></li>
+                    {{-- <li class="w-30"><a href="{{ route('archetypes.list.index') }}" class="light-button special-elite-regular">Archétypes</a></li> --}}
 
                     @isset($users)
                     <li>

@@ -19,7 +19,6 @@ class RegisterController extends Controller
     {
         // password must contain 1 number, 1 uppercase letter, 1 special character and be between 10 and 25 characters long :
         $passwordRegex = '/^(?=.*\d)(?=.*[A-Z])(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{10,25}$/';
-
         $attributes = request()->validate([
             'first_name' => ['required', 'max:50'],
             'last_name' =>  ['required', 'max:50'],
@@ -28,17 +27,17 @@ class RegisterController extends Controller
             'password' => ['required', 'min:10', 'max:25', 'confirmed', 'regex:' . $passwordRegex],
             'accepted_terms' => ['required'],
         ]);
-
         $attributes['avatar_path'] = 'images/static/blank-profile.png';
-
-
-
-        $user = User::create($attributes);
-        event(new Registered($user));
-        auth()->login($user);
-        session()->flash('success', 'Ton compte a bien été créé ! Vérifie ta boîte mail pour activer ton compte !');
-
-        return redirect('/');
+        if ($attributes['accepted_terms'] != 1) {
+            session()->flash('error', 'Tu dois accepter les conditions d\'utilisation pour t\'inscrire !');
+            return back();
+        } else {
+            $user = User::create($attributes);
+            event(new Registered($user));
+            auth()->login($user);
+            session()->flash('success', 'Ton compte a bien été créé ! Vérifie ta boîte mail pour activer ton compte !');
+            return redirect('/');
+        }
     }
 
     public function edit(User $user)
@@ -72,19 +71,14 @@ class RegisterController extends Controller
             'trigger_warnings' => ['nullable', 'max:100'],
             'phone_number' => ['nullable', 'max:20'],
         ]);
-
         if (request()->hasFile('avatar_path')) {
             $attributes['avatar_path'] = request('avatar_path')->store('public/users/avatars');
             $attributes['avatar_path'] = str_replace('public/', '', $attributes['avatar_path']);
         }
-
-
         cache()->forget('users');
         cache()->forget("user-{$user->id}", $user->id);
         $organizedEvents = $user->allEvents()->get();
-
         cache()->forget('events');
-
         foreach ($organizedEvents as $event) {
             cache()->forget("event-{$event->id}", $event->id);
         }
@@ -95,11 +89,8 @@ class RegisterController extends Controller
                 cache()->forget("my-subscribed-events-{$organizer->user_id}", $organizer->user_id);
             }
         }
-
         $user->update($attributes);
-
         session()->flash('success', 'Ton proﬁl a bien été mis à jour !');
-
         return redirect(route('profile.myProfile', $user));
     }
 
@@ -118,7 +109,6 @@ class RegisterController extends Controller
         if (auth()->user()->id !== $user->id) {
             abort(403, 'Tu n\'as pas le droit de voir cette page');
         }
-
         cache()->forget("my-events-{$user->id}", $user->id);
         cache()->forget("my-subscribed-events-{$user->id}", $user->id);
         cache()->forget('events');
@@ -126,14 +116,10 @@ class RegisterController extends Controller
         foreach ($attendees as $attendee) {
             $attendee->delete();
         }
-
-
         cache()->forget('users');
         cache()->forget("user-{$user->id}", $user->id);
         $organizedEvents = $user->allEvents()->get();
-
         cache()->forget('events');
-
         foreach ($organizedEvents as $event) {
             cache()->forget("event-{$event->id}", $event->id);
         }
@@ -149,9 +135,7 @@ class RegisterController extends Controller
             $attendee->delete();
         }
         $user->delete();
-
         session()->flash('success', 'Ton compte a bien été supprimé !');
-
         return redirect('/');
     }
 }

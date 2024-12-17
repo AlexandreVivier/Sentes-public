@@ -47,7 +47,7 @@
                             @if ($attendee->user_id === auth()->user()->id)
                                 <button type="submit" class="light-button chip" id="demoteSelf"><i class="fa-regular fa-user"></i></button>
                             @endif
-                            <form method="POST" action="{{ route('event.attendees.set.payment.status', $event->id) }}">
+                            <form method="POST" action="{{ route('event.attendees.set.payment.status', [$event->id, $attendee->id]) }}">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="user_id" value="{{ $attendee->user_id }}">
@@ -140,7 +140,7 @@
                             <button class="light-button chip" id="promoteOrga-{{ $attendee->id }}">
                                 <i class="fa-solid fa-user"></i>
                             </button>
-                            <form method="POST" action="{{ route('event.attendees.set.payment.status', $event->id) }}">
+                            <form method="POST" action="{{ route('event.attendees.set.payment.status', [$event->id, $attendee->id]) }}">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="user_id" value="{{ $attendee->id }}">
@@ -231,7 +231,7 @@
                          @endif
                     </a>
                     <div class="attendee-manage-buttons">
-                        <form method="POST" action="{{ route('event.attendees.set.payment.status', $event->id) }}">
+                        <form method="POST" action="{{ route('event.attendees.set.payment.status', [$event->id, $attendee->id]) }}">
                             @csrf
                             @method('PATCH')
                             <input type="hidden" name="user_id" value="{{ $attendee->id }}">
@@ -248,6 +248,7 @@
                 </li>
             @endforeach
         </ul>
+        <a href="{{ route('events.show', $event->id) }}" class="light-button special-elite-regular">Retour à la page de l'événement</a>
     </section>
 </main>
 

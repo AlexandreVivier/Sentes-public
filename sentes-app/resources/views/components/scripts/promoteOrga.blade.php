@@ -4,7 +4,7 @@
             button.addEventListener('click', function(event) {
                 event.preventDefault();
                 let attendeeId = this.id.split('-')[1];
-                console.log(attendeeId);
+                // console.log(attendeeId);
                 let dialog = document.getElementById('promoteOrgaModal-' + attendeeId);
                 dialog.showModal();
             });

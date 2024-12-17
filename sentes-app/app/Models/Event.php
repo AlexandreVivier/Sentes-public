@@ -40,6 +40,7 @@ class Event extends Model
     protected $with = [
         'location',
         'attendees',
+        // 'archetypesLists',
     ];
 
     public function location()
@@ -55,6 +56,11 @@ class Event extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'attendees', 'event_id', 'user_id');
+    }
+
+    public function contents()
+    {
+        return $this->hasMany(Content::class, 'event_id');
     }
 
     public function getAttendeesCount()

@@ -5,7 +5,7 @@
         'pastEventsRoute' => route('user.organisations.past.index', $userId),
         'cancelledEventsRoute' => route('user.organisations.cancelled.index', $userId)])
         @if (isset($pastsEvents))
-        <h1 class="index-title special-elite-regular">Les GN que j'ai organisé :</h1>
+        <h1 class="index-title special-elite-regular">Les GN que j'ai organisés :</h1>
         @elseif(isset($cancelledEvents))
         <h1 class="index-title special-elite-regular">Les GN que j'ai annulé :</h1>
         @else

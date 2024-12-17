@@ -17,9 +17,18 @@
                     <a href="{{ url()->previous() }}" class="light-button special-elite-regular">
                         Retour à la page précédente
                     </a>
+                    <a href="{{ route('event.content.creation.index', $user->id) }}" class="light-button special-elite-regular">
+                        Voir tout ce que {{ $user->login }} a créé
+                    </a>
                 </div>
-
-
+                <div class="user-button-container">
+                    <a href="#" class="light-button special-elite-regular">
+                        Voir les organisations de {{ $user->login }}
+                    </a>
+                    <a href="#" class="light-button special-elite-regular">
+                        Voir les GN sur lesquels {{ $user->login }} participe
+                    </a>
+                </div>
             </article>
         </x-basicFrameContent>
 	</section>

@@ -36,9 +36,7 @@ class UserTest extends TestCase
         ]);
 
         // Invalid user email :
-
         $this->post(route('logout'));
-
         $this->post(route('register'), [
             'login' => 'James Doe',
             'first_name' => 'John',
@@ -51,9 +49,7 @@ class UserTest extends TestCase
             ->assertSessionHasErrors('email');
 
         // Invalid password regex user :
-
         $this->post(route('logout'));
-
         $this->post(route('register'), [
             'login' => 'James Doe',
             'first_name' => 'John',
@@ -64,8 +60,6 @@ class UserTest extends TestCase
             'accepted_terms' => true,
         ])
             ->assertSessionHasErrors('password');
-
-
 
         // User already exists :
 
@@ -84,23 +78,21 @@ class UserTest extends TestCase
             ->assertSessionHasErrors(['login', 'email']);
 
         // Invalid accepted terms :
+        $this->post(route('logout'));
+        $this->post(route('register'), [
+            'login' => 'Jane Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'email' => 'mail2@mail.com',
+            'password' => 'SuperP@ssword1!',
+            'password_confirmation' => 'SuperP@ssword1!',
+            'accepted_terms' => 0,
+        ]);
 
-        // $this->post(route('logout'));
-
-        // $this->post(route('register'), [
-        //     'login' => 'Jane Doe',
-        //     'first_name' => 'John',
-        //     'last_name' => 'Doe',
-        //     'email' => 'mail2@mail.com',
-        //     'password' => 'SuperP@ssword1!',
-        //     'password_confirmation' => 'SuperP@ssword1!',
-        //     'accepted_terms' => false,
-        // ]);
-
-        // $this->assertDatabaseMissing('users', [
-        //     'login' => 'Jane Doe',
-        //     'first_name' => 'John',
-        //     'last_name' => 'Doe',
-        // ]);
+        $this->assertDatabaseMissing('users', [
+            'login' => 'Jane Doe',
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+        ]);
     }
 }

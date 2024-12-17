@@ -56,6 +56,66 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_banned' => 'boolean'
     ];
 
+    public function archetypes()
+    {
+        return $this->hasMany(Archetype::class, 'author_id');
+    }
+
+    public function archetypeLists()
+    {
+        return $this->hasMany(ArchetypeList::class, 'author_id');
+    }
+
+    public function archetypeCategories()
+    {
+        return $this->hasMany(ArchetypeCategory::class, 'author_id');
+    }
+
+    public function rituals()
+    {
+        return $this->hasMany(Ritual::class, 'author_id');
+    }
+
+    public function ritualLists()
+    {
+        return $this->hasMany(RitualList::class, 'author_id');
+    }
+
+    public function communities()
+    {
+        return $this->hasMany(Community::class, 'author_id');
+    }
+
+    public function communityLists()
+    {
+        return $this->hasMany(CommunityList::class, 'author_id');
+    }
+
+    public function backgrounds()
+    {
+        return $this->hasMany(Background::class, 'author_id');
+    }
+
+    public function backgroundLists()
+    {
+        return $this->hasMany(BackgroundList::class, 'author_id');
+    }
+
+    public function miscellaneousCategories()
+    {
+        return $this->hasMany(MiscellaneousCategory::class, 'author_id');
+    }
+
+    public function miscellaneousLists()
+    {
+        return $this->hasMany(MiscellaneousList::class, 'author_id');
+    }
+
+    public function miscellaneous()
+    {
+        return $this->hasMany(Miscellaneous::class, 'author_id');
+    }
+
     protected function formatDate($date)
     {
         return Carbon::parse($date)->isoFormat('Do MMM YYYY');
@@ -90,7 +150,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->allEvents()->where('start_date', '>', now())->where('is_cancelled', false)->get();
     }
-
 
     public function isOrganiser()
     {

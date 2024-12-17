@@ -6,7 +6,7 @@
     </div>
     <div class="button-col-2">
         <a href="{{ route('event.change', $event->id) }}" class="light-button special-elite-regular">Modifier les infos du GN</a>
-        <a href="#" class="light-button special-elite-regular">Modifier le contenu de jeu</a>
+        <a href="{{ route('event.content.index', $event->id) }}" class="light-button special-elite-regular">Modifier le contenu de jeu</a>
         <a href="{{ route('event.attendees.manage', $event->id) }}" class="light-button special-elite-regular">Gérer les participations</a>
         <form method="post" action="{{ route('attendee.unsubscribe', $event->id) }}" >
             @csrf

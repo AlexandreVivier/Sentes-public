@@ -7,6 +7,9 @@ use App\Models\Event;
 use App\Models\User;
 use App\Models\Location;
 use App\Models\Attendee;
+use App\Models\ArchetypeCategory;
+use App\Models\ArchetypeList;
+use App\Models\Archetype;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\NewEvent;
@@ -80,16 +83,11 @@ class EventController extends Controller
         ]);
         $event->attendee_count += 1;
         $event->save();
-
         //Send notification to every user
         $users = User::all();
-
         $author = auth()->user();
-        Notification::sendNow($users, new NewEvent($event, $author));
-
-        // TEMPOR
-        // TestJob::dispatch();
-
+        // Notification::sendNow($users, new NewEvent($event, $author));
+        Notification::send($users, new NewEvent($event, $author));
         session()->flash('success', 'Ton évènement a bien été créé !');
         return redirect(route('events.edit', $event));
     }
@@ -200,7 +198,7 @@ class EventController extends Controller
 
         $attendees = $event->attendees()->where('is_subscribed', true)->get();
         $attendees = User::whereIn('id', $attendees->pluck('user_id'))->get();
-        Notification::sendNow($attendees, new EventCancelled($event));
+        Notification::send($attendees, new EventCancelled($event));
 
         session()->flash('success', 'Ton évènement a bien été annulé !');
         return redirect(route('events.index'));
@@ -354,7 +352,7 @@ class EventController extends Controller
 
             $attendees = $event->attendees()->where('is_subscribed', true)->get();
             $attendees = User::whereIn('id', $attendees->pluck('user_id'))->get();
-            Notification::sendNow($attendees, new EventCancelled($event));
+            Notification::send($attendees, new EventCancelled($event));
             $event->cancel();
         } else {
             $event->uncancel();
@@ -384,7 +382,7 @@ class EventController extends Controller
 
         $attendees = $event->attendees()->where('is_subscribed', true)->get();
         $attendees = User::whereIn('id', $attendees->pluck('user_id'))->get();
-        Notification::sendNow($attendees, new EventUpdated($event));
+        Notification::send($attendees, new EventUpdated($event));
 
 
         session()->flash('success', 'Ton évènement a bien été mis à jour !');
