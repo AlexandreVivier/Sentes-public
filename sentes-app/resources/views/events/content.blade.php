@@ -1,9 +1,8 @@
 <x-layoutDark>
     <main class="event-frame-content bg-light border-light text-green justify-center flex-col w-100 items-center">
-        <h1 class="text-green special-elite-regular text-center">{{ $event->title }} - Gestion des Archétypes de personnage</h1>
+        <h1 class="text-green special-elite-regular text-center">{{ $event->title }} - Contenu du jeu</h1>
             <section class="w-75 justify-around flex-row content-responsive-wrapper">
                 <div class="w-100 flex-col">
-
                     <h2 class="text-green special-elite-regular">Tables de contenus pour le GN :</h2>
                     <div class="flex-row justify-center">
                 @if($contents->isEmpty())
@@ -84,7 +83,6 @@
                                             <span class="italic text-light-green">Aucun contenu n'a été ajouté à cette table.</span>
                                             @else
                                             @foreach($content->miscellaneousLists as $list)
-                                            {{-- @dd($list) --}}
                                                 <a href="#" id="seeAllMisc-{{$list->id}}" class="text-green special-elite-regular event-link link none semi-bold uppercase">
                                                     {{ $list->name }}{{ $loop->last ? '' : ' / ' }}
                                                 </a>
@@ -125,6 +123,59 @@
                 </table>
                 @endif
                     </div>
+                    <h2 class="text-green special-elite-regular">Actions de publication / autorisations :</h2>
+                    <div class="w-100 show-button-container">
+                        @if(!$event->profile->published)
+                        <form method="post" action="{{ route('event.profile.publish', $event->id) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="green-button special-elite-regular">Publier le GN</button>
+                        </form>
+                        @endif
+                        @if(!$event->profile->subscribing)
+                        <form method="post" action="{{ route('event.profile.registrations', $event->id) }}">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="light-button special-elite-regular">Ouvrir les inscriptions</button>
+                        </form>
+                        @endif
+                    </div>
+                    @if($event->profile->subscribing)
+                    <div class="w-100 show-button-container flex-wrap">
+                        <form method="post" action="{{ route('event.profile.character.creation', $event->id) }}" class="w-25">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="light-button special-elite-regular">
+                                @if(!$event->profile->character_creation)
+                                Ouvrir la création de personnages
+                                @else
+                                Fermer la création de personnages
+                                @endif
+                            </button>
+                        </form>
+                        <form method="post" action="{{ route('event.profile.character.relations', $event->id) }}" class="w-33">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="light-button special-elite-regular">
+                                @if(!$event->profile->character_relation)
+                                Ouvrir les relations de personnages
+                                @else
+                                Fermer les relations de personnages
+                                @endif
+                            </button>
+                        </form>
+                        @if(!$event->profile->double_relation && $event->profile->character_relation)
+                        <div class="w-25">
+                            <button id="double" class="light-button special-elite-regular">
+                                Autoriser les double liens
+                            </button>
+                        </div>
+                        @endif
+                    </div>
+                    @if($event->profile->double_relation)
+                    <p class="text-center italic">Les double liens sont autorisés pour ce GN.</p>
+                    @endif
+                    @endif
             </div>
             <div class="w-100 flex-row justify-center">
                 <form method="post" class="w-100 " action="{{ route('event.content.store', $event->id) }}" >
@@ -159,11 +210,33 @@
                                 <option value="miscellaneous">Divers</option>
                             </select>
                         </div>
+                        <div class="flex-row justify-around">
                         <div class="form-check">
                             <label for="is_unique" class="text-shadowed">
                                 Eléments de contenu uniques ?
                             </label>
                             <input type="checkbox" name="is_unique" id="is_unique" value="1">
+                        </div>
+                        <div class="form-check">
+                            <label for="is_public" class="text-shadowed">
+                                Table visible pour les joueurs ?
+                            </label>
+                            <input type="checkbox" name="is_visible" id="is_visible" value="1" checked required>
+                        </div>
+                        </div>
+                        <div class="flex-row justify-around">
+                        <div class="form-input">
+                            <label for="number_of_selections" class="text-shadowed">
+                                Nombre de fois ou cet élément sera sélectionnable par les PJ:
+                            </label>
+                            <input type="number" name="number_of_selections" id="number_of_selections" value="1" required>
+                        </div>
+                        <div class="form-input">
+                            <label for="max_selections" class="text-shadowed text-light-green">
+                                Nombre max de sélections de l'élément par les PJ (optionnel) :
+                            </label>
+                            <input type="number" name="max_selections" id="max_selections">
+                        </div>
                         </div>
                         <button type="submit" class="transparent-button special-elite-regular w-50">Ajouter au GN</button>
                     </div>
@@ -173,14 +246,8 @@
             <section class="w-75">
                 <div class="w-100 show-button-container">
                     <a href="{{ route('events.show', $event->id) }}" class="light-button special-elite-regular">Retour au GN</a>
-                    {{-- <a href="#" class="light-button special-elite-regular">Voir tous les archétypes disponibles</a> --}}
                     <a href="{{ route('event.content.creation')}}" class="green-button special-elite-regular">Création de contenus</a>
                 </div>
-                {{-- <div class="w-100 show-button-container">
-                    <a href="#" class="green-button special-elite-regular">Créer une catégorie d'archétypes</a>
-                    <a href="#" class="green-button special-elite-regular">Créer une liste d'archétypes</a>
-                    <a href="#" class="green-button special-elite-regular">Créer un archétype</a>
-                </div> --}}
             </section>
     </main>
     @foreach($contents as $content)
@@ -204,7 +271,9 @@
         @endswitch
     </dialog>
     @endforeach
-
+    <dialog id="doubleLink">
+        @include('components.modals.doubleLink', ['event' => $event])
+    </dialog>
     @if($contents->isNotEmpty())
     @foreach($contents as $content)
     @switch($content->type)
@@ -252,4 +321,5 @@
     @include('components.scripts.seeAllCommunities')
     @include('components.scripts.seeAllBackgrounds')
     @include('components.scripts.seeAllMiscellaneouses')
+    @include('components.scripts.doubleLink')
 </x-layoutDark>

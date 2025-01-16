@@ -53,6 +53,9 @@
                     <a href="{{ route('miscellaneous.create', $miscellaneousList->id) }}" class="green-button special-elite-regular">Ajouter un élément à la liste {{ $miscellaneousList->name }}</a>
                 @endif
             </div>
+            <div class="w-100 show-button-container border-top-down-gradient">
+                <a href="{{ route('miscellaneous.export', $miscellaneousList->id) }}" class="green-button special-elite-regular">Exporter en CSV</a>
+            </div>
         </section>
     </main>
 </x-layoutDoom>

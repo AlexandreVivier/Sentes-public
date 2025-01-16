@@ -7,6 +7,7 @@ use App\Models\Location;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Attendee;
+use App\Models\Profile;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\EventUpdated;
@@ -303,6 +304,7 @@ class AdminController extends Controller
             'description' => ['required', 'max:99'],
             'start_date' => ['required', 'date', 'after:now'],
             'location_id' => ['required', Rule::exists('locations', 'id')],
+            'author_id' => ['required', Rule::exists('users', 'id')],
             'price' => ['nullable', 'numeric', 'min:1'],
             'max_attendees' => ['nullable', 'numeric', 'min:1'],
             'image_path' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png'],
@@ -339,6 +341,9 @@ class AdminController extends Controller
         $users = User::all();
         Notification::send($users, new NewEvent($event, $author));
 
+        Profile::create([
+            'event_id' => $event->id,
+        ]);
         session()->flash('success', 'L\'évènement a bien été créé !');
 
         return redirect(route('admin.events.show', $event));

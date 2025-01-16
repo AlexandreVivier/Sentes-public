@@ -21,6 +21,7 @@ use App\Http\Controllers\CommunityListController;
 use App\Http\Controllers\MiscellaneousController;
 use App\Http\Controllers\MiscellaneousListController;
 use App\Http\Controllers\MiscellaneousCategoryController;
+use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use App\Models\Event;
 use Illuminate\Auth\Events\PasswordReset;
@@ -178,6 +179,14 @@ Route::patch('events/{event}/attendees/{user}/promote', [AttendeeController::cla
 Route::patch('events/{event}/attendees/demote', [AttendeeController::class, 'demoteYourselfFromOrganizers'])->name('event.organizer.demote.self')->middleware(['auth', 'verified']);
 Route::patch('events/{event}/attendees/{user}/status', [AttendeeController::class, 'setPaymentStatus'])->name('event.attendees.set.payment.status')->middleware(['auth', 'verified']);
 
+//******************** PROFILES-Event *******************/
+
+Route::patch('events/{event}/profile/publish', [ProfileController::class, 'publishEvent'])->name('event.profile.publish')->middleware(['auth', 'verified']);
+Route::patch('events/{event}/profile/registrations', [ProfileController::class, 'openRegistrations'])->name('event.profile.registrations')->middleware(['auth', 'verified']);
+Route::patch('events/{event}/profile/character-creation', [ProfileController::class, 'openCharacterCreation'])->name('event.profile.character.creation')->middleware(['auth', 'verified']);
+Route::patch('events/{event}/profile/character-relations', [ProfileController::class, 'openCharacterRelations'])->name('event.profile.character.relations')->middleware(['auth', 'verified']);
+Route::patch('events/{event}/profile/double-link', [ProfileController::class, 'allowDoubleLink'])->name('event.profile.double.link')->middleware(['auth', 'verified']);
+
 //******************** CONTENT *******************/
 
 Route::get('events/{event}/content', [ContentController::class, 'index'])->name('event.content.index')->middleware(['auth', 'verified']);
@@ -218,6 +227,7 @@ Route::post('archetypes/{archetypeList}', [ArchetypeController::class, 'store'])
 Route::get('archetypes/edit/{archetype}', [ArchetypeController::class, 'edit'])->name('archetypes.edit');
 Route::patch('archetypes/update/{archetype}', [ArchetypeController::class, 'update'])->name('archetypes.update');
 Route::delete('archetypes/delete/{archetype}', [ArchetypeController::class, 'destroy'])->name('archetypes.destroy');
+Route::get('archetypes/{archetypeList}/download', [ArchetypeController::class, 'exportToCSV'])->name('archetypes.export');
 
 //******************** COMMUNITIES *******************/
 //Community Listes
@@ -235,6 +245,7 @@ Route::post('communities/{communityList}', [CommunityController::class, 'store']
 Route::get('communities/edit/{community}', [CommunityController::class, 'edit'])->name('communities.edit');
 Route::patch('communities/update/{community}', [CommunityController::class, 'update'])->name('communities.update');
 Route::delete('communities/delete/{community}', [CommunityController::class, 'destroy'])->name('communities.destroy');
+Route::get('communities/{communityList}/download', [CommunityController::class, 'exportToCSV'])->name('communities.export');
 
 //******************** RITUALS *******************/
 //Ritual Listes
@@ -252,6 +263,7 @@ Route::post('rituals/{ritualList}', [RitualController::class, 'store'])->name('r
 Route::get('rituals/edit/{ritual}', [RitualController::class, 'edit'])->name('rituals.edit');
 Route::patch('rituals/update/{ritual}', [RitualController::class, 'update'])->name('rituals.update');
 Route::delete('rituals/delete/{ritual}', [RitualController::class, 'destroy'])->name('rituals.destroy');
+Route::get('rituals/{ritualList}/download', [RitualController::class, 'exportToCSV'])->name('rituals.export');
 
 //******************** BACKGROUNDS *******************/
 //Background Listes
@@ -269,6 +281,7 @@ Route::post('backgrounds/{backgroundList}', [BackgroundController::class, 'store
 Route::get('backgrounds/edit/{background}', [BackgroundController::class, 'edit'])->name('backgrounds.edit');
 Route::patch('backgrounds/update/{background}', [BackgroundController::class, 'update'])->name('backgrounds.update');
 Route::delete('backgrounds/delete/{background}', [BackgroundController::class, 'destroy'])->name('backgrounds.destroy');
+Route::get('backgrounds/{backgroundList}/download', [BackgroundController::class, 'exportToCSV'])->name('backgrounds.export');
 
 //******************** MISCELLANEOUS ****************/
 //Miscellaneous Categories
@@ -295,6 +308,7 @@ Route::post('miscellaneous/{miscellaneousList}', [MiscellaneousController::class
 Route::get('miscellaneous/edit/{miscellaneous}', [MiscellaneousController::class, 'edit'])->name('miscellaneous.edit');
 Route::patch('miscellaneous/update/{miscellaneous}', [MiscellaneousController::class, 'update'])->name('miscellaneous.update');
 Route::delete('miscellaneous/delete/{miscellaneous}', [MiscellaneousController::class, 'destroy'])->name('miscellaneous.destroy');
+Route::get('miscellaneous/{miscellaneousList}/download', [MiscellaneousController::class, 'exportToCSV'])->name('miscellaneous.export');
 
 //******************** ADMIN CRUD *******************/
 

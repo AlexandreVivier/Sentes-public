@@ -70,4 +70,20 @@ class RitualController extends Controller
         session()->flash('message', 'Rituel supprimé de la liste !');
         return redirect()->route('rituals.list.show', $ritualList->id);
     }
+
+    public function exportToCSV(RitualList $ritualList)
+    {
+        $rituals = $ritualList->rituals;
+        $filename = $ritualList->name . '-rituals.csv';
+        $handle = fopen($filename, 'w+');
+        fputcsv($handle, ['Nom', 'Description']);
+        foreach ($rituals as $ritual) {
+            fputcsv($handle, [$ritual->name, $ritual->description]);
+        }
+        fclose($handle);
+        $headers = [
+            'Content-Type' => 'text/csv',
+        ];
+        return response()->download($filename, $filename, $headers)->deleteFileAfterSend(true);
+    }
 }

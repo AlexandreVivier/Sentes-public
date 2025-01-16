@@ -116,6 +116,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Miscellaneous::class, 'author_id');
     }
 
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'author_id');
+    }
+
     protected function formatDate($date)
     {
         return Carbon::parse($date)->isoFormat('Do MMM YYYY');

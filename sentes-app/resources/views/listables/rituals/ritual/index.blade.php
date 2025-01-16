@@ -48,10 +48,13 @@
         @endif
             <div class="w-100 show-button-container border-top-down-gradient">
                 <a href="{{ route('event.content.creation') }}" class="light-button special-elite-regular">Retour vers la création de contenus</a>
-                <a  href="{{ route('rituals.list.index')}}" class="light-button special-elite-regular">Retour aux listes de rituel</a>
+                <a href="{{ route('rituals.list.index')}}" class="light-button special-elite-regular">Retour aux listes de rituel</a>
                 @if($ritualList->author_id == auth()->user()->id || Auth::user()->is_admin == 1)
                     <a href="{{ route('rituals.create', $ritualList->id) }}" class="green-button special-elite-regular">Ajouter un rituel à la liste {{ $ritualList->name }}</a>
                 @endif
+            </div>
+            <div class="w-100 show-button-container border-top-down-gradient">
+                <a href="{{ route('rituals.export', $ritualList->id) }}" class="green-button special-elite-regular">Exporter en CSV</a>
             </div>
         </section>
     </main>

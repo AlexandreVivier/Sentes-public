@@ -95,10 +95,13 @@
             @endif
                 <div class="w-100 show-button-container border-top-down-gradient">
                     <a href="{{ route('event.content.creation') }}" class="light-button special-elite-regular">Retour vers la création de contenus</a>
-                    <a  href="{{ route('communities.list.index')}}" class="light-button special-elite-regular">Retour aux listes de communautés</a>
+                    <a href="{{ route('communities.list.index')}}" class="light-button special-elite-regular">Retour aux listes de communautés</a>
                     @if($communityList->author_id == auth()->user()->id || Auth::user()->is_admin == 1)
                         <a href="{{ route('communities.create', $communityList->id) }}" class="green-button special-elite-regular">Ajouter une communauté à la liste {{ $communityList->name }}</a>
                     @endif
+                </div>
+                <div class="w-100 show-button-container border-top-down-gradient">
+                    <a href="{{ route('communities.export', $communityList->id) }}" class="green-button special-elite-regular">Exporter en CSV</a>
                 </div>
             </section>
         </main>

@@ -64,4 +64,32 @@ class BackgroundController extends Controller
         session()->flash('message', 'Background supprimé !');
         return redirect()->route('backgrounds.list.show', $backgroundList->id);
     }
+
+    public function exportToCSV(BackgroundList $backgroundList)
+    {
+        $backgrounds = $backgroundList->backgrounds;
+        $filename = $backgroundList->name . '-backgrounds.csv';
+        $handle = fopen($filename, 'w+');
+        fputcsv($handle, ['Nom', 'Description', 'Auteurice']);
+        foreach ($backgrounds as $background) {
+            fputcsv($handle, [$background->name, $background->description, $background->author->login]);
+        }
+        fclose($handle);
+        $headers = [
+            'Content-Type' => 'text/csv',
+        ];
+        return response()->download($filename, $filename, $headers)->deleteFileAfterSend(true);
+
+        // $csvFilename = $backgroundList->name . '.csv';
+        // $csvFile = fopen($csvFilename, 'w');
+        // $headers = array_keys((array) $backgrounds[0]);
+        // fputcsv($csvFile, $headers);
+
+        // foreach ($backgrounds as $background) {
+        //     fputcsv($csvFile, $background->toArray());
+        // }
+
+        // fclose($csvFile);
+        // return response()->download($csvFilename)->deleteFileAfterSend(true);
+    }
 }

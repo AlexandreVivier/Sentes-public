@@ -76,4 +76,20 @@ class CommunityController extends Controller
         session()->flash('message', 'Communauté supprimée !');
         return redirect()->route('communities.list.show', $community->list->id);
     }
+
+    public function exportToCSV(CommunityList $communityList)
+    {
+        $communities = $communityList->communities;
+        $filename = $communityList->name . '-communautes.csv';
+        $handle = fopen($filename, 'w+');
+        fputcsv($handle, ['Nom', 'Description', 'Individuel', 'Groupe', 'Perspectives', 'Points forts']);
+        foreach ($communities as $community) {
+            fputcsv($handle, [$community->name, $community->description, $community->individual, $community->group, $community->perspectives, $community->highlights]);
+        }
+        fclose($handle);
+        $headers = [
+            'Content-Type' => 'text/csv',
+        ];
+        return response()->download($filename, $filename, $headers)->deleteFileAfterSend(true);
+    }
 }

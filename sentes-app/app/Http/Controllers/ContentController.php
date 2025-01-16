@@ -73,6 +73,9 @@ class ContentController extends Controller
             'event_id' => 'required|exists:events,id',
             'is_unique' => 'boolean',
             'type' => 'required',
+            'is_public' => 'boolean',
+            'number_of_selections' => 'integer',
+            'max_selections' => 'nullable|integer',
         ]);
         $attributes['order'] = $event->contents->count() + 1;
         Content::create($attributes);

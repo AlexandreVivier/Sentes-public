@@ -20,6 +20,7 @@ use App\Models\BackgroundList;
 use App\Models\Miscellaneous;
 use App\Models\MiscellaneousCategory;
 use App\Models\MiscellaneousList;
+use App\Models\Profile;
 
 class DatabaseSeeder extends Seeder
 {
@@ -431,7 +432,12 @@ class DatabaseSeeder extends Seeder
             'location_id' => 2,
             'max_attendees' => 35,
             'image_path' => 'events/images/vinland.png',
-
+            'author_id' => 1,
+        ]);
+        Profile::factory()->create([
+            'event_id' => 1,
+            'published' => true,
+            'subscribing' => true,
         ]);
 
         Attendee::factory()->create([
@@ -457,6 +463,12 @@ class DatabaseSeeder extends Seeder
             'max_attendees' => 50,
             'is_cancelled' => true,
             'image_path' => 'events/images/compostelle.png',
+            'author_id' => 3,
+        ]);
+        Profile::factory()->create([
+            'event_id' => 2,
+            'published' => true,
+            'subscribing' => true,
         ]);
 
         Attendee::factory()->create([
@@ -476,12 +488,18 @@ class DatabaseSeeder extends Seeder
             'price' => 10,
             'max_attendees' => 25,
             'image_path' => 'events/images/asrai.png',
+            'author_id' => 1,
+        ]);
+        Profile::factory()->create([
+            'event_id' => 3,
+            'published' => true,
+            'subscribing' => true,
         ]);
 
         // Create archetype_list_event for this event with archetype_list_id = 1
 
         $event = Event::find(3);
-        $list = ArchetypeList::find(1);
+        // $list = ArchetypeList::find(1);
 
         // Assurez-vous que $event et $list existent
         // if ($event && $list) {
@@ -553,6 +571,12 @@ class DatabaseSeeder extends Seeder
             'price' => 10,
             'max_attendees' => 4,
             'image_path' => 'events/images/zad.jpg',
+            'author_id' => 4,
+        ]);
+        Profile::factory()->create([
+            'event_id' => 4,
+            'published' => true,
+            'subscribing' => true,
         ]);
 
         Attendee::factory()->create([
@@ -593,6 +617,12 @@ class DatabaseSeeder extends Seeder
             'location_id' => 1,
             'max_attendees' => 50,
             'image_path' => 'events/images/valerrance.png',
+            'author_id' => 1,
+        ]);
+        Profile::factory()->create([
+            'event_id' => 4,
+            'published' => true,
+            'subscribing' => true,
         ]);
 
         Attendee::factory()->create([
@@ -611,6 +641,12 @@ class DatabaseSeeder extends Seeder
             'location_id' => 5,
             'price' => 10,
             'max_attendees' => 25,
+            'author_id' => 5,
+        ]);
+        Profile::factory()->create([
+            'event_id' => 5,
+            'published' => true,
+            'subscribing' => true,
         ]);
 
         Attendee::factory()->create([
@@ -705,6 +741,12 @@ class DatabaseSeeder extends Seeder
             'price' => 10,
             'max_attendees' => 25,
             'image_path' => 'events/images/hiver-nucleaire.png',
+            'author_id' => 1,
+        ]);
+        Profile::factory()->create([
+            'event_id' => 6,
+            'published' => true,
+            'subscribing' => true,
         ]);
 
         Attendee::factory()->create([
@@ -721,12 +763,17 @@ class DatabaseSeeder extends Seeder
             'has_paid' => true,
         ]);
 
-        Event::factory(10)->create()->each(function ($event) {
+        Event::factory(7)->create()->each(function ($event) {
             Attendee::factory()->create([
                 'event_id' => $event->id,
                 'user_id' => rand(1, 13),
                 'is_organizer' => true,
                 'has_paid' => true,
+            ]);
+            Profile::factory()->create([
+                'event_id' => $event->id,
+                'published' => true,
+                'subscribing' => true,
             ]);
         });
 

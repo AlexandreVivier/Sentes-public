@@ -71,4 +71,20 @@ class MiscellaneousController extends Controller
         session()->flash('success', 'Elément supprimé avec succès !');
         return redirect(route('miscellaneous.list.show', $miscellaneousList->id));
     }
+
+    public function exportToCSV(MiscellaneousList $miscellaneousList)
+    {
+        $miscellaneouses = $miscellaneousList->miscellaneous;
+        $filename = $miscellaneousList->name . '-divers.csv';
+        $handle = fopen($filename, 'w+');
+        fputcsv($handle, ['Description',]);
+        foreach ($miscellaneouses as $miscellaneous) {
+            fputcsv($handle, [$miscellaneous->description]);
+        }
+        fclose($handle);
+        $headers = [
+            'Content-Type' => 'text/csv',
+        ];
+        return response()->download($filename, $filename, $headers)->deleteFileAfterSend(true);
+    }
 }

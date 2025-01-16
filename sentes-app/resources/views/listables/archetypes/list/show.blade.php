@@ -4,7 +4,7 @@
         <h1 class="index-title special-elite-regular">Archétypes de la liste : {{ $archetypeList->name }}</h1>
         <h2 class="index-title special-elite-regular">Catégorie : {{ $archetypeList->category->name }}</h2>
         <p class="special-elite-regular">"{{ $archetypeList->description }}" - par {{ $archetypeList->author->login}}</p>
-        <p class="special-elite-regular text-green-light">Si tu es auteurice de cette liste, tu peux ici ajouter, modifier ou supprimer des éléments.</p>
+        <p class="special-elite-regular text-green-light">Si tu es auteurice de cette liste, tu peux ici ajouter, modifier ou supprimer des archétypes.</p>
         @if($archetypes->isEmpty())
         <p class="special-elite-regular">Pas d'archétypes dans cette liste pour le moment.</p>
         @else
@@ -58,6 +58,9 @@
                 @if($archetypeList->author_id == auth()->user()->id || Auth::user()->is_admin == 1)
                     <a href="{{ route('archetypes.create', $archetypeList->id) }}" class="green-button special-elite-regular">Ajouter un archétype à la liste {{ $archetypeList->name }}</a>
                 @endif
+            </div>
+            <div class="w-100 show-button-container border-top-down-gradient">
+                <a href="{{ route('archetypes.export', $archetypeList->id) }}" class="green-button special-elite-regular">Exporter en CSV</a>
             </div>
         </section>
     </main>

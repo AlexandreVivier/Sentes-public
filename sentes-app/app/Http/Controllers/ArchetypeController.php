@@ -82,4 +82,18 @@ class ArchetypeController extends Controller
         session()->flash('success', 'Archétype supprimé avec succès !');
         return redirect(route('archetypes.list.show', $archetypeListId));
     }
+
+    public function exportToCSV(ArchetypeList $archetypeList)
+    {
+        $archetypes = $archetypeList->archetypes;
+        $filename = $archetypeList->name . '-archetypes.csv';
+        $handle = fopen($filename, 'w+');
+        fputcsv($handle, ['Nom', 'Description', 'Lien 1', 'Lien 2']);
+        foreach ($archetypes as $archetype) {
+            fputcsv($handle, [$archetype->name, $archetype->description, $archetype->first_link, $archetype->second_link]);
+        }
+        fclose($handle);
+        $headers = ['Content-Type: text/csv'];
+        return response()->download($filename, $filename, $headers)->deleteFileAfterSend(true);
+    }
 }

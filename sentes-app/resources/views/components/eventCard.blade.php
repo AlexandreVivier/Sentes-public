@@ -16,7 +16,7 @@
     <div class="flex-row w-100">
         @switch($event->checkAuthAttendeeStatus())
             @case('null')
-                @if($event->start_date > now())
+                @if($event->start_date > now() && $event->profile->subscribing)
                 <form method="POST" action="{{ route('attendee.subscribe', $event->id) }}" class="event-button-grid">
                     @csrf
                     <button type="submit" class="light-button special-elite-regular">T'inscrire !</button>
@@ -30,7 +30,7 @@
                 @include('events.components.attendeeButtons')
             @break
             @case('unsubscribed')
-                @if($event->start_date > now())
+                @if($event->start_date > now() && $event->profile->subscribing)
                 <form method="POST" action="{{ route('attendee.subscribe', $event->id) }}" class="event-button-grid">
                     @csrf
                     <button type="submit" class="light-button special-elite-regular">Te réinscrire !</button>

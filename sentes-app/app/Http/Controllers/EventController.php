@@ -10,6 +10,8 @@ use App\Models\Attendee;
 use App\Models\ArchetypeCategory;
 use App\Models\ArchetypeList;
 use App\Models\Archetype;
+use App\Models\Profile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\NewEvent;
@@ -23,10 +25,15 @@ class EventController extends Controller
 {
     public function index()
     {
-
-        $events = Event::with(['organizers.user', 'attendees.user'])
+        $events = Event::with([
+            'organizers.user:id,login',
+            'attendees.user:id,login',
+        ])
             ->where('start_date', '>', now())
             ->where('is_cancelled', false)
+            ->whereHas('profile', function ($query) {
+                $query->where('published', 1);
+            })
             ->filter(request(['search']))
             ->orderBy('start_date')
             ->paginate(4)->withQueryString();
@@ -35,10 +42,8 @@ class EventController extends Controller
             return Location::all()
                 ->sortByDesc('zip_code');
         });
-
         return view('events.index', compact('events', 'locations'));
     }
-
 
     public function create()
     {
@@ -52,6 +57,7 @@ class EventController extends Controller
             'description' => ['required', 'max:99'],
             'start_date' => ['required', 'date', 'after:now'],
             'location_id' => ['required', Rule::exists('locations', 'id')],
+            'author_id' => ['required', Rule::exists('users', 'id')],
             'price' => ['nullable', 'numeric', 'min:1'],
             'max_attendees' => ['nullable', 'numeric', 'min:1'],
             'image_path' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png'],
@@ -83,12 +89,10 @@ class EventController extends Controller
         ]);
         $event->attendee_count += 1;
         $event->save();
-        //Send notification to every user
-        $users = User::all();
-        $author = auth()->user();
-        // Notification::sendNow($users, new NewEvent($event, $author));
-        Notification::send($users, new NewEvent($event, $author));
         session()->flash('success', 'Ton évènement a bien été créé !');
+        Profile::create([
+            'event_id' => $event->id,
+        ]);
         return redirect(route('events.edit', $event));
     }
 
@@ -98,7 +102,6 @@ class EventController extends Controller
         if (!$orga) {
             abort(403, 'Tu dois être orga de ce GN pour le modifier !');
         }
-
         return view('events.createStep2', compact('event'));
     }
 

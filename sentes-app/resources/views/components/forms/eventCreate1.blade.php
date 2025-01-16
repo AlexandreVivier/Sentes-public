@@ -42,6 +42,7 @@
         </p>
         @enderror
     </div>
+    <input type="hidden" name="author_id" value="{{ auth()->user()->id }}">
     <div class="form-input">
         <label for="location_id" class="text-shadowed">
             Choisis un lieu :

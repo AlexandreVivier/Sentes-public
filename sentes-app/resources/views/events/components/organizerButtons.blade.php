@@ -1,8 +1,12 @@
 <div class="event-button-grid">
     <div class="button-col-1">
         <a href="#" class="light-button special-elite-regular">Voir le coffre à jouets</a>
+        @if ($event->profile->character_relation)
         <a href="#" class="light-button special-elite-regular">Voir les relations</a>
+        @endif
+        @if ($event->profile->character_creation)
         <a href="#" class="light-button special-elite-regular">Créer ton personnage</a>
+        @endif
     </div>
     <div class="button-col-2">
         <a href="{{ route('event.change', $event->id) }}" class="light-button special-elite-regular">Modifier les infos du GN</a>

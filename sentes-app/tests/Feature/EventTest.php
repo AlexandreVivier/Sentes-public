@@ -207,4 +207,53 @@ class EventTest extends TestCase
         $this->get(route('user.organisations.past.index', $organizer->id))
             ->assertSee('Test event PastEvent');
     }
+
+    /** @test */
+    public function only_published_events_can_be_seen()
+    {
+        $user = User::factory()->create([
+            'login' => 'userPublish',
+        ]);
+
+        $organizer = User::factory()->create([
+            'login' => 'organizerPublish',
+        ]);
+
+        $location = Location::factory()->create();
+
+        $this->actingAs($organizer);
+        $this->post(route('events.store'), [
+            'title' => 'Test publish event',
+            'description' => 'This is a test event',
+            'start_date' => now()->addDay(),
+            'location_id' => $location->id,
+            'author_id' => $organizer->id,
+        ])->assertSessionDoesntHaveErrors()
+            ->assertStatus(302);
+
+        $user = User::where('login', 'userPublish')->first();
+        $this->actingAs($user);
+        $this->get(route('events.index'))
+            ->assertDontSee('Test publish event');
+
+        $organizer = User::where('id', $organizer->id)->first();
+        $this->actingAs($organizer);
+
+        $event = Event::where('title', 'Test publish event')->first();
+        $this->patch(route('event.profile.publish', $event->id))
+            ->assertStatus(302);
+
+        $user = User::where('id', $user->id)->first();
+        $this->actingAs($user);
+
+        $this->assertDatabaseHas('events', [
+            'title' => 'Test publish event',
+        ]);
+        $this->assertDatabaseHas('profiles', [
+            'event_id' => $event->id,
+            'published' => 1
+        ]);
+        $this->get(route('events.index'))
+            ->assertSee('Test publish event');
+    }
 }

@@ -27,14 +27,15 @@ abstract class TestCase extends BaseTestCase
         // Créer un lieu pour le GN et créer un événement
         $location = Location::factory()->create();
 
-        $start_date = now()->addDay();
+        $start_date = now()->addDay(2);
 
         $data = [
             '_token' => csrf_token(),
             'title' => 'Test event ' . $title,
             'description' => 'This is a test event',
             'start_date' => $start_date,
-            'location_id' => $location->id
+            'location_id' => $location->id,
+            'author_id' => $organizer->id,
         ];
 
         $this->post(route('events.store'), $data)
@@ -44,6 +45,8 @@ abstract class TestCase extends BaseTestCase
         $this->patch(route('events.update', $event->id), [
             'max_attendees' => 3,
         ]);
+        $this->patch(route('event.profile.publish', $event->id))
+            ->assertSessionHas('success', 'Le GN est maintenant publié !');
     }
 
     public function createAdminUser(String $login)

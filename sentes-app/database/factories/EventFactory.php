@@ -34,6 +34,7 @@ class EventFactory extends Factory
             'server_link' => 'https://discord.gg/bHP6D3q9fR',
             'tickets_link' => 'https://www.helloasso.com/',
             'file_path' => 'events/files/sentes.pdf',
+            'author_id' => $this->faker->randomElement(User::pluck('id')->toArray()),
         ];
     }
 }
